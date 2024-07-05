@@ -1,0 +1,42 @@
+.sidenav {
+  background: black;
+  height: 100%;
+  margin: 2px 0 0 2px;
+  border-radius: .7rem;
+  box-shadow: 0 1rem 2rem rgba(black, .2);
+ 
+
+  &__btnlist {
+    list-style-type: none;
+
+    & li button {
+      width: 40%;
+      height: 4rem;
+      margin: .5rem 3% 0 3%;
+      border-radius: 5px;
+      background-color: #1B263B;
+      border: 1px solid #eee;
+      color: #eee;
+      cursor: pointer;
+      list-style-type: none;
+
+      &:hover {
+        background-color: #222;
+      }
+
+      &:active {
+        border: 2px solid green;
+      }
+     }
+  }
+}
+
+.alpine__sidenav {
+  & > p {
+    color:red;
+    font-size: 5rem;
+  }
+}
+
+
+

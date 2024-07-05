@@ -1,0 +1,23 @@
+
+{{define "system-list"}}
+
+<div class="system-list">
+  <ul class="sidenav__btnlist">
+    <li><button type="button" x-on:click="count++">Shortimer</button></li>
+    <li><button type="button" @click="open = ! open">Happy</button></li>
+    <div class="" x-show="open" @click.outside="open=false">
+      <ul class="">
+        <li>
+          <p style="font-size: 3rem; color: red" x-text="count"></p>
+        </li>
+      </ul>
+    </div>
+    <li><button type="button" @click="$el.innerText='This is a test'">10.205.185.43</button></li>
+    <li><button type="button">10.205.181.120</button></li>
+    <li><button type="button">SomeSys1</button></li>
+    <li><button type="button">SomeSys1</button></li>
+    <li><button type="button">SomeSys1</button></li>
+  </ul>
+</div>
+
+{{ end }}

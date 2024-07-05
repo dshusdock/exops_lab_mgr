@@ -1,0 +1,164 @@
+*,
+*:after,
+*:before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit; }
+
+html {
+  font-size: 62.5%; }
+
+body {
+  box-sizing: border-box;
+  background-color: #415A77; }
+
+.test1 {
+  font-size: 20rem; }
+
+.test2 {
+  width: 5rem;
+  border-radius: 4px;
+  padding: 0 16px;
+  height: 40px;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.05);
+  margin-right: 16px;
+  transition: background-color 200ms; }
+
+.hdr {
+  height: 7vh;
+  background-color: #18141d;
+  background-size: cover;
+  background-position: top;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; }
+  .hdr__nav, .hdr__control {
+    padding: 0rem 2rem;
+    font-size: 1.7rem; }
+    .hdr__nav > a, .hdr__control > a {
+      padding: 1rem;
+      margin: 1.2rem 4rem .5rem 4rem;
+      font-family: sans-serif;
+      text-decoration: none;
+      color: #eee;
+      height: 60%;
+      display: inline-block;
+      transform: translateY(5px);
+      transition: all .1s; }
+    .hdr__nav > a:hover, .hdr__control > a:hover {
+      border-bottom: 4px solid green; }
+    .hdr__nav--img, .hdr__control--img {
+      transform: translateY(1rem) scale(1.1); }
+  .hdr__icon {
+    color: #eee;
+    transform: scale(2.5);
+    margin: 0 3rem;
+    font-size: 1rem; }
+    .hdr__icon:hover {
+      color: green; }
+
+.container {
+  display: grid;
+  grid-template-columns: 0.15fr 1fr;
+  grid-template-rows: 0.3fr 15fr 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas: "header header" "side-nav main" "footer footer"; }
+
+.header {
+  grid-area: header; }
+
+.side-nav {
+  grid-area: side-nav; }
+
+.main {
+  grid-area: main; }
+
+.footer {
+  grid-area: footer; }
+
+.sidenav {
+  background: black;
+  height: 100%;
+  margin: 2px 0 0 2px;
+  border-radius: .7rem;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2); }
+  .sidenav__btnlist li button {
+    width: 94%;
+    height: 4rem;
+    margin: .5rem 3% 0 3%;
+    border-radius: 5px;
+    background-color: #1B263B;
+    border: 1px solid #eee;
+    color: #eee;
+    cursor: pointer; }
+    .sidenav__btnlist li button:hover {
+      background-color: #222; }
+    .sidenav__btnlist li button:active {
+      border: 2px solid green; }
+
+.alpine__sidenav > p {
+  color: red;
+  font-size: 5rem; }
+
+.buttons {
+  height: 10rem; }
+  .buttons * {
+    height: 9rem;
+    padding: 5rem;
+    margin: 1rem;
+    border-radius: 1.1rem; }
+
+input::file-selector-button {
+  border-radius: 4px;
+  padding: 0 16px;
+  height: 40px;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.05);
+  margin-right: 16px;
+  transition: background-color 200ms; }
+
+/* file upload button */
+input::file-selector-button {
+  border-radius: 4px;
+  padding: 0 16px;
+  height: 40px;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.05);
+  margin-right: 16px;
+  transition: background-color 200ms; }
+
+/* file upload button hover state */
+input[type="file"]::file-selector-button:hover {
+  background-color: #f3f4f6; }
+
+/* file upload button active state */
+input[type="file"]::file-selector-button:active {
+  background-color: #e5e7eb; }
+
+/* Faked label styles and icon */
+input[type="file"]::before {
+  position: absolute;
+  pointer-events: none;
+  top: 10px;
+  left: 16px;
+  height: 20px;
+  width: 20px;
+  content: "";
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230964B0'%3E%3Cpath d='M18 15v3H6v-3H4v3c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-3h-2zM7 9l1.41 1.41L11 7.83V16h2V7.83l2.59 2.58L17 9l-5-5-5 5z'/%3E%3C/svg%3E"); }
+
+input[type="file"]::after {
+  position: absolute;
+  pointer-events: none;
+  top: 11px;
+  left: 40px;
+  color: #0964b0;
+  content: "Upload File"; }

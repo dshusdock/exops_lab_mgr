@@ -1,0 +1,35 @@
+{{define "header"}}
+
+<div class="hdr" x-data>
+  <div class="hdr__nav" @click.outside="$store.hdrData.onOutsideClick(event)">
+    <img src="/html/img/exops.png" alt="" class="hdr__nav--img">
+    <a href="#" class="hdr__nav-version">View</a>
+
+    <div class="hdr__dropdown"  >
+      <button class="hdr__dropbtn" @click="$store.hdrData.onClick($event)">Dropdown
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="hdr__dropdown-content" id="myDropdown" @click="$store.hdrData.onElementClick(event)">
+        <a href="#">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+      </div>
+    </div> 
+  </div>
+  <div class="hdr__control">
+    <i 
+      class="fa-solid fa-circle-plus hdr__icon" 
+      hx-post="/element/event/click" 
+      hx-swap="internalHTML settle:1" 
+      hx-trigger="click"
+      hx-target=".main"
+      hx-vals='{"view_id":"lyoutvw"}'>
+    </i>
+    
+    <i class="fa-solid fa-gear hdr__icon"></i>
+    
+    <a href="#" class="hdr__nav-stats">Logout</a>
+  </div>
+</div>
+
+{{ end }}

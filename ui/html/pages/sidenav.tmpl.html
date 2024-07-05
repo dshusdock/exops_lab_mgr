@@ -1,0 +1,14 @@
+{{define "sidenav"}}
+
+<div class="alpine__sidenav" x-data="
+  { 
+    open: false,
+    count: 0
+  }">
+  <nav class="sidenav">
+    {{template "system-list" .}}
+  </nav>
+  <p ></p>
+</div>
+
+{{ end }}

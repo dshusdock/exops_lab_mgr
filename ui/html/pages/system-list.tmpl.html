@@ -1,0 +1,64 @@
+{{define "system-list"}}
+
+<div id="mymodal" class="modal">
+
+  <div class="system-list" x-data="{ open: false, count: 0 }">
+    <ul class="sidenav__btnlist">
+      <li><button type="button" x-on:click="count++">Longtimer</button></li>
+      <li><button type="button" @click="open = ! open">Not so Happy</button></li>
+      <div x-show="open" @click.outside="open=false">
+        <ul>
+          <li>
+            <p style="font-size: 3rem; color: red" x-text="count"></p>
+          </li>
+        </ul>
+      </div>
+      <li><button type="button" @click="$el.innerText='This is a test'">10.205.185.43</button></li>
+      <li><button type="button">10.205.181.120</button></li>
+      <li><button type="button">SomeSys1</button></li>
+    </ul>
+  </div>
+
+  <form id='form' hx-encoding='multipart/form-data' hx-post='/upload' hx-swap="none" class="upload_form">
+    <input type="file" name="myFile"/>
+    
+    <button type="submit" class="buttons">
+        Upload
+    </button>
+    <progress id='progress' value='0' max='100'></progress>
+  </form>
+
+  <form id='form' hx-encoding='multipart/form-data' hx-post='/upload' hx-swap="none" class="">
+    <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4Z"
+        fill="white"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M13 7C13 6.44772 12.5523 6 12 6C11.4477 6 11 6.44772 11 7V11H7C6.44772 11 6 11.4477 6 12C6 12.5523 6.44772 13 7 13H11V17C11 17.5523 11.4477 18 12 18C12.5523 18 13 17.5523 13 17V13H17C17.5523 13 18 12.5523 18 12C18 11.4477 17.5523 11 17 11H13V7Z"
+        fill="white"
+      />
+    </svg>
+   
+  </form>
+
+</div>
+
+
+<script>
+  htmx.on('#form', 'htmx:xhr:progress', function(evt) {
+    htmx.find('#progress').setAttribute('value', evt.detail.loaded/evt.detail.total * 100)
+  });
+</script>
+
+{{ end }}

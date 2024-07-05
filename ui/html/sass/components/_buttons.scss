@@ -1,0 +1,17 @@
+.buttons {
+  height: 5rem;
+  width: 80%;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  align-self: center;
+  // padding: 5rem;
+
+  & * {
+     height: 9rem;
+     padding: 5rem;
+     margin: 1rem;
+     border-radius: 1.1rem;
+    
+  }
+}
+

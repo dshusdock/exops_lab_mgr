@@ -1,0 +1,14 @@
+.main {
+    position: relative;
+
+    &__div {
+        position: absolute;
+        left: 10rem;
+        top: 10rem;
+        height: 50rem;
+        width: 60rem;
+        border: 1px solid white;
+        border-radius: 1rem;
+        
+    }
+}

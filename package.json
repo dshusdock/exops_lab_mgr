@@ -1,0 +1,14 @@
+{
+  "name": "html_go_ws",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "compile:sass": "node-sass ui/html/sass/main.scss ui/html/css/styles.css -w"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "node-sass": "^9.0.0"
+  }
+}
