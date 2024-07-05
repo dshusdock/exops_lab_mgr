@@ -30,14 +30,14 @@ func RenderModal(w http.ResponseWriter, r *http.Request, d any) {
 }
 
 // RenderTemplate renders a template
-func RenderTemplate_new(w http.ResponseWriter, r *http.Request, d any, t int16) {
+func RenderTemplate_new(w http.ResponseWriter, r *http.Request, data any, _type int16) {
 	ptr := constants.RENDERED_FILE_MAP()
 
-	switch t {
+	switch _type {
 	case constants.RM_HOME:
-		template.Must(template.ParseFiles(ptr.HOME...)).ExecuteTemplate(w, "base", d)
+		template.Must(template.ParseFiles(ptr.HOME...)).ExecuteTemplate(w, "base", data)
 	case constants.RM_ADD_FORM:
-		template.Must(template.ParseFiles(ptr.ADD_FORM...)).ExecuteTemplate(w, "base", d)
+		template.Must(template.ParseFiles(ptr.ADD_FORM...)).ExecuteTemplate(w, "base", data)
 	default:
 	}
 }

@@ -77,7 +77,7 @@ func (m *Repository) HandleClickEvents(w http.ResponseWriter, r *http.Request) {
  */
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 
-	render.RenderTemplate(w, r, m.App)
+	render.RenderTemplate_new(w, r, m.App, constants.RM_HOME)
 }
 
 func (m *Repository) Test(w http.ResponseWriter, r *http.Request) {
