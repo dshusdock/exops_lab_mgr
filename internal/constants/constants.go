@@ -55,3 +55,31 @@ type ViewInfo struct {
 type RowData struct {
 	Data []string
 }
+
+///////////////Rendered File Map///////////////
+const (
+	RM_HOME = iota
+	RM_ADD_FORM	
+)
+
+type RenderedFileMap struct {
+	HOME         []string
+	ADD_FORM     []string
+}
+
+func RENDERED_FILE_MAP() *RenderedFileMap {
+	return &RenderedFileMap{
+		HOME:  []string{
+			"./ui/html/pages/base.tmpl.html",
+			"./ui/html/pages/layout.tmpl.html",
+			"./ui/html/pages/page1.tmpl.html",
+			"./ui/html/pages/header.tmpl.html",
+			"./ui/html/pages/add_form.tmpl.html",
+			"./ui/html/pages/test_form.tmpl.html",
+			"./ui/html/pages/checkbox_ex.tmpl.html",
+		},
+		ADD_FORM:	[]string{
+			"./ui/html/pages/add_from.tmpl.html",
+		},
+	}
+}

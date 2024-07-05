@@ -1,6 +1,7 @@
 package render
 
 import (
+	"dshusdock/tw_prac1/internal/constants"
 	"html/template"
 	"net/http"
 )
@@ -26,4 +27,17 @@ func RenderModal(w http.ResponseWriter, r *http.Request, d any) {
 	tmpl := template.Must(template.ParseFiles(files...))
 
 	tmpl.ExecuteTemplate(w, "test-modal", d)
+}
+
+// RenderTemplate renders a template
+func RenderTemplate_new(w http.ResponseWriter, r *http.Request, d any, t int16) {
+	ptr := constants.RENDERED_FILE_MAP()
+
+	switch t {
+	case constants.RM_HOME:
+		template.Must(template.ParseFiles(ptr.HOME...)).ExecuteTemplate(w, "base", d)
+	case constants.RM_ADD_FORM:
+		template.Must(template.ParseFiles(ptr.ADD_FORM...)).ExecuteTemplate(w, "base", d)
+	default:
+	}
 }
