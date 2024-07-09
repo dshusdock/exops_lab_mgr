@@ -62,5 +62,9 @@ document.addEventListener("alpine:init", () => {
         console.log("testThis: ", this);
         this.drop=false;
       },
+      testThis2(event) {
+        console.log("Got the focus");
+        
+      },
     })
 });

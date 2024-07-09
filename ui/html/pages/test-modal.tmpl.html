@@ -7,7 +7,8 @@
     <div class="modal-content" @click.outside="$store.modalData.onOutsideClick(event)">
       <span class="close" @click="$store.modalData.onCloseClick($event)">&times;</span>
       <form id='form' hx-encoding='multipart/form-data' hx-post='/upload' hx-swap="none" class="upload_form">        
-        <input type="file" name="myFile"/>
+        <input type="file" id="fileInput" name="myFile" @change.debounce="$store.modalData.onChange($event)"/>
+        <button type="button" class="buttons" @click="$store.modalData.onFileClick($event)">File</button>
         
         <button type="submit" class="buttons">
             Upload

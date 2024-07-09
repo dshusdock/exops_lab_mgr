@@ -7,6 +7,14 @@ document.addEventListener("alpine:init", () => {
       btn: document.getElementById("myBtn"),
       span: document.getElementsByClassName("close")[0],     
       // Functions
+      onFileClick(event) { 
+        console.log("on file clicked");
+        document.getElementById("fileInput").click();
+      },
+      onChange(event) {
+        console.log("on change clicked" + event.target.value);
+     
+      },
       onCloseClick(event) {
         console.log("close clicked");
         let modal = document.getElementById("myModal");
