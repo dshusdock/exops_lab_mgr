@@ -331,7 +331,9 @@ input[type="file"] {
       overflow: hidden;
       text-overflow: ellipsis; }
     .settings-modal__container .menu {
-      width: 25%; }
+      width: 25%;
+      border-right: 1px solid #ccc;
+      margin-bottom: 1rem; }
       .settings-modal__container .menu li {
         list-style-type: none;
         padding: 1rem;
@@ -348,8 +350,31 @@ input[type="file"] {
       .settings-modal__container .menu li:hover {
         background-color: #5075b9; }
     .settings-modal__container .page {
-      outline: 1px solid #ccc;
-      margin-bottom: .5rem; }
+      width: 100%;
+      margin-bottom: .5rem;
+      font-size: 1.6rem;
+      font-weight: 500;
+      font-family: sans-serif;
+      color: white; }
+      .settings-modal__container .page__general {
+        display: flex; }
+      .settings-modal__container .page__test {
+        display: none;
+        flex-direction: column; }
+        .settings-modal__container .page__test .container {
+          margin: 2rem 2rem 0 2rem;
+          display: flex;
+          flex-direction: column; }
+        .settings-modal__container .page__test button {
+          margin-top: 1rem;
+          height: 4rem;
+          width: 10rem;
+          background-color: #0964b0;
+          color: white;
+          outline: 1px solid #ccc;
+          border-radius: .5rem; }
+        .settings-modal__container .page__test button:hover {
+          background-color: #5075b9; }
   .settings-modal__button {
     width: 30%;
     height: 5rem;

@@ -5,6 +5,7 @@ import (
 	"dshusdock/tw_prac1/internal/handlers"
 	"dshusdock/tw_prac1/internal/handlers/headervw"
 	"dshusdock/tw_prac1/internal/handlers/layoutvw"
+	"dshusdock/tw_prac1/internal/handlers/settingsvw"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -13,6 +14,7 @@ import (
 func initRouteHandlers() {
 	app.ViewCache["lyoutvw"] = layoutvw.AppLayoutVw.RegisterView(app)
 	app.ViewCache["headervw"] = headervw.AppHeaderVw.RegisterView(app)
+	app.ViewCache["settingsvw"] = settingsvw.AppSettingsVw.RegisterView(app)
 }
 
 func routes(app *config.AppConfig) http.Handler {

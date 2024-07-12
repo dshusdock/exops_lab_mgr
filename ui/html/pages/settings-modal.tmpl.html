@@ -10,7 +10,7 @@
     <hr>
     <div class="settings-modal__container">
       <div class="menu">
-       <ul class="">
+       <ul class="" @click="$store.settings.onMenuClick($event)">
         <li>General</li>
         <li>Test</li>
         <li>Item 2</li>
@@ -19,7 +19,39 @@
        </ul>
       </div>
       <div class="page">
-        
+        <div class="page__general">This is the general page</div>
+        <div class="page__test">
+          <div class="container">
+            <p>This is a test button</p>
+            <button 
+              type="button"
+              hx-post="/element/event/click" 
+              hx-swap="none" 
+              hx-trigger="click"
+              hx-target=""
+              hx-vals='{
+                "type": "button",
+                "label": "Test Button",
+                "view_id": "settingsvw",
+                "view_str": ""
+              }'>Test Button</button>
+          </div> 
+          <div class="container">
+            <p>This is a test button2</p>
+            <button 
+            type="button"
+            hx-post="/element/event/click" 
+              hx-swap="none" 
+              hx-trigger="click"
+              hx-target=""
+              hx-vals='{
+                "type": "button",
+                "label": "Test Button2",
+                "view_id": "settingsvw",
+                "view_str": ""
+              }'>Test Button2</button>
+          </div>          
+        </div>
       </div>
     </div>
   

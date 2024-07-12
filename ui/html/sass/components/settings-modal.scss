@@ -68,6 +68,8 @@
 
       & .menu {
         width: 25%;
+        border-right: 1px solid #ccc;
+        margin-bottom: 1rem;
 
         & li {
           list-style-type: none;
@@ -91,8 +93,42 @@
       }
 
       & .page {
-        outline: 1px solid #ccc;
+        width: 100%;       
         margin-bottom: .5rem;
+        font-size: 1.6rem;
+        font-weight: 500;
+        font-family: sans-serif;
+        color: white;
+
+        &__general {
+          display: flex;
+        }
+
+        &__test {
+          display: none;
+          flex-direction: column;
+
+           & .container {
+            margin: 2rem 2rem 0 2rem;
+            display: flex;
+            flex-direction: column;
+           }
+
+           & button {
+            margin-top: 1rem;
+            height: 4rem;
+            width: 10rem;
+            background-color: #0964b0;
+            color: white;
+            outline: 1px solid #ccc;
+            border-radius: .5rem;
+           }
+
+           & button:hover {
+            background-color: #5075b9;
+           
+           }
+        }
       }
     }
 
