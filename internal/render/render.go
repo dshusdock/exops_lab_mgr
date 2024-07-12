@@ -38,6 +38,10 @@ func RenderTemplate_new(w http.ResponseWriter, r *http.Request, data any, _type 
 		template.Must(template.ParseFiles(ptr.HOME...)).ExecuteTemplate(w, "base", data)
 	case constants.RM_ADD_FORM:
 		template.Must(template.ParseFiles(ptr.ADD_FORM...)).ExecuteTemplate(w, "base", data)
+	case constants.RM_UPLOAD_MODAL:
+		template.Must(template.ParseFiles(ptr.UPLOAD_MODAL...)).ExecuteTemplate(w, "test-modal", data)
+	case constants.RM_SETTINGS_MODAL:
+		template.Must(template.ParseFiles(ptr.SETTINGS_MODAL...)).ExecuteTemplate(w, "settings-modal", data)
 	default:
 	}
 }

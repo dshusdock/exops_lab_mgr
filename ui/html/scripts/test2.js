@@ -13,6 +13,11 @@ document.addEventListener("alpine:init", () => {
       },
       onChange(event) {
         console.log("on change clicked" + event.target.value);
+        let value = event.target.value;
+        let fileName = value.split("\\").pop();
+        console.log("fileName: ", fileName);
+        
+        document.getElementById("fileChoice").innerText = fileName;
      
       },
       onCloseClick(event) {

@@ -1,12 +1,14 @@
 .hdr {
   height: 6rem;
-  background-color: #18141d;
+  //background-color: #18141d; 
+  background-color: $color-primary-dark;
   background-size: cover;
   background-position: top;
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, .2);
 
   &__nav, &__control{
     display: flex;
@@ -15,6 +17,7 @@
     padding: 0rem 2rem;
     font-size: 1.7rem;
     width: 30%;
+    background-color: $color-primary-dark;
 
     & > a {
       padding: .7rem;
@@ -35,6 +38,9 @@
 
     &--img {
       transform: scale(.5);
+      border-radius: 1.5rem;
+      box-shadow: 0 1rem 2rem rgba(0, 0, 0, .2);
+
     }
 
     &-version {}

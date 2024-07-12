@@ -1,0 +1,20 @@
+CREATE TABLE `LabSystem` (
+    `cab` varchar(255) DEFAULT NULL,
+    `cabULocaltion` int(11) DEFAULT NULL,
+    `iso` varchar(255) DEFAULT NULL,
+    `name` varchar(255) DEFAULT NULL,
+    `serialNbr` varchar(255) DEFAULT NULL,
+    `iPAddress` varchar(255) DEFAULT NULL,
+    `vip` varchar(255) DEFAULT NULL,
+    `idracIp` varchar(255) DEFAULT NULL,
+    `swVer` varchar(255) DEFAULT NULL,
+    `serverType` varchar(255) DEFAULT NULL,
+    `enterprise` varchar(255) DEFAULT NULL,
+    `role` varchar(255) DEFAULT NULL,
+    `comments` varchar(255) DEFAULT NULL,
+    `vmLabServerHostIp` varchar(255) DEFAULT NULL
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci
+
+
+1900-01-01 00:00:00
+

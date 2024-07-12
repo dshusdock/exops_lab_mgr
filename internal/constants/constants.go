@@ -59,12 +59,16 @@ type RowData struct {
 ///////////////Rendered File Map///////////////
 const (
 	RM_HOME = iota
-	RM_ADD_FORM	
+	RM_ADD_FORM
+	RM_UPLOAD_MODAL	
+	RM_SETTINGS_MODAL
 )
 
 type RenderedFileMap struct {
-	HOME         []string
-	ADD_FORM     []string
+	HOME          	[]string
+	ADD_FORM     	[]string
+	UPLOAD_MODAL 	[]string
+	SETTINGS_MODAL 	[]string
 }
 
 func RENDERED_FILE_MAP() *RenderedFileMap {
@@ -81,6 +85,12 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 		},
 		ADD_FORM:	[]string{
 			"./ui/html/pages/add_from.tmpl.html",
+		},
+		UPLOAD_MODAL: []string{
+			"./ui/html/pages/test-modal.tmpl.html",
+		},
+		SETTINGS_MODAL: []string{
+			"./ui/html/pages/settings-modal.tmpl.html",
 		},
 	}
 }

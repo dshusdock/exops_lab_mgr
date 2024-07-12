@@ -23,10 +23,27 @@
       hx-swap="internalHTML settle:1" 
       hx-trigger="click"
       hx-target=".main"
-      hx-vals='{"view_id":"lyoutvw"}'>
+      hx-vals='{
+        "type": "button",
+        "label": "upload",
+        "view_id": "headervw",
+        "view_str": ""
+      }'>
     </i>
     
-    <i class="fa-solid fa-gear hdr__icon" @mouseover="$store.myData.testThis2(event)" ></i>
+    <i 
+      class="fa-solid fa-gear hdr__icon" 
+      hx-post="/element/event/click" 
+      hx-swap="internalHTML settle:1" 
+      hx-trigger="click"
+      hx-target=".main"
+      hx-vals='{
+        "type": "button",
+        "label": "settings",
+        "view_id": "headervw",
+        "view_str": ""
+      }'>
+    </i>
     
     <a href="#" class="hdr__nav-stats">Logout</a>
   </div>

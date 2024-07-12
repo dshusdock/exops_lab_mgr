@@ -3,12 +3,10 @@ package handlers
 import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/constants"
+	"dshusdock/tw_prac1/internal/handlers/upload"
 	"dshusdock/tw_prac1/internal/render"
-	"encoding/csv"
 	"fmt"
-	"io"
 	"log"
-	"mime/multipart"
 	"net/http"
 )
 
@@ -18,23 +16,6 @@ var Repo *Repository
 // Repository is the repository type
 type Repository struct {
 	App *config.AppConfig
-}
-
-type LabDataRow struct {
-	Cab string
-	U string
-	ISO string
-	Name string
-	SerialNbr string
-	IP string
-	VIP string
-	IdracIP string
-	SWVer string
-	ServerType string
-	Enterprise string
-	Role string
-	Comments string
-	VMLabServerHostIP string
 }
 
 // http.ResponseWriter, r *http.Request NewRepo creates a new repository
@@ -99,59 +80,9 @@ func (m *Repository) Upload(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	p := processLabInfo(file)
+	p := upload.ProcessLabInfo(file)
 
 	fmt.Println("Number of records - ", len(p))
 	
 }
 
-func processLabInfo(f multipart.File) ([]LabDataRow){
-	var result []LabDataRow
-	reader := csv.NewReader(f)
-
-	for {
-		record, err := reader.Read()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		var x = LabDataRow{}
-		for i := 0; i < len(record); i++ {
-			switch(i) {
-			case 0:
-				x.Cab = record[i]
-			case 1:
-				x.U = record[i]
-			case 2:
-				x.ISO = record[i]
-			case 3:
-				x.Name = record[i]
-			case 4:
-				x.SerialNbr = record[i]
-			case 5:
-				x.IP = record[i]
-			case 6:
-				x.VIP = record[i]
-			case 7:
-				x.IdracIP = record[i]
-			case 8:
-				x.SWVer = record[i]
-			case 9:
-				x.ServerType= record[i]
-			case 10:
-				x.Enterprise = record[i]
-			case 11:
-				x.Role = record[i]
-			case 12:
-				x.Comments = record[i]
-			case 13:
-				x.VMLabServerHostIP = record[i]				
-			}
-		}
-		result = append(result, x)
-	}
-	return result
-}

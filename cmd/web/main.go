@@ -4,6 +4,7 @@ import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/handlers"
+	"dshusdock/tw_prac1/internal/services/database"
 	"fmt"
 	"log"
 	"log/slog"
@@ -38,4 +39,11 @@ func main()  {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func initApp() {
+	// init the app
+	var dba = database.DBAccess{}
+	dba.Init()
+	app.DBA = &dba
 }

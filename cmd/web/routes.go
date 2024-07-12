@@ -3,6 +3,7 @@ package main
 import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/handlers"
+	"dshusdock/tw_prac1/internal/handlers/headervw"
 	"dshusdock/tw_prac1/internal/handlers/layoutvw"
 	"net/http"
 
@@ -11,6 +12,7 @@ import (
 
 func initRouteHandlers() {
 	app.ViewCache["lyoutvw"] = layoutvw.AppLayoutVw.RegisterView(app)
+	app.ViewCache["headervw"] = headervw.AppHeaderVw.RegisterView(app)
 }
 
 func routes(app *config.AppConfig) http.Handler {
