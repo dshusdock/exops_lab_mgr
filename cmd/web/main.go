@@ -27,6 +27,7 @@ func main()  {
 	programLevel.Set(slog.LevelDebug)
 
 	initRouteHandlers()
+	initApp()
 	
 	fmt.Printf("Staring application on port %s\n", portNumber)
 
@@ -43,7 +44,5 @@ func main()  {
 
 func initApp() {
 	// init the app
-	var dba = database.DBAccess{}
-	dba.Init()
-	app.DBA = &dba
+	database.Init()
 }

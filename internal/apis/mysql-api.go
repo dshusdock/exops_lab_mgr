@@ -32,7 +32,7 @@ func Connect() (*sql.DB){
     if pingErr != nil {
         log.Fatal(pingErr)
     }
-    fmt.Println("Connected!")
+    fmt.Println("Database Connected!...")
     return db
 }
 

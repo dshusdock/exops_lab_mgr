@@ -10,16 +10,11 @@ type DBAccess struct {
 	active   bool
 }
 
-var DBA *DBAccess
+var DBA DBAccess
 
-func (m *DBAccess) Init() {
-	var dba = DBAccess{
-		DBHandle: nil,
-	}
-
-	dba.DBHandle = apis.Connect()
-	DBA = &dba
-	dba.active = true
+func Init() {
+	DBA.DBHandle = apis.Connect()
+	DBA.active = true
 }
 
 func (m *DBAccess) Write(sql string) {

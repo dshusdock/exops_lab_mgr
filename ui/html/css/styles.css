@@ -93,13 +93,13 @@ body {
     display: none;
     position: absolute;
     top: 6rem;
-    background-color: grey;
+    background-color: #23324e;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1; }
     .hdr__dropdown-content a {
       float: none;
-      color: black;
+      color: #eee;
       padding: 12px 16px;
       text-decoration: none;
       font-family: sans-serif;
@@ -107,7 +107,8 @@ body {
       text-align: left;
       width: 100%; }
     .hdr__dropdown-content a:hover {
-      background-color: #ddd; }
+      background-color: #0D1B2A;
+      color: #eee; }
 
 .container {
   display: grid;
