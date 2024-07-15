@@ -3,9 +3,9 @@ package main
 import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/handlers"
-	"dshusdock/tw_prac1/internal/handlers/headervw"
-	"dshusdock/tw_prac1/internal/handlers/layoutvw"
-	"dshusdock/tw_prac1/internal/handlers/settingsvw"
+	"dshusdock/tw_prac1/internal/views/headervw"
+	"dshusdock/tw_prac1/internal/views/layoutvw"
+	"dshusdock/tw_prac1/internal/views/settingsvw"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"

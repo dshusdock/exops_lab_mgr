@@ -52,6 +52,5 @@ func Read(db *sql.DB, sql string) (*sql.Rows) {
     if err != nil {
         log.Fatal(err)
     }
-    defer rows.Close()
     return rows
 }

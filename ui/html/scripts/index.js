@@ -103,18 +103,13 @@ document.addEventListener("alpine:init", () => {
       btn: document.getElementById("myBtn"),
       span: document.getElementsByClassName("close")[0],     
       // Functions
-      onClick(event) {
-        console.log("hdr clicked");
-        // let modal = document.getElementsByClassName("hdr__dropbtn")[0];
+      onClick(event) {        
         let modal = document.getElementById("myDropdown");
-        console.log("modal: ", modal);
         modal.style.display = "block";
       },
       onElementClick(event) {
-        console.log("onElementClick clicked");
+        // Disappear the dropdown
         let modal = document.getElementsByClassName("hdr__dropdown-content")[0];
-        // let modal = document.getElementById("myDropdown");
-        console.log("modal: ", modal);
         modal.style.display = "none";
       },
       onOutsideClick(event) {

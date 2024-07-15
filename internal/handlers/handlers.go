@@ -67,7 +67,7 @@ func (m *Repository) Test(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) Upload(w http.ResponseWriter, r *http.Request) {
-	
+
 	fmt.Println("This is an Upload test")
 
 	r.ParseMultipartForm(10 << 20)
@@ -83,6 +83,5 @@ func (m *Repository) Upload(w http.ResponseWriter, r *http.Request) {
 	p := upload.ProcessLabInfo(file)
 
 	fmt.Println("Number of records - ", len(p))
-	
-}
 
+}

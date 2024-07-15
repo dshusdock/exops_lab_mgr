@@ -8,7 +8,20 @@
       <button class="hdr__dropbtn" @click="$store.hdrData.onClick($event)">View
         <i class="fa fa-caret-down"></i>
       </button>
-      <div class="hdr__dropdown-content" id="myDropdown" @click="$store.hdrData.onElementClick(event)">
+      <div 
+        class="hdr__dropdown-content" 
+        id="myDropdown" 
+        @click="$store.hdrData.onElementClick(event)"
+        hx-post="/element/event/click" 
+        hx-swap="internalHTML settle:1" 
+        hx-trigger="click"
+        hx-target=".main"
+        hx-vals='js:{
+          "type": "button",
+          "label": event.target.innerHTML,
+          "view_id": "headervw",
+          "view_str": "" }'
+        >
         <a href="#">Cards</a>
         <a href="#">Table</a>
         <a href="#">List</a>
