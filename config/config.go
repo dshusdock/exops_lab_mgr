@@ -5,6 +5,8 @@ import (
 	"dshusdock/tw_prac1/internal/services/database"
 	"log"
 	"text/template"
+
+	"github.com/asaskevich/EventBus"
 )
 
 type AppConfig struct {
@@ -14,4 +16,5 @@ type AppConfig struct {
 	InProduction  bool
 	ViewCache     map[string]constants.ViewInteface
 	DBA 		  *database.DBAccess
+	Bus 		  EventBus.Bus
 }

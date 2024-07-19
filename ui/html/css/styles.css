@@ -40,14 +40,17 @@ body {
   .hdr__nav, .hdr__control {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     padding: 0rem 2rem;
     font-size: 1.7rem;
     width: 30%;
     background-color: #23324e; }
+    .hdr__nav--space-around, .hdr__control--space-around {
+      justify-content: space-around; }
+      .hdr__nav--space-around i, .hdr__control--space-around i {
+        margin-left: 5rem; }
     .hdr__nav > a, .hdr__control > a {
       padding: .7rem;
-      margin: 1.0rem 4rem .5rem 0rem;
+      margin: 1.0rem -6rem .5rem 0rem;
       font-family: sans-serif;
       text-decoration: none;
       color: #eee;
@@ -113,7 +116,7 @@ body {
 .container {
   display: grid;
   grid-template-columns: 0.15fr 1fr;
-  grid-template-rows: 0.3fr 15fr 1fr;
+  grid-template-rows: 0.1fr 15fr 1fr;
   gap: 0px 0px;
   grid-auto-flow: row;
   grid-template-areas: "header header" "side-nav main" "footer footer"; }
@@ -382,18 +385,23 @@ input[type="file"] {
     margin-bottom: 2rem; }
 
 .labsys-table {
-  margin: 2rem 0 0 0; }
+  margin: 2rem 10rem 0 0;
+  opacity: 1;
+  animation-name: animatetop;
+  animation-duration: 0.3s; }
 
 table.blueTable {
   border: 1px solid #1C6EA4;
   background-color: #EEEEEE;
-  width: 90%;
-  text-align: left;
-  border-collapse: collapse; }
+  text-align: center;
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%; }
 
 table.blueTable td, table.blueTable th {
   border: 1px solid #AAAAAA;
-  padding: 3px 2px; }
+  padding: 3px 2px;
+  word-wrap: break-word; }
 
 table.blueTable tbody td {
   font-size: 13px; }
@@ -439,3 +447,15 @@ table.blueTable tfoot .links a {
   color: #FFFFFF;
   padding: 2px 8px;
   border-radius: 5px; }
+
+table.blueTable thead th {
+  text-align: center; }
+
+table.blueTable tr:hover {
+  background-color: #1b70b6; }
+
+@keyframes animatetop {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }

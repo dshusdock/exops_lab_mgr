@@ -99,3 +99,8 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 		},
 	}
 }
+
+type HeaderDef struct {
+	Header string
+	Width  string
+}

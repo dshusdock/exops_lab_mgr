@@ -3,6 +3,7 @@ package layoutvw
 import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/render"
+	"dshusdock/tw_prac1/internal/services/messagebus"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -34,8 +35,14 @@ func init() {
 }
 
 func (m *LayoutVw) RegisterView(app config.AppConfig) *LayoutVw{
+	messagebus.GetBus().Subscribe("Event:Change", AppLayoutVw.ProcessMBusRequest)
 	AppLayoutVw.App = &app
 	return AppLayoutVw
+}
+
+func (m *LayoutVw) ProcessMBusRequest() {
+	fmt.Println("[lyoutvw] - Processing message bus request")
+
 }
 
 func (m *LayoutVw) ProcessRequest(w http.ResponseWriter, d url.Values) {

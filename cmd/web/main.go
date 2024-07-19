@@ -14,9 +14,10 @@ import (
 // AppConfig holds the application config
 
 const portNumber = ":8082"
-var app config.AppConfig 
 
-func main()  {
+var app config.AppConfig
+
+func main() {
 	app.InProduction = false
 	app.ViewCache = make(map[string]constants.ViewInteface)
 
@@ -28,9 +29,8 @@ func main()  {
 
 	initRouteHandlers()
 	initApp()
-	
-	fmt.Printf("Staring application on port %s\n", portNumber)
 
+	fmt.Printf("Staring application on port %s\n", portNumber)
 	srv := &http.Server{
 		Addr:    portNumber,
 		Handler: routes(&app),
@@ -45,4 +45,23 @@ func main()  {
 func initApp() {
 	// init the app
 	database.Init()
+
+	// queueSize := 100
+	// bus := messagebus.New(queueSize)
+
+	// var wg sync.WaitGroup
+	// wg.Add(2)
+
+	// _ = bus.Subscribe("topic", func(v bool) {
+	//     defer wg.Done()
+	//     fmt.Println(v)
+	// })
+
+	// _ = bus.Subscribe("topic", func(v bool) {
+	//     defer wg.Done()
+	//     fmt.Println(v)
+	// })
+
+	// bus.Publish("topic", true)
+	// wg.Wait()
 }

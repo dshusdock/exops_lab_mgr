@@ -1,18 +1,22 @@
 .labsys-table {
-    margin: 2rem 0 0 0;
+    margin: 2rem 10rem 0 0;
+    opacity: 1;
+    animation-name: animatetop;
+    animation-duration: 0.3s
 }
 
 table.blueTable {
-   
     border: 1px solid #1C6EA4;
     background-color: #EEEEEE;
-    width: 90%;
-    text-align: left;
+    text-align: center;
     border-collapse: collapse;
+    table-layout:fixed;
+    width: 100%;
   }
   table.blueTable td, table.blueTable th {
     border: 1px solid #AAAAAA;
     padding: 3px 2px;
+    word-wrap: break-word;
   }
   table.blueTable tbody td {
     font-size: 13px;
@@ -32,6 +36,7 @@ table.blueTable {
     font-weight: bold;
     color: #FFFFFF;
     border-left: 2px solid #D0E4F5;
+    
   }
   table.blueTable thead th:first-child {
     border-left: none;
@@ -60,3 +65,19 @@ table.blueTable {
     padding: 2px 8px;
     border-radius: 5px;
   }
+
+  table.blueTable thead th { 
+    text-align: center;
+  }
+
+  table.blueTable tr:hover {
+    background-color: #1b70b6;
+  }
+
+  @keyframes animatetop {
+    from {opacity: 0}
+    to {opacity: 1}
+  }
+
+
+

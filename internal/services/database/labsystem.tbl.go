@@ -10,23 +10,21 @@ type DataVw1 struct {
 }
 
 type MdcData struct {
-	cab string
-	cabULocaltion int16
-	iso string
-	name string
-	serialNbr string
-	iPAddress string
-	vip string
-	idracIp string
-	swVer string
-	serverType string
-	enterprise string
-	role string
-	comments string
-	vmLabServerHostIp string
+	Cab               string
+	CabULocation      string
+	Iso               string
+	Name              string
+	SerialNbr         string
+	IPAddress         string
+	Vip               string
+	IdracIp           string
+	SwVer             string
+	ServerType        string
+	Enterprise        string
+	Role              string
+	Comments          string
+	VmLabServerHostIp string
 }
-
-
 
 func GetTableData() ([]DataVw1, error) {
 	// An albums slice to hold data from returned rows.
@@ -63,19 +61,18 @@ func PrintTableData() {
 	}
 }
 
-
-type  labsystem_queries struct {
-	QUERY_1		string
-	QUERY_2		string
-	QUERY_3		string
-	QUERY_4		string
-	QUERY_5		string
+type labsystem_queries struct {
+	QUERY_1 string
+	QUERY_2 string
+	QUERY_3 string
+	QUERY_4 string
+	QUERY_5 string
 }
 
 func TBL_LAB_SYSTEM_QRY() *labsystem_queries {
 	return &labsystem_queries{
-		QUERY_1:       	"select unique enterprise from LabSystem",
-		QUERY_2:		"select * from LabSystem where enterprise = ?",
-		QUERY_3: 		`SELECT vip, swVer, enterprise, name FROM LabSystem where role = "Unigy"`,
+		QUERY_1: "select unique enterprise from LabSystem",
+		QUERY_2: "select * from LabSystem where enterprise = ?",
+		QUERY_3: `SELECT vip, swVer, enterprise, name FROM LabSystem where role = "Unigy"`,
 	}
 }

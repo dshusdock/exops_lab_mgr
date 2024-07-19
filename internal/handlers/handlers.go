@@ -5,6 +5,7 @@ import (
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/handlers/upload"
 	"dshusdock/tw_prac1/internal/render"
+	"dshusdock/tw_prac1/internal/services/messagebus"
 	"fmt"
 	"log"
 	"net/http"
@@ -16,6 +17,7 @@ var Repo *Repository
 // Repository is the repository type
 type Repository struct {
 	App *config.AppConfig
+	MBS messagebus.MessageBusSvc
 }
 
 // http.ResponseWriter, r *http.Request NewRepo creates a new repository
@@ -24,11 +26,14 @@ func NewRepo(a *config.AppConfig) *Repository {
 		App: a,
 	}
 }
-
 // NewHandlers sets the repository for the handlers
 func NewHandlers(r *Repository) {
 	Repo = r
 }
+
+func init() {
+	fmt.Println("Initializing handlers")
+}	
 
 /**
  * 	HandleClickEvents
@@ -48,16 +53,21 @@ func (m *Repository) HandleClickEvents(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	messagebus.GetBus().Publish("Event:Click", w, data)
+	messagebus.GetBus().Publish("Event:Change")
+
 	// route request to appropriate handler
 	ptr := m.App.ViewCache[v_id]
 	ptr.ProcessRequest(w, data)
+
+	
 }
 
 /**
  * 	Home is the handler for the home page
  */
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-
+	
 	render.RenderTemplate_new(w, r, m.App, constants.RM_HOME)
 }
 
