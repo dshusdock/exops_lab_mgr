@@ -13,7 +13,7 @@ import (
 
 // AppConfig holds the application config
 
-const portNumber = ":8082"
+const portNumber = ":8084"
 
 var app config.AppConfig
 

@@ -4,17 +4,22 @@
 
 <div id="labsystbl" class="labsys-table"  x-data>
   {{ with.ViewCache.lstablevw.Data }}
-  <table class="blueTable" >
+  <table class="blueTable" x-data>
     <thead>
     <tr>
       {{ range.HdrDef }}
-    <th style="{{.Width}}">{{.Header}}</th>
+    <th style="{{.Width}}" @click="$store.tblehdr.onHdrClick($event)">{{.Header}}</th>
       {{end}}
     </tr>
+
+    <div class="tbl-hdr-modal">
+      <span class="tbl-hdr-modal__close" @click="$store.tblehdr.onCloseClick($event)">&times;</span>
+      <p class="tbl-hdr-modal__text">Test</p>      
+    </div>
     </thead>
     <tbody>
     {{ range.Tbl }}
-    <tr>
+    <tr class="data-row">
       {{range.Data}}
     <td>{{.}}</td>
       {{end}}
@@ -24,5 +29,7 @@
     </table>
 
 </div>
+
+
 {{end}}
 {{end}}
