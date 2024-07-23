@@ -7,6 +7,7 @@ import (
 	"dshusdock/tw_prac1/internal/services/database"
 	"dshusdock/tw_prac1/internal/services/datetime"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 )
@@ -37,6 +38,7 @@ func init() {
 }
 
 func (m *SettingsVw) RegisterView(app config.AppConfig) *SettingsVw{
+	log.Println("Registering AppSettingsVw...")
 	AppSettingsVw.App = &app
 	return AppSettingsVw
 }

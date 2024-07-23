@@ -32,7 +32,7 @@ func NewHandlers(r *Repository) {
 }
 
 func init() {
-	fmt.Println("Initializing handlers")
+	// fmt.Println("Initializing handlers")
 }	
 
 /**

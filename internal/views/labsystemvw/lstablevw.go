@@ -6,6 +6,7 @@ import (
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/database"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 )
@@ -65,6 +66,7 @@ func init() {
 }
 
 func (m *LSTableVW) RegisterView(app config.AppConfig) *LSTableVW {
+	log.Println("Registering AppLSTableVW...")
 	AppLSTableVW.App = &app
 	return AppLSTableVW
 }

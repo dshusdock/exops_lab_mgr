@@ -5,6 +5,7 @@ import (
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/messagebus"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 )
@@ -35,6 +36,7 @@ func init() {
 }
 
 func (m *LayoutVw) RegisterView(app config.AppConfig) *LayoutVw{
+	log.Println("Registering AppLayoutVw...")
 	messagebus.GetBus().Subscribe("Event:Change", AppLayoutVw.ProcessMBusRequest)
 	AppLayoutVw.App = &app
 	return AppLayoutVw

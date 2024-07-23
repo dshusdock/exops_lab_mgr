@@ -6,6 +6,8 @@ import (
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/messagebus"
 	"dshusdock/tw_prac1/internal/views/labsystemvw"
+	"log"
+
 	// "dshusdock/tw_prac1/internal/views/tablevw"
 	"fmt"
 	"net/http"
@@ -39,6 +41,7 @@ func init() {
 }
 
 func (m *HeaderVw) RegisterView(app config.AppConfig) *HeaderVw {
+	log.Println("Registering AppHeaderVw...")
 	AppHeaderVw.App = &app
 	return AppHeaderVw
 }

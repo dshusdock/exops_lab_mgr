@@ -2,7 +2,6 @@ package database
 
 import (
 	con "dshusdock/tw_prac1/internal/constants"
-	"fmt"
 )
 
 type SqlQueryDef struct {
@@ -19,7 +18,6 @@ var DB_VIEW_TYPE_MAP map[string]SqlQueryDef
 func init() {
 	pa := con.HDR_BTN_LBL()
 
-	fmt.Println("SQL Query def: " + pa.HDR_BTN_TABLE)
 	DB_VIEW_TYPE_MAP = map[string]SqlQueryDef{
 		pa.HDR_BTN_TABLE: {
 			SQL_STR: "Select * from LabSystem",
