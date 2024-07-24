@@ -17,6 +17,9 @@ type SideNavVwData struct {
 	Caret  bool
 	Class  string
 	SubLbl []con.SubElement
+	RepoDlg []string
+	DBList  []string
+	Htmx    []con.HtmxInfo
 }
 
 type DSListData struct {
@@ -38,29 +41,33 @@ type SideNav struct {
 var AppSideNav *SideNav
 
 func init() {
+	slog.Info("In sidenav init \n")
 
 	pa := SIDE_NAV_BTN_LBL()
-	pb := SYS_SUB_BTN_LBL()
+	// pb := SYS_SUB_BTN_LBL()
 
 	AppSideNav = &SideNav{
 		Id:         "sidenav",
 		RenderFile: "side-nav-categories",
 		ViewFlags:  []bool{true, true},
-		Data: []SideNavVwData{{
-			Type:  "caret",
-			Lbl:   pa.ENTERPRISE,
-			Caret: false,
-			Class: "bi-caret-right",
-			SubLbl: nil,  
-			RepoDlg: []string{"border", "IP Address"},
-			DBList:  []string{},
-			Htmx: []con.HtmxInfo{
+		Data: []SideNavVwData{
 			{
-				Url: f.Sprintf("/element/event/click/%d", con.VW_APPHEADER),
+				Type:  "caret",
+				Lbl:   pa.ENTERPRISE,
+				Caret: false,
+				Class: "bi-caret-right",
+				SubLbl: nil,  
+				RepoDlg: []string{"border", "IP Address"},
+				DBList:  []string{},
+				Htmx: []con.HtmxInfo{
+					{
+					Url: f.Sprintf("/element/event/click/%d", con.VW_APPHEADER),
+					},
+				},
 			},
+			// Next Element
 		},
 	}
-	slog.Info("In sidenav init \n")
 }
 
 func (m *SideNav) RegisterView(app config.AppConfig) *SideNav {
