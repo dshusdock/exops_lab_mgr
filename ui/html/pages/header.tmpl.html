@@ -12,13 +12,14 @@
       <div 
         class="hdr__dropdown-content" 
         id="myDropdown" 
+        @click="$store.hdrData.onElementClick(event)"
         hx-post="/element/event/click" 
-        hx-swap="internalHTML settle:1" 
+        hx-swap="internalHTML" 
         hx-trigger="click"
-        hx-target="#app-container"
+        hx-target=".main"
         hx-vals='js:{
           "type": "button",
-          "label": event.target.innerText,
+          "label": event.target.innerHTML,
           "view_id": "headervw",
           "view_str": "" }'
         >

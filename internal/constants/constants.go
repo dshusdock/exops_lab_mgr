@@ -14,7 +14,7 @@ const (
 )
 
 const (
-	EVENT_CLICK = "Event_Click"
+	EVENT_CLICK  = "Event_Click"
 	EVENT_SEARCH = "Event_Search"
 )
 
@@ -37,11 +37,11 @@ type HtmxInfo struct {
 
 type SubElement struct {
 	Type string
-	Lbl string
+	Lbl  string
 }
 
 type ViewInteface interface {
-	ProcessRequest(w http.ResponseWriter, d  url.Values/*ViewInfo*/)
+	ProcessRequest(w http.ResponseWriter, d url.Values /*ViewInfo*/)
 }
 
 type ViewInfo struct {
@@ -56,35 +56,36 @@ type RowData struct {
 	Data []string
 }
 
-///////////////Rendered File Map///////////////
+// /////////////Rendered File Map///////////////
 const (
 	RM_HOME = iota
 	RM_ADD_FORM
-	RM_UPLOAD_MODAL	
+	RM_UPLOAD_MODAL
 	RM_SETTINGS_MODAL
 	RM_LSTABLE
 )
 
 type RenderedFileMap struct {
-	HOME          	[]string
-	ADD_FORM     	[]string
-	UPLOAD_MODAL 	[]string
-	SETTINGS_MODAL 	[]string
-	LSTABLE			[]string
+	HOME           []string
+	ADD_FORM       []string
+	UPLOAD_MODAL   []string
+	SETTINGS_MODAL []string
+	LSTABLE        []string
 }
 
 func RENDERED_FILE_MAP() *RenderedFileMap {
 	return &RenderedFileMap{
-		HOME:  []string{
+		HOME: []string{
 			"./ui/html/pages/base.tmpl.html",
 			"./ui/html/pages/layout.tmpl.html",
 			"./ui/html/pages/test/page1.tmpl.html",
+			"./ui/html/pages/header.tmpl.html",
 			"./ui/html/pages/sidenav.tmpl.html",
 			"./ui/html/pages/system-list.tmpl.html",
 			"./ui/html/pages/test-modal.tmpl.html",
-			"./ui/html/pages/side-nav-categories.tmpl.html",			
+			"./ui/html/pages/side-nav-categories.tmpl.html",
 		},
-		ADD_FORM:	[]string{
+		ADD_FORM: []string{
 			"./ui/html/pages/add_from.tmpl.html",
 		},
 		UPLOAD_MODAL: []string{

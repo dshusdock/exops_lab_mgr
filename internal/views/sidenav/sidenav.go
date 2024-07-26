@@ -12,15 +12,15 @@ import (
 )
 
 type SideNavVwData struct {
-	Type   string
-	Lbl    string
-	Caret  bool
-	Class  string
-	SubLbl []con.SubElement
+	Type    string
+	Lbl     string
+	Caret   bool
+	Class   string
+	SubLbl  []con.SubElement
 	RepoDlg []string
 	DBList  []string
 	Htmx    []con.HtmxInfo
-	EntList  []string
+	EntList []string
 }
 
 type DSListData struct {
@@ -46,33 +46,32 @@ func init() {
 
 	pa := SIDE_NAV_BTN_LBL()
 	// pb := SYS_SUB_BTN_LBL()
-	
+
 	AppSideNav = &SideNav{
 		Id:         "sidenav",
 		RenderFile: "side-nav-categories",
 		ViewFlags:  []bool{true, true},
 		Data: []SideNavVwData{
 			{
-				Type:  "caret",
-				Lbl:   pa.ENTERPRISE,
-				Caret: true,
-				Class: "bi-caret-right",
-				SubLbl: nil,  				
+				Type:    "caret",
+				Lbl:     pa.ENTERPRISE,
+				Caret:   true,
+				Class:   "bi-caret-right",
+				SubLbl:  nil,
 				RepoDlg: []string{"border", "IP Address"},
 				DBList:  []string{},
 				EntList: []string{"Item1", "Item2", "Item3"},
-				Htmx: nil,
-				
+				Htmx:    nil,
 			},
 			{
-				Type:  "caret",
-				Lbl:   pa.USER,
-				Caret: true,
-				Class: "bi-caret-right",
-				SubLbl: nil,  
+				Type:    "caret",
+				Lbl:     pa.USER,
+				Caret:   true,
+				Class:   "bi-caret-right",
+				SubLbl:  nil,
 				RepoDlg: []string{"border", "IP Address"},
 				DBList:  []string{},
-				Htmx: nil,
+				Htmx:    nil,
 				EntList: []string{"Item4", "Item5", "Item6"},
 			},
 			// Next Element
@@ -122,7 +121,7 @@ func (m *SideNav) processClickEvent(w http.ResponseWriter, d url.Values) {
 		//tablevw.AppTableVw.DisplaySQLTable(lbl)
 		//render.RenderMain(w, nil, m.App)
 	}
-	
+
 	fmt.Println("HERE")
 }
 
@@ -130,18 +129,18 @@ func (m *SideNav) toggleCaret(x int) {
 
 	if m.Data[x].Class == "bi-caret-down" {
 		m.Data[x].Class = "bi-caret-right"
-	 } else {
+	} else {
 		m.Data[x].Class = "bi-caret-down"
-	 }
+	}
 }
 
-func indexOf(element string, data []SideNavVwData) (int) {
-   for k, v := range data {
-       if element == v.Lbl {
-           return k
-       }
-   }
-   return -1    //not found.
+func indexOf(element string, data []SideNavVwData) int {
+	for k, v := range data {
+		if element == v.Lbl {
+			return k
+		}
+	}
+	return -1 //not found.
 }
 
 func (m *SideNav) InitDropdownData() {
@@ -149,7 +148,9 @@ func (m *SideNav) InitDropdownData() {
 
 	for _, result := range rslt {
 		fmt.Printf("Result: %+v\n", result)
-		
+
 	}
+
+	
 	//m.Data[0].EntList = rslt[0].Data
 }

@@ -31,7 +31,7 @@ func main() {
 	initRouteHandlers()
 	initApp()
 
-	fmt.Printf("Staring application on port %s\n", portNumber)
+	fmt.Printf("Starting application on port %s\n", portNumber)
 	srv := &http.Server{
 		Addr:    portNumber,
 		Handler: routes(&app),
