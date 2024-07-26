@@ -3,8 +3,8 @@ package sidenav
 import (
 	"dshusdock/tw_prac1/config"
 	con "dshusdock/tw_prac1/internal/constants"
+	db "dshusdock/tw_prac1/internal/services/database"
 	"fmt"
-	f "fmt"
 	"log"
 	"log/slog"
 	"net/http"
@@ -20,6 +20,7 @@ type SideNavVwData struct {
 	RepoDlg []string
 	DBList  []string
 	Htmx    []con.HtmxInfo
+	EntList  []string
 }
 
 type DSListData struct {
@@ -45,7 +46,7 @@ func init() {
 
 	pa := SIDE_NAV_BTN_LBL()
 	// pb := SYS_SUB_BTN_LBL()
-
+	
 	AppSideNav = &SideNav{
 		Id:         "sidenav",
 		RenderFile: "side-nav-categories",
@@ -54,16 +55,25 @@ func init() {
 			{
 				Type:  "caret",
 				Lbl:   pa.ENTERPRISE,
-				Caret: false,
+				Caret: true,
+				Class: "bi-caret-right",
+				SubLbl: nil,  				
+				RepoDlg: []string{"border", "IP Address"},
+				DBList:  []string{},
+				EntList: []string{"Item1", "Item2", "Item3"},
+				Htmx: nil,
+				
+			},
+			{
+				Type:  "caret",
+				Lbl:   pa.USER,
+				Caret: true,
 				Class: "bi-caret-right",
 				SubLbl: nil,  
 				RepoDlg: []string{"border", "IP Address"},
 				DBList:  []string{},
-				Htmx: []con.HtmxInfo{
-					{
-					Url: f.Sprintf("/element/event/click/%d", con.VW_APPHEADER),
-					},
-				},
+				Htmx: nil,
+				EntList: []string{"Item4", "Item5", "Item6"},
 			},
 			// Next Element
 		},
@@ -132,4 +142,14 @@ func indexOf(element string, data []SideNavVwData) (int) {
        }
    }
    return -1    //not found.
+}
+
+func (m *SideNav) InitDropdownData() {
+	rslt := db.ReadDatabase[db.TBL_EnterpriseList](db.TBL_LAB_SYSTEM_QRY().QUERY_1.Qry)
+
+	for _, result := range rslt {
+		fmt.Printf("Result: %+v\n", result)
+		
+	}
+	//m.Data[0].EntList = rslt[0].Data
 }

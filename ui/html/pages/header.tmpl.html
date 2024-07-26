@@ -5,20 +5,20 @@
     <img src="/html/img/exops.png" alt="" class="hdr__nav--img">
   
     <div class="hdr__dropdown"  >
-      <button class="hdr__dropbtn" @click="$store.hdrData.onClick($event)">View
+      <button class="hdr__dropbtn" @click="$store.hdrData.onClick($event)">
+        <span>View</span>
         <i class="fa fa-caret-down"></i>
       </button>
       <div 
         class="hdr__dropdown-content" 
         id="myDropdown" 
-        @click="$store.hdrData.onElementClick(event)"
         hx-post="/element/event/click" 
         hx-swap="internalHTML settle:1" 
         hx-trigger="click"
-        hx-target=".main"
+        hx-target="#app-container"
         hx-vals='js:{
           "type": "button",
-          "label": event.target.innerHTML,
+          "label": event.target.innerText,
           "view_id": "headervw",
           "view_str": "" }'
         >

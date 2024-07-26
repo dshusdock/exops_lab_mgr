@@ -155,7 +155,8 @@ body {
   font-family: sans-serif;
   transition: display 1s ease-in; }
   .sidenav__ul {
-    width: 100%; }
+    width: 100%;
+    color: white; }
   .sidenav__btnlist {
     list-style-type: none;
     display: flex;

@@ -79,13 +79,10 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 			"./ui/html/pages/base.tmpl.html",
 			"./ui/html/pages/layout.tmpl.html",
 			"./ui/html/pages/test/page1.tmpl.html",
-			"./ui/html/pages/header.tmpl.html",
 			"./ui/html/pages/sidenav.tmpl.html",
 			"./ui/html/pages/system-list.tmpl.html",
 			"./ui/html/pages/test-modal.tmpl.html",
-			"./ui/html/pages/side-nav-categories.tmpl.html",
-
-			
+			"./ui/html/pages/side-nav-categories.tmpl.html",			
 		},
 		ADD_FORM:	[]string{
 			"./ui/html/pages/add_from.tmpl.html",

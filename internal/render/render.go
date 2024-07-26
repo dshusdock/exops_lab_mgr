@@ -43,7 +43,8 @@ func RenderTemplate_new(w http.ResponseWriter, r *http.Request, data any, _type 
 	case constants.RM_SETTINGS_MODAL:
 		template.Must(template.ParseFiles(ptr.SETTINGS_MODAL...)).ExecuteTemplate(w, "settings-modal", data)
 	case constants.RM_LSTABLE:
-		template.Must(template.ParseFiles(ptr.LSTABLE...)).ExecuteTemplate(w, "lstable", data)
+		template.Must(template.ParseFiles(ptr.LSTABLE...)).ExecuteTemplate(w, "layoutvw", data)
 	default:
+		template.Must(template.ParseFiles(ptr.HOME...)).ExecuteTemplate(w, "base", data)
 	}
 }

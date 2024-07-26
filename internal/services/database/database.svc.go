@@ -45,4 +45,10 @@ func ReadTableData(t string) []con.RowData {
 	return rd
 }
 
+func ReadDatabase[T any](sql string) []con.RowData {	
+	return apis.ReadDB[T](DBA.DBHandle, sql)
+}
+
+
+
 

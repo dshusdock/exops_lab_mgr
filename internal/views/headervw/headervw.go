@@ -37,7 +37,7 @@ func init() {
 		Data:       "",
 		Htmx:       nil,
 	}
-	messagebus.GetBus().Subscribe("Event:Click", AppHeaderVw.ProcessMBusRequest)
+	messagebus.GetBus().Subscribe("Event:Click", AppHeaderVw.ProcessClickEvent)
 }
 
 func (m *HeaderVw) RegisterView(app config.AppConfig) *HeaderVw {
@@ -47,7 +47,7 @@ func (m *HeaderVw) RegisterView(app config.AppConfig) *HeaderVw {
 }
 
 func (m *HeaderVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
-	fmt.Println("[headervw] - Processing request")
+	fmt.Printf("[%s] - Processing request\n", m.Id)
 	s := d.Get("label")
 	fmt.Println("Label: ", s)
 
@@ -72,10 +72,9 @@ func (m *HeaderVw) ToggleView() {
 	}
 }
 
-func (m *HeaderVw) ProcessMBusRequest(w http.ResponseWriter, d  url.Values) {
-	fmt.Println("In ProcessMBusRequest")
+func (m *HeaderVw) ProcessClickEvent(w http.ResponseWriter, d  url.Values) {
 	lbl := d.Get("label")
-	fmt.Println("Label: ", lbl)
+	fmt.Printf("[%s] ProcessClickEvent - %s", m.Id, lbl)
 
 	switch lbl {
 	case "upload":

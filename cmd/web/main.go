@@ -5,6 +5,7 @@ import (
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/handlers"
 	"dshusdock/tw_prac1/internal/services/database"
+	"dshusdock/tw_prac1/internal/views/sidenav"
 	"fmt"
 	"log"
 	"log/slog"
@@ -45,6 +46,7 @@ func main() {
 func initApp() {
 	// init the app
 	database.Init()
+	sidenav.AppSideNav.InitDropdownData()
 
 	// queueSize := 100
 	// bus := messagebus.New(queueSize)

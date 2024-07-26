@@ -1,0 +1,80 @@
+{{define "side-nav-categories"}}
+<div class="sidenav__btnlist">
+  <span>Categories</span>
+  <ul class="sidenav__ul">
+
+{{with .ViewCache.sidenav}}
+{{ $i := .Id}}
+{{range .Data }}
+  <li>
+    <p>{{.Lbl}}</p>
+    <i class="fa-solid fa-chevron-right"></i>
+   
+  </li>
+  
+  <!-- {{if .Caret}} -->
+  <ul>
+    <!-- {{range .EntList}} -->
+    
+    <li>
+      <p>{{.Type}}</p>
+      <p>test</p>
+      <p>{{.Type}}</p>
+    </li>
+    <!-- {{end}} -->
+  </ul>
+  <!-- {{end}} -->
+  
+  <!--  <li
+      style="height: 40px"
+      class="d-flex flex-row justify-content-between text-start caret_icon me-2 side_item"
+      aria-expanded="false"
+      hx-post="/element/event/click/"
+      hx-swap="innerHTML"
+      hx-trigger="click"
+      hx-target="#side_nav_btns"
+      hx-vals='{
+        "type": "{{.Type}}",
+        "label": "{{.Lbl}}",
+        "view_id": "{{$i}}",
+        "view_str": ""
+      }' >
+      <p class="mt-1 ms-2">{{.Lbl}}</p>
+      <i class="{{.Class}} me-2 mt-2"></i>
+    </li>
+  {{if .Caret}}
+
+
+  <ul style="list-style-type: none; padding-left: 0" class="">
+    
+    {{range .SubLbl}}
+    <div class="me-2">
+      <li
+        style="height: 40px"
+        class="d-flex flex-row justify-content-between text-start caret_icon"
+        aria-expanded="false"
+        hx-post="/element/event/click/"
+        hx-swap="innerHTML"
+        hx-trigger="click"
+        hx-target="#main-view"
+        hx-vals='{
+          "type": "{{.Type}}",
+          "label": "{{.Lbl}}",
+          "view_id": "{{$i}}",
+          "view_str": ""
+        }'
+      >
+        <p style="font-size: 14px" class="mt-1 ms-4">{{ .Lbl }}</p>
+      </li>
+    </div>
+    {{end}}
+  </ul>
+{{end}}-->
+
+{{end}} 
+
+{{end}} 
+  </ul>
+  
+</div>
+{{end}}
