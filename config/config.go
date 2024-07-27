@@ -17,4 +17,6 @@ type AppConfig struct {
 	ViewCache     map[string]constants.ViewInteface
 	DBA 		  *database.DBAccess
 	Bus 		  EventBus.Bus
+	SideNav	      bool
+	MainTable	  bool
 }

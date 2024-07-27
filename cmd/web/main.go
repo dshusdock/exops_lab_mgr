@@ -5,7 +5,6 @@ import (
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/handlers"
 	"dshusdock/tw_prac1/internal/services/database"
-	"dshusdock/tw_prac1/internal/views/sidenav"
 	"fmt"
 	"log"
 	"log/slog"
@@ -20,6 +19,8 @@ var app config.AppConfig
 
 func main() {
 	app.InProduction = false
+	app.SideNav = false
+	app.MainTable = false
 	app.ViewCache = make(map[string]constants.ViewInteface)
 
 	repo := handlers.NewRepo(&app)
@@ -46,7 +47,7 @@ func main() {
 func initApp() {
 	// init the app
 	database.Init()
-	sidenav.AppSideNav.InitDropdownData()
+	// sidenav.AppSideNav.InitDropdownData()
 
 	// queueSize := 100
 	// bus := messagebus.New(queueSize)

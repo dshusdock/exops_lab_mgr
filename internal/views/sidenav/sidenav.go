@@ -151,6 +151,5 @@ func (m *SideNav) InitDropdownData() {
 
 	}
 
-	
 	//m.Data[0].EntList = rslt[0].Data
 }

@@ -6,6 +6,8 @@ import (
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/messagebus"
 	"dshusdock/tw_prac1/internal/views/labsystemvw"
+
+	// "dshusdock/tw_prac1/internal/views/labsystemvw"
 	"log"
 
 	// "dshusdock/tw_prac1/internal/views/tablevw"
@@ -83,7 +85,8 @@ func (m *HeaderVw) ProcessClickEvent(w http.ResponseWriter, d  url.Values) {
 		render.RenderTemplate_new(w, nil, nil, constants.RM_SETTINGS_MODAL)
 	case "Table":
 		labsystemvw.AppLSTableVW.DisplaySQLTable(lbl)
-
-		render.RenderTemplate_new(w, nil, m.App, constants.RM_LSTABLE)
+		m.App.SideNav = true
+		fmt.Println("\nTable clicked")
+		render.RenderTemplate_new(w, nil, m.App, constants.RM_TABLE)
 	}
 }

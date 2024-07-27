@@ -14,12 +14,12 @@
         id="myDropdown" 
         @click="$store.hdrData.onElementClick(event)"
         hx-post="/element/event/click" 
-        hx-swap="internalHTML" 
+        hx-swap="internalHTML settle:1" 
         hx-trigger="click"
         hx-target=".main"
         hx-vals='js:{
           "type": "button",
-          "label": event.target.innerHTML,
+          "label": "Table",
           "view_id": "headervw",
           "view_str": "" }'
         >
@@ -35,7 +35,7 @@
       hx-post="/element/event/click" 
       hx-swap="internalHTML settle:1" 
       hx-trigger="click"
-      hx-target=".main"
+      hx-target=".activity"
       hx-vals='{
         "type": "button",
         "label": "upload",
@@ -49,7 +49,7 @@
       hx-post="/element/event/click" 
       hx-swap="internalHTML settle:1" 
       hx-trigger="click"
-      hx-target=".main"
+      hx-target=".activity"
       hx-vals='{
         "type": "button",
         "label": "settings",

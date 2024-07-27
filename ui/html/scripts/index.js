@@ -111,8 +111,8 @@ document.addEventListener("alpine:init", () => {
         // Disappear the dropdown
         let modal = document.getElementsByClassName("hdr__dropdown-content")[0];
         modal.style.display = "none";
-        let sidnav = document.getElementsByClassName("sidenav")[0];
-        sidnav.style.display = "block";
+        // let sidnav = document.getElementsByClassName("sidenav")[0];
+        // sidnav.style.display = "block";
       },
       onOutsideClick(event) {
         console.log("outside clicked");

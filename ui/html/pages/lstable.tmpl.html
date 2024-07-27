@@ -1,32 +1,37 @@
 {{define "lstable" }}
 
-<div id="labsystbl" class="labsys-table"  x-data>
+<div id="labsystbl" class="labsys-table" x-data>
   {{ with.ViewCache.lstablevw.Data }}
   <table class="blueTable" x-data>
     <thead>
-    <tr>
-      {{ range.HdrDef }}
-    <th style="{{.Width}}" @click="$store.tblehdr.onHdrClick($event)">{{.Header}}</th>
-      {{end}}
-    </tr>
+      <tr>
+        {{ range.HdrDef }}
+        <th style="{{.Width}}" @click="$store.tblehdr.onHdrClick($event)">
+          {{.Header}}
+        </th>
+        {{end}}
+      </tr>
 
-    <div class="tbl-hdr-modal">
-      <span class="tbl-hdr-modal__close" @click="$store.tblehdr.onCloseClick($event)">&times;</span>
-      <p class="tbl-hdr-modal__text">Test</p>      
-    </div>
+      <div class="tbl-hdr-modal">
+        <span
+          class="tbl-hdr-modal__close"
+          @click="$store.tblehdr.onCloseClick($event)"
+          >&times;</span
+        >
+        <p class="tbl-hdr-modal__text">Test</p>
+      </div>
     </thead>
     <tbody>
-    {{ range.Tbl }}
-    <tr class="data-row">
-      {{range.Data}}
-    <td>{{.}}</td>
+      {{ range.Tbl }}
+      <tr class="data-row">
+        {{range.Data}}
+        <td>{{.}}</td>
+        {{end}}
+      </tr>
       {{end}}
-    </tr>
-    {{end}}
     </tbody>
-    </table>
-
-</div> 
+  </table>
+</div>
 
 {{end}}
 {{end}}

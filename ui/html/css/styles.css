@@ -10,7 +10,8 @@ html {
 
 body {
   box-sizing: border-box;
-  background-color: #415A77; }
+  background-color: #415A77;
+  overflow: hidden; }
 
 .test1 {
   font-size: 10rem; }
@@ -115,37 +116,31 @@ body {
 
 .container {
   display: grid;
-  grid-template-columns: 0.15fr 1fr;
+  grid-template-columns: 100%;
   grid-template-rows: 6rem 15fr 1fr;
   gap: 0px 0px;
   grid-auto-flow: row;
-  grid-template-areas: "header header" "side-nav main" "footer footer"; }
+  grid-template-areas: "_header" "_main" "_footer"; }
 
 .header {
-  grid-area: header; }
-
-.side-nav {
-  grid-area: side-nav; }
-
-.main {
-  grid-area: main; }
+  grid-area: _header; }
 
 .footer {
-  grid-area: footer; }
+  grid-area: _footer; }
+
+.activity {
+  width: 100%; }
 
 .main {
-  position: relative; }
-  .main__div {
-    position: absolute;
-    left: 10rem;
-    top: 10rem;
-    height: 50rem;
-    width: 60rem;
-    border: 1px solid white;
-    border-radius: 1rem; }
+  grid-area: _main;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly; }
 
 .sidenav {
-  display: none;
+  display: block;
+  width: 90%;
+  padding: 0 5rem 0 5rem;
   background: #0D1B2A;
   height: 100rem;
   margin: 1rem 1rem 0 1rem;
@@ -417,16 +412,17 @@ input[type="file"] {
   animation-duration: 0.3s; }
 
 table.blueTable {
-  border: 1px solid #1C6EA4;
+  border: 1px solid #1c6ea4;
   border-radius: 5px;
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
   text-align: center;
   border-collapse: collapse;
   table-layout: fixed;
   width: 100%; }
 
-table.blueTable td, table.blueTable th {
-  border: 1px solid #AAAAAA;
+table.blueTable td,
+table.blueTable th {
+  border: 1px solid #aaaaaa;
   padding: 3px 2px;
   word-wrap: break-word; }
 
@@ -434,20 +430,20 @@ table.blueTable tbody td {
   font-size: 13px; }
 
 table.blueTable tr:nth-child(even) {
-  background: #D0E4F5; }
+  background: #d0e4f5; }
 
 table.blueTable thead {
-  background: #23324E;
-  background: -moz-linear-gradient(top, #5a657a 0%, #39465f 66%, #23324E 100%);
-  background: -webkit-linear-gradient(top, #5a657a 0%, #39465f 66%, #23324E 100%);
-  background: linear-gradient(to bottom, #5a657a 0%, #39465f 66%, #23324E 100%);
+  background: #23324e;
+  background: -moz-linear-gradient(top, #5a657a 0%, #39465f 66%, #23324e 100%);
+  background: -webkit-linear-gradient(top, #5a657a 0%, #39465f 66%, #23324e 100%);
+  background: linear-gradient(to bottom, #5a657a 0%, #39465f 66%, #23324e 100%);
   border-bottom: 2px solid #444444; }
 
 table.blueTable thead th {
   font-size: 15px;
   font-weight: bold;
-  color: #FFFFFF;
-  border-left: 2px solid #D0E4F5;
+  color: #ffffff;
+  border-left: 2px solid #d0e4f5;
   cursor: pointer; }
 
 table.blueTable thead th:first-child {
@@ -456,11 +452,11 @@ table.blueTable thead th:first-child {
 table.blueTable tfoot {
   font-size: 14px;
   font-weight: bold;
-  color: #FFFFFF;
-  background: #D0E4F5;
-  background: -moz-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
-  background: -webkit-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
-  background: linear-gradient(to bottom, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+  color: #ffffff;
+  background: #d0e4f5;
+  background: -moz-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #d0e4f5 100%);
+  background: -webkit-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #d0e4f5 100%);
+  background: linear-gradient(to bottom, #dcebf7 0%, #d4e6f6 66%, #d0e4f5 100%);
   border-top: 2px solid #444444; }
 
 table.blueTable tfoot td {
@@ -471,8 +467,8 @@ table.blueTable tfoot .links {
 
 table.blueTable tfoot .links a {
   display: inline-block;
-  background: #1C6EA4;
-  color: #FFFFFF;
+  background: #1c6ea4;
+  color: #ffffff;
   padding: 2px 8px;
   border-radius: 5px; }
 
@@ -509,6 +505,15 @@ table.blueTable .data-row:hover {
   .tbl-hdr-modal__close {
     color: white;
     font-size: 2.5rem;
-    margin: .2rem .6rem 0 0;
+    margin: 0.2rem 0.6rem 0 0;
     cursor: pointer;
     align-self: flex-end; }
+
+.activity-sidenav {
+  width: 15%;
+  height: 100rem; }
+
+.activity-main {
+  width: 85%;
+  height: 100rem;
+  overflow: auto; }

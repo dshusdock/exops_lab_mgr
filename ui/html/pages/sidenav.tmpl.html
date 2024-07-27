@@ -1,15 +1,8 @@
 {{define "sidenav"}}
 
-<div class="alpine__sidenav" x-data="
-  { 
-    open: false,
-    count: 0
-  }">
-  <nav class="sidenav">
-    <!-- {{template "system-list" .}} -->
-     {{ template "side-nav-categories" . }}
-  </nav>
-  <p ></p>
+<div class="sidenav">
+  <nav class="">{{ template "side-nav-categories" . }}</nav>
 </div>
 
 {{ end }}
+     

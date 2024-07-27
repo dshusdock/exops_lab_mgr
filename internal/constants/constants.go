@@ -59,18 +59,18 @@ type RowData struct {
 // /////////////Rendered File Map///////////////
 const (
 	RM_HOME = iota
+	RM_TABLE
 	RM_ADD_FORM
 	RM_UPLOAD_MODAL
 	RM_SETTINGS_MODAL
-	RM_LSTABLE
 )
 
 type RenderedFileMap struct {
 	HOME           []string
+	TABLE          []string
 	ADD_FORM       []string
 	UPLOAD_MODAL   []string
 	SETTINGS_MODAL []string
-	LSTABLE        []string
 }
 
 func RENDERED_FILE_MAP() *RenderedFileMap {
@@ -84,6 +84,15 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 			"./ui/html/pages/system-list.tmpl.html",
 			"./ui/html/pages/test-modal.tmpl.html",
 			"./ui/html/pages/side-nav-categories.tmpl.html",
+			"./ui/html/pages/lstable.tmpl.html",
+			"./ui/html/pages/activity.tmpl.html",
+		},
+		TABLE: []string{
+			// "./ui/html/pages/layout.tmpl.html",			
+			"./ui/html/pages/sidenav.tmpl.html",
+			"./ui/html/pages/side-nav-categories.tmpl.html",		
+			"./ui/html/pages/activity.tmpl.html",	
+			"./ui/html/pages/lstable.tmpl.html",
 		},
 		ADD_FORM: []string{
 			"./ui/html/pages/add_from.tmpl.html",
@@ -93,9 +102,6 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 		},
 		SETTINGS_MODAL: []string{
 			"./ui/html/pages/settings-modal.tmpl.html",
-		},
-		LSTABLE: []string{
-			"./ui/html/pages/lstable.tmpl.html",
 		},
 	}
 }
