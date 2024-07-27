@@ -7,10 +7,10 @@
 
 table.blueTable {
   border: 1px solid #1c6ea4;
-  border-radius: 5px;
   background-color: #eeeeee;
   text-align: center;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-radius: .7rem;
   table-layout: fixed;
   width: 100%;
 }
@@ -23,6 +23,18 @@ table.blueTable th {
 table.blueTable tbody td {
   font-size: 13px;
 }
+
+th:first-child {
+  border-left: none;
+  border-radius: .7rem 0 0 0;
+}
+
+th:last-child {
+  border-left: none;
+  border-radius: 0 .7rem 0 0 ;
+}
+
+
 table.blueTable tr:nth-child(even) {
   background: #d0e4f5;
 }
@@ -43,6 +55,7 @@ table.blueTable thead {
   );
   background: linear-gradient(to bottom, #5a657a 0%, #39465f 66%, #23324e 100%);
   border-bottom: 2px solid #444444;
+  border-radius: .5rem;
 }
 table.blueTable thead th {
   font-size: 15px;
