@@ -84,9 +84,7 @@ func (m *HeaderVw) ProcessClickEvent(w http.ResponseWriter, d  url.Values) {
 	case "settings":
 		render.RenderTemplate_new(w, nil, nil, constants.RM_SETTINGS_MODAL)
 	case "Table":
-		labsystemvw.AppLSTableVW.DisplaySQLTable(lbl)
-		m.App.SideNav = true
-		fmt.Println("\nTable clicked")
+		labsystemvw.AppLSTableVW.LoadTableData(lbl)
 		render.RenderTemplate_new(w, nil, m.App, constants.RM_TABLE)
 	}
 }

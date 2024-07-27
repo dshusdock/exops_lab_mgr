@@ -58,21 +58,10 @@ func init() {
 				Caret:   true,
 				Class:   "bi-caret-right",
 				SubLbl:  nil,
-				RepoDlg: []string{"border", "IP Address"},
+				RepoDlg: []string{},
 				DBList:  []string{},
-				EntList: []string{"Item1", "Item2", "Item3"},
+				EntList: []string{},
 				Htmx:    nil,
-			},
-			{
-				Type:    "caret",
-				Lbl:     pa.USER,
-				Caret:   true,
-				Class:   "bi-caret-right",
-				SubLbl:  nil,
-				RepoDlg: []string{"border", "IP Address"},
-				DBList:  []string{},
-				Htmx:    nil,
-				EntList: []string{"Item4", "Item5", "Item6"},
 			},
 			// Next Element
 		},
@@ -118,11 +107,9 @@ func (m *SideNav) processClickEvent(w http.ResponseWriter, d url.Values) {
 
 	default:
 
-		//tablevw.AppTableVw.DisplaySQLTable(lbl)
+		//tablevw.AppTableVw.LoadTableData(lbl)
 		//render.RenderMain(w, nil, m.App)
 	}
-
-	fmt.Println("HERE")
 }
 
 func (m *SideNav) toggleCaret(x int) {
@@ -143,13 +130,13 @@ func indexOf(element string, data []SideNavVwData) int {
 	return -1 //not found.
 }
 
-func (m *SideNav) InitDropdownData() {
+func (m *SideNav) LoadDropdownData() {
 	rslt := db.ReadDatabase[db.TBL_EnterpriseList](db.TBL_LAB_SYSTEM_QRY().QUERY_1.Qry)
 
 	for _, result := range rslt {
 		fmt.Printf("Result: %+v\n", result)
 
 	}
-
+	// populate the structure
 	//m.Data[0].EntList = rslt[0].Data
 }

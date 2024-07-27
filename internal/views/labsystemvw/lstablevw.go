@@ -82,7 +82,7 @@ func (m *LSTableVW) ProcessRequest(w http.ResponseWriter, d url.Values) {
 	}
 }
 
-func (m *LSTableVW) DisplaySQLTable(t string) {
+func (m *LSTableVW) LoadTableData(t string) {
 	fmt.Println("\nDisplaying SQL Table: ", t)
 	m.ViewFlags[0] = true
 	ptr := database.DB_VIEW_TYPE_MAP[t]

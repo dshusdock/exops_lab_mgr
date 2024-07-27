@@ -47,7 +47,7 @@ func main() {
 func initApp() {
 	// init the app
 	database.Init()
-	// sidenav.AppSideNav.InitDropdownData()
+	// sidenav.AppSideNav.LoadDropdownData()
 
 	// queueSize := 100
 	// bus := messagebus.New(queueSize)
