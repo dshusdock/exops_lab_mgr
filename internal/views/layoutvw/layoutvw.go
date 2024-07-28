@@ -37,13 +37,13 @@ func init() {
 
 func (m *LayoutVw) RegisterView(app config.AppConfig) *LayoutVw{
 	log.Println("Registering AppLayoutVw...")
-	messagebus.GetBus().Subscribe("Event:Change", AppLayoutVw.ProcessMBusRequest)
+	messagebus.GetBus().Subscribe("Event:Change", AppLayoutVw.ProcessChangEvent)
 	AppLayoutVw.App = &app
 	return AppLayoutVw
 }
 
-func (m *LayoutVw) ProcessMBusRequest() {
-	fmt.Println("[lyoutvw] - Processing message bus request")
+func (m *LayoutVw) ProcessChangEvent() {
+	fmt.Println("\n[lyoutvw] Process Change Event")
 
 }
 

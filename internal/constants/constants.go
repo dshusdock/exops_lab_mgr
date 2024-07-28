@@ -60,6 +60,7 @@ type RowData struct {
 const (
 	RM_HOME = iota
 	RM_TABLE
+	RM_TABLE_REFRESH
 	RM_ADD_FORM
 	RM_UPLOAD_MODAL
 	RM_SETTINGS_MODAL
@@ -69,6 +70,7 @@ const (
 type RenderedFileMap struct {
 	HOME           []string
 	TABLE          []string
+	TABLE_REFRESH  []string
 	ADD_FORM       []string
 	UPLOAD_MODAL   []string
 	SETTINGS_MODAL []string
@@ -94,6 +96,9 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 			"./ui/html/pages/sidenav.tmpl.html",
 			"./ui/html/pages/side-nav-categories.tmpl.html",		
 			"./ui/html/pages/activity.tmpl.html",	
+			"./ui/html/pages/lstable.tmpl.html",
+		},
+		TABLE_REFRESH: []string{
 			"./ui/html/pages/lstable.tmpl.html",
 		},
 		ADD_FORM: []string{

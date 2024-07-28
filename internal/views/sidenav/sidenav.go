@@ -6,8 +6,9 @@ import (
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	db "dshusdock/tw_prac1/internal/services/database"
+	logger "dshusdock/tw_prac1/internal/services/logging"
+	"dshusdock/tw_prac1/internal/views/labsystemvw"
 	"fmt"
-	"log"
 	"log/slog"
 	"net/http"
 	"net/url"
@@ -71,13 +72,13 @@ func init() {
 }
 
 func (m *SideNav) RegisterView(app config.AppConfig) *SideNav {
-	log.Println("Registering AppSideNav...")
+	fmt.Println("Registering AppSideNav...")
 	AppSideNav.App = &app
 	return AppSideNav
 }
 
 func (m *SideNav) ProcessRequest(w http.ResponseWriter, d url.Values) {
-	slog.Info("[SideNav] Entering Process Request")
+	fmt.Println("[SideNav] Process Request")
 	s := d.Get("event")
 
 	switch s {
@@ -88,7 +89,7 @@ func (m *SideNav) ProcessRequest(w http.ResponseWriter, d url.Values) {
 
 func (m *SideNav) processClickEvent(w http.ResponseWriter, d url.Values) {
 
-	fmt.Println("[SideNav] In processClickEvent")
+	fmt.Println("\n[SideNav] ProcessClickEvent")
 	lbl := d.Get("label")
 
 	switch d.Get("type") {
@@ -105,8 +106,11 @@ func (m *SideNav) processClickEvent(w http.ResponseWriter, d url.Values) {
 		}
 		render.RenderTemplate_new(w, nil, m.App, constants.RM_SNIPPET1)
 	case "button":
-		fmt.Println("In the button case")
-		render.RenderTemplate_new(w, nil, nil, constants.RM_SNIPPET1)
+		fmt.Printf("In the button case - %s\n", lbl)
+		str := fmt.Sprintf("Select * from LabSystem where Enterprise = \"%s\"", lbl)
+		labsystemvw.AppLSTableVW.LoadTblDataByQuery(str)
+		render.RenderTemplate_new(w, nil, m.App, constants.RM_TABLE_REFRESH)
+		// render.RenderTemplate_new(w, nil, nil, constants.RM_SNIPPET1)
 
 	case "select":
 		fmt.Println("In the select case")
@@ -141,7 +145,9 @@ func (m *SideNav) LoadDropdownData() {
 	m.Data[0].EntList = nil
 
 	for i, result := range rslt {
-		fmt.Printf("Result:%d  %s\n", i, result.Data[0])
+		// fmt.Printf("Result:%d  %s\n", i, result.Data[0])
+		logger.Log("Result:%d  %s\n", i, result.Data[0])
+
 		m.Data[0].EntList = append(m.Data[0].EntList, result.Data[0])
 
 	}

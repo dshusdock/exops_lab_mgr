@@ -44,6 +44,8 @@ func RenderTemplate_new(w http.ResponseWriter, r *http.Request, data any, _type 
 		template.Must(template.ParseFiles(ptr.SETTINGS_MODAL...)).ExecuteTemplate(w, "settings-modal", data)
 	case constants.RM_TABLE:
 		template.Must(template.ParseFiles(ptr.TABLE...)).ExecuteTemplate(w, "activity", data)
+	case constants.RM_TABLE_REFRESH:
+		template.Must(template.ParseFiles(ptr.TABLE...)).ExecuteTemplate(w, "lstable", data)
 	case constants.RM_SNIPPET1:
 		template.Must(template.ParseFiles(ptr.SNIPPET1...)).ExecuteTemplate(w, "side-nav-categories", data)
 	default:

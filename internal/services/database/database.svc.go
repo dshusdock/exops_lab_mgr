@@ -49,6 +49,10 @@ func ReadDatabase[T any](sql string) []con.RowData {
 	return apis.ReadDB[T](DBA.DBHandle, sql)
 }
 
+func ReadTblWithQry(sql string) []con.RowData {	
+	return apis.ReadDB[MdcData](DBA.DBHandle, sql)
+}
+
 
 
 

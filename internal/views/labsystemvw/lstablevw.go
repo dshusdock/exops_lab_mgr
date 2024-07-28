@@ -104,3 +104,27 @@ func (m *LSTableVW) LoadTableData(t string) {
 	m.Data.HdrDef = ptr.HdrDef
 	
 }
+
+func (m *LSTableVW) LoadTblDataByQuery(q string) {
+	fmt.Println("\nLoadDataByQuery - ", q)
+	m.ViewFlags[0] = true
+	ptr := database.DB_VIEW_TYPE_MAP["Table"]
+
+	m.Data.Start = 0
+	m.Data.Tbl = database.ReadTblWithQry(q)
+	m.Data.Table = "QUERY"
+
+	var end int
+	m.Data.RowCnt = len(m.Data.Tbl)
+
+	if m.Data.RowCnt > m.Data.MaxRows {
+		end = m.Data.MaxRows
+	} else {
+		end = m.Data.RowCnt
+	}
+
+	m.Data.TblSlice = m.Data.Tbl[m.Data.Start:end]
+	m.Data.HdrDef = ptr.HdrDef
+	
+}
+

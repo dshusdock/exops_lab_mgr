@@ -49,6 +49,7 @@ func (m *HeaderVw) RegisterView(app config.AppConfig) *HeaderVw {
 }
 
 func (m *HeaderVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
+
 	fmt.Printf("[%s] - Processing request\n", m.Id)
 	s := d.Get("label")
 	fmt.Println("Label: ", s)
@@ -75,8 +76,9 @@ func (m *HeaderVw) ToggleView() {
 }
 
 func (m *HeaderVw) ProcessClickEvent(w http.ResponseWriter, d  url.Values) {
+	if d.Get("view_id") != m.Id {return}
 	lbl := d.Get("label")
-	fmt.Printf("[%s] ProcessClickEvent - %s", m.Id, lbl)
+	fmt.Printf("[%s] ProcessClickEvent - %s\n", m.Id, lbl)
 
 	switch lbl {
 	case "upload":
