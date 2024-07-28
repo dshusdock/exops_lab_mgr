@@ -1,29 +1,39 @@
 {{define "side-nav-categories"}}
-<div class="sidenav__btnlist">
+<div class="sidenav__btnlist" x-data>
   <span>Categories</span>
   <ul class="sidenav__ul">
+    {{with .ViewCache.sidenav}} 
+    {{ $data := .Data }} 
+    
+    {{range $data}}
+    <li
+      class=""
+      hx-post="/element/event/click"
+      hx-swap="outerHTML settle:1"
+      hx-target=".sidenav__btnlist"
+      hx-trigger="click"
+      hx-vals='js:{
+      "type": "caret",
+      "label": "{{.Lbl}}",
+      "view_id": "sidenav",
+      "view_str": "" }'
+    >
+      <p>{{.Lbl}}</p>
+      <i  id="{{.Lbl}}" class="{{.Class}}"></i>
+    </li>
+    <div id="list_container"  class="">
+      {{if .Caret}}
+      <ul class="list_container__ul">
+      {{range .EntList}}
+          <li>{{.}}</li>
+      {{end}}
+      </ul>
+      {{end}}
+    </div>
 
-{{with .ViewCache.sidenav}}
-{{ $data := .Data }} 
-
-{{range $data}}
-{{ $list := .RepoDlg }}
-{{ $list2 := .EntList}}
-  <li>
-    <p>{{.Lbl}}</p>
-    <i class="fa-solid fa-chevron-right"></i>
-  </li>
-  {{range $list}}
-    <p>..{{.}}</p>
-  {{end}}
-
-  {{range $list2}}
-    <p>..{{.}}</p>
-  {{end}}
-
-
-{{end}} <!--Data-->
+    {{end}}
+    <!--Data-->
   </ul>
-{{end}} 
+  {{end}}
 </div>
 {{end}}

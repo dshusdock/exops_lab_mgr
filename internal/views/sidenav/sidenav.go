@@ -2,7 +2,9 @@ package sidenav
 
 import (
 	"dshusdock/tw_prac1/config"
+	"dshusdock/tw_prac1/internal/constants"
 	con "dshusdock/tw_prac1/internal/constants"
+	"dshusdock/tw_prac1/internal/render"
 	db "dshusdock/tw_prac1/internal/services/database"
 	"fmt"
 	"log"
@@ -56,7 +58,7 @@ func init() {
 				Type:    "caret",
 				Lbl:     pa.ENTERPRISE,
 				Caret:   true,
-				Class:   "bi-caret-right",
+				Class:   "fa-solid fa-chevron-right rotate_back",
 				SubLbl:  nil,
 				RepoDlg: []string{},
 				DBList:  []string{},
@@ -92,15 +94,19 @@ func (m *SideNav) processClickEvent(w http.ResponseWriter, d url.Values) {
 	switch d.Get("type") {
 	case "caret":
 		x := indexOf(lbl, m.Data)
+		
+		m.LoadDropdownData()
+
 		m.toggleCaret(x)
 		if m.Data[x].Caret {
 			m.Data[x].Caret = false
 		} else {
 			m.Data[x].Caret = true
 		}
-		//render.RenderSideNav(w, nil, m.App)
+		render.RenderTemplate_new(w, nil, m.App, constants.RM_SNIPPET1)
 	case "button":
 		fmt.Println("In the button case")
+		render.RenderTemplate_new(w, nil, nil, constants.RM_SNIPPET1)
 
 	case "select":
 		fmt.Println("In the select case")
@@ -114,10 +120,10 @@ func (m *SideNav) processClickEvent(w http.ResponseWriter, d url.Values) {
 
 func (m *SideNav) toggleCaret(x int) {
 
-	if m.Data[x].Class == "bi-caret-down" {
-		m.Data[x].Class = "bi-caret-right"
+	if m.Data[x].Class == "fa fa-chevron-right rotate_back" {
+		m.Data[x].Class = "fa fa-chevron-right rotate_fwd"
 	} else {
-		m.Data[x].Class = "bi-caret-down"
+		m.Data[x].Class = "fa fa-chevron-right rotate_back"
 	}
 }
 
@@ -132,9 +138,11 @@ func indexOf(element string, data []SideNavVwData) int {
 
 func (m *SideNav) LoadDropdownData() {
 	rslt := db.ReadDatabase[db.TBL_EnterpriseList](db.TBL_LAB_SYSTEM_QRY().QUERY_1.Qry)
+	m.Data[0].EntList = nil
 
-	for _, result := range rslt {
-		fmt.Printf("Result: %+v\n", result)
+	for i, result := range rslt {
+		fmt.Printf("Result:%d  %s\n", i, result.Data[0])
+		m.Data[0].EntList = append(m.Data[0].EntList, result.Data[0])
 
 	}
 	// populate the structure

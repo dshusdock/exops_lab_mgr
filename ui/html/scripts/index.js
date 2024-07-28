@@ -172,5 +172,30 @@ document.addEventListener("alpine:init", () => {
       }
 
 
+    }),
+    Alpine.store("sidenav", {
+        chevronRotated: false,
+        onElementClick(el) {
+            console.log("sidenav clicked" + el.innerText);
+            el.style.backgroundColor = "blue";
+            let children = el.childNodes;
+            console.log("children: ", children);
+            children.forEach(element => {
+              console.log("element: ", element.tagName);
+              if (element.tagName === "I") {
+                if (this.chevronRotated) {
+                  element.className = "fa fa-chevron-right rotate_back";                  
+                  this.chevronRotated = false;
+                } else {
+                  element.className = "fa fa-chevron-right rotate_fwd";                 
+                  this.chevronRotated = true;
+                }
+                
+                
+              }
+        })
+      }
+
+
     })
   });

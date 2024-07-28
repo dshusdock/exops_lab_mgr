@@ -2,7 +2,7 @@
   display: block;
   width: 90%;
   background: $color-secondary-dark;
-  height: 100rem;
+  height: 87rem;
   margin: 2rem 1rem 0 1rem;
   border-radius: .7rem;
   box-shadow: 0 1rem 2rem rgba(black, .2);
@@ -55,11 +55,11 @@
         margin: .4rem 0 0 0;
       }
 
-      & i:active {
-        transform-origin: 7px;
-        transform: rotate(90deg);        
-        transition: all .3s;
-      }
+      // & i:active {
+      //   transform-origin: 7px;
+      //   transform: rotate(90deg);        
+      //   transition: all .3s;
+      // }
 
       &:hover {
         background-color: #222;
@@ -75,5 +75,21 @@
   }
 }
 
+.rotate_fwd {
+  transform-origin: 7px;
+  transform: rotate(90deg);        
+  transition: all .3s;
+}
 
+.rotate_back {
+  transform-origin: 7px;
+  transform: rotate(0deg);        
+  transition: all .3s;
+}
+
+.list_container__ul{
+  height: 77rem;
+  overflow-y: auto;
+  display: block;
+}
 

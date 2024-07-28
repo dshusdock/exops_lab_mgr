@@ -141,7 +141,7 @@ body {
   display: block;
   width: 90%;
   background: #0D1B2A;
-  height: 100rem;
+  height: 87rem;
   margin: 2rem 1rem 0 1rem;
   border-radius: .7rem;
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
@@ -180,16 +180,27 @@ body {
         height: 2rem;
         width: 2rem;
         margin: .4rem 0 0 0; }
-      .sidenav__btnlist li i:active {
-        transform-origin: 7px;
-        transform: rotate(90deg);
-        transition: all .3s; }
       .sidenav__btnlist li:hover {
         background-color: #222; }
 
 .alpine__sidenav > p {
   color: red;
   font-size: 5rem; }
+
+.rotate_fwd {
+  transform-origin: 7px;
+  transform: rotate(90deg);
+  transition: all .3s; }
+
+.rotate_back {
+  transform-origin: 7px;
+  transform: rotate(0deg);
+  transition: all .3s; }
+
+.list_container__ul {
+  height: 77rem;
+  overflow-y: auto;
+  display: block; }
 
 .buttons {
   height: 5rem;

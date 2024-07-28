@@ -63,6 +63,7 @@ const (
 	RM_ADD_FORM
 	RM_UPLOAD_MODAL
 	RM_SETTINGS_MODAL
+	RM_SNIPPET1
 )
 
 type RenderedFileMap struct {
@@ -71,6 +72,7 @@ type RenderedFileMap struct {
 	ADD_FORM       []string
 	UPLOAD_MODAL   []string
 	SETTINGS_MODAL []string
+	SNIPPET1       []string
 }
 
 func RENDERED_FILE_MAP() *RenderedFileMap {
@@ -102,6 +104,9 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 		},
 		SETTINGS_MODAL: []string{
 			"./ui/html/pages/settings-modal.tmpl.html",
+		},
+		SNIPPET1: []string{
+			"./ui/html/pages/side-nav-categories.tmpl.html",
 		},
 	}
 }
