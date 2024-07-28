@@ -65,6 +65,9 @@ const (
 	RM_UPLOAD_MODAL
 	RM_SETTINGS_MODAL
 	RM_SNIPPET1
+	RM_SNIPPET2
+	RM_SNIPPET3
+	RM_PARTIAL1
 )
 
 type RenderedFileMap struct {
@@ -75,6 +78,9 @@ type RenderedFileMap struct {
 	UPLOAD_MODAL   []string
 	SETTINGS_MODAL []string
 	SNIPPET1       []string
+	SNIPPET2       []string
+	SNIPPET3       []string
+	PARTIAL1       []string
 }
 
 func RENDERED_FILE_MAP() *RenderedFileMap {
@@ -97,6 +103,7 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 			"./ui/html/pages/side-nav-categories.tmpl.html",		
 			"./ui/html/pages/activity.tmpl.html",	
 			"./ui/html/pages/lstable.tmpl.html",
+			"./ui/html/pages/partial1.tmpl.html",
 		},
 		TABLE_REFRESH: []string{
 			"./ui/html/pages/lstable.tmpl.html",
@@ -112,6 +119,15 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 		},
 		SNIPPET1: []string{
 			"./ui/html/pages/side-nav-categories.tmpl.html",
+		},
+		SNIPPET2: []string{
+			"./ui/html/pages/snippets.tmpl.html",
+		},
+		SNIPPET3: []string{
+			"./ui/html/pages/snippets.tmpl.html",
+		},
+		PARTIAL1: []string{
+			"./ui/html/pages/partial1.tmpl.html",
 		},
 	}
 }

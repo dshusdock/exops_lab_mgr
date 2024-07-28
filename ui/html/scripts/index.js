@@ -177,7 +177,7 @@ document.addEventListener("alpine:init", () => {
         chevronRotated: false,
         onElementClick(el) {
             console.log("sidenav clicked" + el.innerText);
-            el.style.backgroundColor = "blue";
+          
             let children = el.childNodes;
             console.log("children: ", children);
             children.forEach(element => {

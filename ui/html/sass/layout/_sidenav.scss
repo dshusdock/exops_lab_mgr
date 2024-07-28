@@ -88,8 +88,13 @@
 }
 
 .list_container__ul{
-  height: 77rem;
+  max-height: 70rem;
   overflow-y: auto;
   display: block;
+  
+  & li {
+    opacity: 1;
+    transition: opacity 1s ease-in;
+  }
 }
 

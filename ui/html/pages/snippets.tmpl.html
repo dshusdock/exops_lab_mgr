@@ -17,7 +17,25 @@
 {{end}}
 
 {{define "snippets3"}}
-
+<ul class="list_container__ul">
+    {{if .Caret}}
+    {{range .EntList}}
+        <li
+          class=""
+          hx-post="/element/event/click"
+          hx-swap="innerHTML"
+          hx-target=".activity-main"
+          hx-trigger="click"
+          hx-vals='js:{
+          "type": "button",
+          "label": "{{.}}",
+          "view_id": "sidenav",
+          "view_str": "" }'>
+          {{.}}
+        </li>
+    {{end}}
+    {{end}}
+</ul>
 {{end}}
 
 {{define "snippets4"}}

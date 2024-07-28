@@ -2,6 +2,7 @@ package render
 
 import (
 	"dshusdock/tw_prac1/internal/constants"
+	"fmt"
 	"html/template"
 	"net/http"
 )
@@ -32,7 +33,7 @@ func RenderModal(w http.ResponseWriter, r *http.Request, d any) {
 // RenderTemplate renders a template
 func RenderTemplate_new(w http.ResponseWriter, r *http.Request, data any, _type int16) {
 	ptr := constants.RENDERED_FILE_MAP()
-
+	fmt.Println("Type: ", _type)
 	switch _type {
 	case constants.RM_HOME:
 		template.Must(template.ParseFiles(ptr.HOME...)).ExecuteTemplate(w, "base", data)
@@ -48,6 +49,11 @@ func RenderTemplate_new(w http.ResponseWriter, r *http.Request, data any, _type 
 		template.Must(template.ParseFiles(ptr.TABLE...)).ExecuteTemplate(w, "lstable", data)
 	case constants.RM_SNIPPET1:
 		template.Must(template.ParseFiles(ptr.SNIPPET1...)).ExecuteTemplate(w, "side-nav-categories", data)
+	case constants.RM_SNIPPET3:
+		template.Must(template.ParseFiles(ptr.SNIPPET3...)).ExecuteTemplate(w, "snippets3", data)
+	case constants.RM_PARTIAL1:
+		fmt.Println("Partial1")
+		template.Must(template.ParseFiles(ptr.PARTIAL1...)).ExecuteTemplate(w, "partial1", data)
 	default:
 		template.Must(template.ParseFiles(ptr.HOME...)).ExecuteTemplate(w, "base", data)
 	}

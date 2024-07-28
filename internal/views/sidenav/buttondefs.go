@@ -3,7 +3,7 @@ package sidenav
 // /////////////TOP LEVEL SIDE MENU///////////////
 type side_nav_btn_lbl struct {
 	ENTERPRISE      string
-	USER            string
+	SOFTWARE_VER    string
 	RECORDING       string
 	BUTTON          string
 	RESOURCE_AOR    string
@@ -15,7 +15,7 @@ type side_nav_btn_lbl struct {
 func SIDE_NAV_BTN_LBL() *side_nav_btn_lbl {
 	return &side_nav_btn_lbl{
 		ENTERPRISE:      "Enterprise",
-		USER:            "User",
+		SOFTWARE_VER:    "Software Version",
 		RECORDING:       "Recording",
 		BUTTON:          "Button",
 		RESOURCE_AOR:    "Resource AOR",
@@ -24,6 +24,8 @@ func SIDE_NAV_BTN_LBL() *side_nav_btn_lbl {
 		ZONE:            "Zone",
 	}
 }
+
+
 
 // /////////////SYSTEM///////////////
 type SysSubBtnLbl struct {

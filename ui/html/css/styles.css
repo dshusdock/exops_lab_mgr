@@ -198,9 +198,12 @@ body {
   transition: all .3s; }
 
 .list_container__ul {
-  height: 77rem;
+  max-height: 70rem;
   overflow-y: auto;
   display: block; }
+  .list_container__ul li {
+    opacity: 1;
+    transition: opacity 1s ease-in; }
 
 .buttons {
   height: 5rem;

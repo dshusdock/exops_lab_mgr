@@ -16,6 +16,7 @@ import (
 
 type SideNavVwData struct {
 	Type    string
+	ID 		string
 	Lbl     string
 	Caret   bool
 	Class   string
@@ -57,8 +58,21 @@ func init() {
 		Data: []SideNavVwData{
 			{
 				Type:    "caret",
+				ID:	  	 "enterprise",
 				Lbl:     pa.ENTERPRISE,
-				Caret:   true,
+				Caret:   false,
+				Class:   "fa-solid fa-chevron-right rotate_back",
+				SubLbl:  nil,
+				RepoDlg: []string{},
+				DBList:  []string{},
+				EntList: []string{},
+				Htmx:    nil,
+			},
+			{
+				Type:    "caret",
+				ID:	  	 "swver",
+				Lbl:     pa.SOFTWARE_VER,
+				Caret:   false,
 				Class:   "fa-solid fa-chevron-right rotate_back",
 				SubLbl:  nil,
 				RepoDlg: []string{},
@@ -91,27 +105,28 @@ func (m *SideNav) processClickEvent(w http.ResponseWriter, d url.Values) {
 
 	fmt.Println("\n[SideNav] ProcessClickEvent")
 	lbl := d.Get("label")
+	id := d.Get("view_str")
 
 	switch d.Get("type") {
 	case "caret":
 		x := indexOf(lbl, m.Data)
-		
-		m.LoadDropdownData()
-
 		m.toggleCaret(x)
-		if m.Data[x].Caret {
-			m.Data[x].Caret = false
-		} else {
-			m.Data[x].Caret = true
-		}
-		render.RenderTemplate_new(w, nil, m.App, constants.RM_SNIPPET1)
+		m.LoadDropdownData(x)
+		
+		render.RenderTemplate_new(w, nil, m.Data[x], constants.RM_PARTIAL1)
 	case "button":
-		fmt.Printf("In the button case - %s\n", lbl)
-		str := fmt.Sprintf("Select * from LabSystem where Enterprise = \"%s\"", lbl)
+		fmt.Printf("In the button case - %s\n", id)
+		var str string
+		switch id {
+		case "enterprise":
+			str = fmt.Sprintf("Select * from LabSystem where Enterprise = \"%s\"", lbl)
+		case "swver":
+			str = fmt.Sprintf("Select * from LabSystem where swVer = \"%s\"", lbl)
+		}		
+		
 		labsystemvw.AppLSTableVW.LoadTblDataByQuery(str)
 		render.RenderTemplate_new(w, nil, m.App, constants.RM_TABLE_REFRESH)
-		// render.RenderTemplate_new(w, nil, nil, constants.RM_SNIPPET1)
-
+		
 	case "select":
 		fmt.Println("In the select case")
 
@@ -124,10 +139,12 @@ func (m *SideNav) processClickEvent(w http.ResponseWriter, d url.Values) {
 
 func (m *SideNav) toggleCaret(x int) {
 
-	if m.Data[x].Class == "fa fa-chevron-right rotate_back" {
+	if !m.Data[x].Caret {
 		m.Data[x].Class = "fa fa-chevron-right rotate_fwd"
+		m.Data[x].Caret = true
 	} else {
 		m.Data[x].Class = "fa fa-chevron-right rotate_back"
+		m.Data[x].Caret = false
 	}
 }
 
@@ -140,17 +157,21 @@ func indexOf(element string, data []SideNavVwData) int {
 	return -1 //not found.
 }
 
-func (m *SideNav) LoadDropdownData() {
-	rslt := db.ReadDatabase[db.TBL_EnterpriseList](db.TBL_LAB_SYSTEM_QRY().QUERY_1.Qry)
-	m.Data[0].EntList = nil
+func (m *SideNav) LoadDropdownData(x int) {
+	var rslt []con.RowData
+
+	switch x {
+	case 0:
+		rslt = db.ReadDatabase[db.TBL_EnterpriseList](db.TBL_LAB_SYSTEM_QRY().QUERY_1.Qry)
+	case 1:
+		rslt = db.ReadDatabase[db.TBL_SWVerList](db.TBL_LAB_SYSTEM_QRY().QUERY_4.Qry)
+	}
+
+	m.Data[x].EntList = nil
 
 	for i, result := range rslt {
-		// fmt.Printf("Result:%d  %s\n", i, result.Data[0])
-		logger.Log("Result:%d  %s\n", i, result.Data[0])
-
-		m.Data[0].EntList = append(m.Data[0].EntList, result.Data[0])
-
+		logger.Log("Result: %d %d  %s\n", x,  i, result.Data[0])
+		m.Data[x].EntList = append(m.Data[x].EntList, result.Data[0])
 	}
-	// populate the structure
-	//m.Data[0].EntList = rslt[0].Data
+	
 }

@@ -4,48 +4,31 @@
   <ul class="sidenav__ul">
     {{with .ViewCache.sidenav}} 
     {{ $data := .Data }} 
-    
     {{range $data}}
     <li
       class=""
+      @click="$store.sidenav.onElementClick($el)"
       hx-post="/element/event/click"
-      hx-swap="outerHTML settle:1"
-      hx-target=".sidenav__btnlist"
+      hx-swap="innerHTML swap:.1s"
+      hx-target="#{{.ID}}"
       hx-trigger="click"
       hx-vals='js:{
       "type": "caret",
       "label": "{{.Lbl}}",
       "view_id": "sidenav",
-      "view_str": "" }'
+      "view_str": "{{.ID}}" }'
     >
       <p>{{.Lbl}}</p>
-      <i  id="{{.Lbl}}" class="{{.Class}}"></i>
+      <i id="" class="{{.Class}}"></i>
     </li>
-    <div id="list_container"  class="">
-      {{if .Caret}}
-      <ul class="list_container__ul">
-      {{range .EntList}}
-          <li
-            class=""
-            hx-post="/element/event/click"
-            hx-swap="innerHTML settle:1"
-            hx-target=".activity-main"
-            hx-trigger="click"
-            hx-vals='js:{
-            "type": "button",
-            "label": "{{.}}",
-            "view_id": "sidenav",
-            "view_str": "" }'>
-            {{.}}
-          </li>
-      {{end}}
-      </ul>
-      {{end}}
+    <div id="{{.ID}}" class="list_container">
+      {{template "partial1" .}}
     </div>
 
     {{end}}
     <!--Data-->
   </ul>
+
   {{end}}
 </div>
 {{end}}
