@@ -6,7 +6,6 @@ import (
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	db "dshusdock/tw_prac1/internal/services/database"
-	logger "dshusdock/tw_prac1/internal/services/logging"
 	"dshusdock/tw_prac1/internal/views/labsystemvw"
 	"fmt"
 	"log/slog"
@@ -80,7 +79,6 @@ func init() {
 				EntList: []string{},
 				Htmx:    nil,
 			},
-			// Next Element
 		},
 	}
 }
@@ -103,7 +101,7 @@ func (m *SideNav) ProcessRequest(w http.ResponseWriter, d url.Values) {
 
 func (m *SideNav) processClickEvent(w http.ResponseWriter, d url.Values) {
 
-	fmt.Println("\n[SideNav] ProcessClickEvent")
+	fmt.Println("[SideNav] ProcessClickEvent")
 	lbl := d.Get("label")
 	id := d.Get("view_str")
 
@@ -113,18 +111,11 @@ func (m *SideNav) processClickEvent(w http.ResponseWriter, d url.Values) {
 		m.toggleCaret(x)
 		m.LoadDropdownData(x)
 		
-		render.RenderTemplate_new(w, nil, m.Data[x], constants.RM_PARTIAL1)
+		render.RenderTemplate_new(w, nil, m.App, constants.RM_SNIPPET1)
 	case "button":
 		fmt.Printf("In the button case - %s\n", id)
-		var str string
-		switch id {
-		case "enterprise":
-			str = fmt.Sprintf("Select * from LabSystem where Enterprise = \"%s\"", lbl)
-		case "swver":
-			str = fmt.Sprintf("Select * from LabSystem where swVer = \"%s\"", lbl)
-		}		
-		
-		labsystemvw.AppLSTableVW.LoadTblDataByQuery(str)
+				
+		labsystemvw.AppLSTableVW.LoadTblDataByQuery(getListFromId(id, lbl))
 		render.RenderTemplate_new(w, nil, m.App, constants.RM_TABLE_REFRESH)
 		
 	case "select":
@@ -137,7 +128,42 @@ func (m *SideNav) processClickEvent(w http.ResponseWriter, d url.Values) {
 	}
 }
 
+func getListFromId(id string, lbl string) string {
+	var str string
+	part := "Select * from LabSystem where "
+
+	switch id {
+	case "enterprise":
+		str = fmt.Sprintf(part + "Enterprise = \"%s\"", lbl)
+	case "swver":
+		str = fmt.Sprintf(part + "swVer = \"%s\"", lbl)
+	}
+
+	return str
+}
+
 func (m *SideNav) toggleCaret(x int) {
+
+	for count := 0; count < len(m.Data); count++ {
+		fmt.Printf("Count: %d  x: %d\n", count, x)
+		if count != x {			
+			fmt.Print("Setting to rotate_back\n")
+			m.Data[count].Class = "fa fa-chevron-right rotate_back"
+			m.Data[count].Caret = false			
+		} else {
+
+			if !m.Data[count].Caret {
+				m.Data[count].Class = "fa fa-chevron-right rotate_fwd"
+				m.Data[count].Caret = true
+			} else {
+				m.Data[count].Class = "fa fa-chevron-right rotate_back"
+				m.Data[count].Caret = false
+			}	
+		}
+	}
+}
+
+func (m *SideNav) toggleCaretXXX(x int) {
 
 	if !m.Data[x].Caret {
 		m.Data[x].Class = "fa fa-chevron-right rotate_fwd"
@@ -169,8 +195,8 @@ func (m *SideNav) LoadDropdownData(x int) {
 
 	m.Data[x].EntList = nil
 
-	for i, result := range rslt {
-		logger.Log("Result: %d %d  %s\n", x,  i, result.Data[0])
+	for _, result := range rslt {
+		// logger.Log("Result: %d %d  %s\n", x,  i, result.Data[0])
 		m.Data[x].EntList = append(m.Data[x].EntList, result.Data[0])
 	}
 	

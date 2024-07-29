@@ -119,6 +119,7 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 		},
 		SNIPPET1: []string{
 			"./ui/html/pages/side-nav-categories.tmpl.html",
+			"./ui/html/pages/partial1.tmpl.html",
 		},
 		SNIPPET2: []string{
 			"./ui/html/pages/snippets.tmpl.html",

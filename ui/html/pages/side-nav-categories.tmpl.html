@@ -9,8 +9,8 @@
       class=""
       @click="$store.sidenav.onElementClick($el)"
       hx-post="/element/event/click"
-      hx-swap="innerHTML swap:.1s"
-      hx-target="#{{.ID}}"
+      hx-swap="outerHTML swap:.1s"
+      hx-target=".sidenav__btnlist"
       hx-trigger="click"
       hx-vals='js:{
       "type": "caret",
