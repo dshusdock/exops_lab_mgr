@@ -65,6 +65,19 @@
         background-color: #222;
       }
      }
+
+     & input {
+        height: 3rem;
+        width: 90%;
+        margin: 1rem 0 1rem 0;
+        font-size: large;
+        border-radius: 5px;
+     }
+
+     & input:focus {
+        background-color: #222;
+        color: white;
+     }
   }
 }
 
@@ -96,5 +109,15 @@
     opacity: 1;
     transition: opacity 1s ease-in;
   }
+}
+
+.my-indicator{
+  display:none;
+}
+.htmx-request .my-indicator{
+  display:inline;
+}
+.htmx-request.my-indicator{
+  display:inline;
 }
 

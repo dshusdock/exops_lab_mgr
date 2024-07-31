@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"dshusdock/tw_prac1/config"
-	"dshusdock/tw_prac1/internal/constants"
+	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/handlers/upload"
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/messagebus"
@@ -45,7 +45,7 @@ func (m *Repository) HandleClickEvents(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	data := r.PostForm
-	data.Add("event", constants.EVENT_CLICK)
+	data.Add("event", con.EVENT_CLICK)
 	v_id := data.Get("view_id")
 
 	if v_id == "" {
@@ -63,12 +63,38 @@ func (m *Repository) HandleClickEvents(w http.ResponseWriter, r *http.Request) {
 	
 }
 
+func (m *Repository) HandleSearchEvents(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Handling Search Events")
+
+	err := r.ParseForm()
+	if err != nil {
+		log.Fatal(err)
+	}
+	data := r.PostForm
+	data.Add("event", con.EVENT_SEARCH)
+	v_id := data.Get("view_id")
+
+	if v_id == "" {
+		_ = fmt.Errorf("no handler for route")
+		return 
+	}
+
+	fmt.Println("View ID - ", v_id)
+
+	// messagebus.GetBus().Publish("Event:Search", w, data)
+
+	// route request to appropriate handler
+	ptr := m.App.ViewCache[v_id]
+	ptr.ProcessRequest(w, data)
+	
+}
+
 /**
  * 	Home is the handler for the home page
  */
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	
-	render.RenderTemplate_new(w, r, m.App, constants.RM_HOME)
+	render.RenderTemplate_new(w, r, m.App, con.RM_HOME)
 }
 
 func (m *Repository) Test(w http.ResponseWriter, r *http.Request) {

@@ -11,6 +11,7 @@ import (
 	"log/slog"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type SideNavVwData struct {
@@ -24,6 +25,7 @@ type SideNavVwData struct {
 	DBList  []string
 	Htmx    []con.HtmxInfo
 	EntList []string
+	EntListPart []string
 }
 
 type DSListData struct {
@@ -32,14 +34,15 @@ type DSListData struct {
 }
 
 type SideNav struct {
-	App        *config.AppConfig
-	Id         string
-	RenderFile string
-	ViewFlags  []bool
-	Data       []SideNavVwData
-	RepoDlg    []string
-	DBList     []string
-	Htmx       []con.HtmxInfo
+	App        	*config.AppConfig
+	Id         	string
+	RenderFile 	string
+	ViewFlags  	[]bool
+	SearchInput string
+	Data       	[]SideNavVwData
+	RepoDlg    	[]string
+	DBList     	[]string
+	Htmx       	[]con.HtmxInfo
 }
 
 var AppSideNav *SideNav
@@ -54,6 +57,7 @@ func init() {
 		Id:         "sidenav",
 		RenderFile: "side-nav-categories",
 		ViewFlags:  []bool{true, true},
+		SearchInput: "",
 		Data: []SideNavVwData{
 			{
 				Type:    "caret",
@@ -65,6 +69,7 @@ func init() {
 				RepoDlg: []string{},
 				DBList:  []string{},
 				EntList: []string{},
+				EntListPart: []string{},
 				Htmx:    nil,
 			},
 			{
@@ -77,6 +82,7 @@ func init() {
 				RepoDlg: []string{},
 				DBList:  []string{},
 				EntList: []string{},
+				EntListPart: []string{},
 				Htmx:    nil,
 			},
 		},
@@ -96,6 +102,8 @@ func (m *SideNav) ProcessRequest(w http.ResponseWriter, d url.Values) {
 	switch s {
 	case con.EVENT_CLICK:
 		m.processClickEvent(w, d)
+	case con.EVENT_SEARCH:
+		m.processSearchEvent(w, d)	
 	}
 }
 
@@ -126,6 +134,35 @@ func (m *SideNav) processClickEvent(w http.ResponseWriter, d url.Values) {
 		//tablevw.AppTableVw.LoadTableData(lbl)
 		//render.RenderMain(w, nil, m.App)
 	}
+}
+
+func (m *SideNav) processSearchEvent(w http.ResponseWriter, d url.Values) {
+	var rd []string
+	key := d.Get("search")
+	lbl := d.Get("label")
+	idx := m.getActiveListIdx()
+	m.SearchInput = key
+
+	if idx < 0 { return }
+
+	fmt.Printf("Search: %s  Label: %s  Index: %d\n", key, lbl, idx)
+
+	if key == "" {
+		fmt.Println("Key is null")
+		rd = m.Data[idx].EntList
+	} else {
+		fmt.Println("Key is not null")
+		for i := 0; i < len(m.Data[idx].EntList); i++ {
+			str := m.Data[idx].EntList[i]
+			if strings.Contains(str, key) {				
+				rd = append(rd, str)
+			}
+		}
+	}
+	fmt.Printf("Result: %v\n", rd)
+	m.Data[idx].EntListPart = rd
+
+	render.RenderTemplate_new(w, nil, m.App, constants.RM_SNIPPET1)
 }
 
 func getListFromId(id string, lbl string) string {
@@ -183,6 +220,15 @@ func indexOf(element string, data []SideNavVwData) int {
 	return -1 //not found.
 }
 
+func (m *SideNav) getActiveListIdx() int {
+	for k, v := range m.Data {
+		if v.Caret {
+			return k
+		}
+	}
+	return -1 //not found.
+}
+
 func (m *SideNav) LoadDropdownData(x int) {
 	var rslt []con.RowData
 
@@ -199,5 +245,6 @@ func (m *SideNav) LoadDropdownData(x int) {
 		// logger.Log("Result: %d %d  %s\n", x,  i, result.Data[0])
 		m.Data[x].EntList = append(m.Data[x].EntList, result.Data[0])
 	}
+	m.Data[x].EntListPart = m.Data[x].EntList
 	
 }

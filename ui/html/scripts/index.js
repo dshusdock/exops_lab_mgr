@@ -94,7 +94,7 @@ document.addEventListener("alpine:init", () => {
       }
     },
   }),
-  Alpine.store("hdrData", {
+    Alpine.store("hdrData", {
       btn: document.getElementById("myBtn"),
       span: document.getElementsByClassName("close")[0],
       // Functions
@@ -114,8 +114,8 @@ document.addEventListener("alpine:init", () => {
         let modal = document.getElementById("myDropdown");
         modal.style.display = "none";
       },
-  }),
-  Alpine.store("settings", {
+    }),
+    Alpine.store("settings", {
       active: document.getElementsByClassName("page__general")[0],
       parm2: "",
       onMenuClick(event) {
@@ -144,8 +144,8 @@ document.addEventListener("alpine:init", () => {
           }
         }
       },
-  }),
-  Alpine.store("tblehdr", {
+    }),
+    Alpine.store("tblehdr", {
       onHdrClick(event) {
         // let modal = document.getElementById("myDropdown");
         console.log("header clicked" + event.target.innerText);
@@ -165,17 +165,55 @@ document.addEventListener("alpine:init", () => {
         let modal = document.getElementsByClassName("tbl-hdr-modal")[0];
         modal.style.display = "none";
       },
-  }),
-  Alpine.store("sidenav", {
+    }),
+    Alpine.store("sidenav", {
+      list_search: "",
       chevronRotated: false,
+      nodeListCopy: [],
+      strLength: 0,
+
       onElementClick(el) {
         let children = el.childNodes;
         children.forEach((element) => {
           if (element.tagName === "I") {
-            element.className = element.className === "fa fa-chevron-right rotate_back" ? 
-              "fa fa-chevron-right rotate_fwd" : "fa fa-chevron-right rotate_back";
+            element.className =
+              element.className === "fa fa-chevron-right rotate_back"
+                ? "fa fa-chevron-right rotate_fwd"
+                : "fa fa-chevron-right rotate_back";
           }
         });
+
+        this.nodeListCopy = [];
       },
-  });
+      onSearchChange(event) {
+        let el = document.getElementsByClassName("list_container__ul")[0];
+        const list = el.childNodes;
+
+        // copy original list to nodeListCopy
+        if (this.nodeListCopy.length === 0) {         
+          list.forEach(function (currentValue, currentIndex, listObj) {           
+            let copy = currentValue.cloneNode(true);
+            this.nodeListCopy.push(copy);          
+          }, this);
+        }
+        
+        // purge the list
+        while (el.firstChild) {
+          el.removeChild(el.firstChild);
+        }
+
+        // filter the list
+        this.nodeListCopy.forEach(function (currentValue, currentIndex, listObj) {
+          if (currentValue.tagName === "LI") {                       
+            if (currentValue.innerText.includes(this.list_search)) {              
+              el.appendChild(currentValue);
+            }
+          } else {
+            el.appendChild(currentValue);
+          }
+        }, this);        
+      },
+    });
 });
+
+

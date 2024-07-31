@@ -29,6 +29,7 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/test", handlers.Repo.Test)
 	mux.Post("/upload", handlers.Repo.Upload)
 	mux.Post("/element/event/click", handlers.Repo.HandleClickEvents)
+	mux.Post("/element/event/search", handlers.Repo.HandleSearchEvents)
 
 	fileServer := http.FileServer(http.Dir("./ui/html/"))
 	mux.Handle("/html/*", http.StripPrefix("/html", fileServer))

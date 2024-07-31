@@ -1,2 +1,23 @@
 Center CAB 39 NO ASG AMER Spare from MH 7NJ8VR1  N/A N/A  R610   PWR Off - Dispose of 2024, Guillermo to review ASG AMER
 Center CAB,39,NO,ASG AMER Spare from MH,7NJ8VR1,,N/A,N/A,,R610,,,"PWR Off - Dispose of 2024, Guillermo to review",ASG AMER,
+
+
+
+
+ <input 
+    type="search"
+    name="search"
+    value="{{.SearchInput}}"
+    placeholder="Begin Typing To Search..."
+    autofocus
+    hx-post="/element/event/search"
+    hx-trigger="input changed delay:500ms, search"
+    hx-target=".sidenav__btnlist"
+    hx-swap="outerHTML"
+    hx-indicator=".htmx-indicator"
+    hx-vals='js:{
+      "type": "search",
+      "label": "",
+      "view_id": "{{.Id}}",
+      "view_str": "" }'
+  />
