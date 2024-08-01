@@ -168,10 +168,10 @@ body {
     .sidenav__btnlist li {
       display: flex;
       flex-direction: row;
-      justify-content: space-around;
+      justify-content: space-between;
       width: 100%;
       height: 4rem;
-      padding: .8rem 0 0 0;
+      padding: .8rem .5rem 0 1.5rem;
       margin: .1rem 0 0 0rem;
       background-color: #1B263B;
       color: #eee;
@@ -207,12 +207,18 @@ body {
   transition: all .3s; }
 
 .list_container__ul {
+  display: flex;
   max-height: 70rem;
   overflow-y: auto;
   display: block; }
   .list_container__ul li {
+    display: flex;
     opacity: 1;
-    transition: opacity 1s ease-in; }
+    transition: opacity 1s ease-in;
+    align-content: space-between; }
+  .list_container__ul p {
+    display: flex;
+    align-content: space-between; }
 
 .my-indicator {
   display: none; }
@@ -436,18 +442,56 @@ input[type="file"] {
     height: 5rem;
     margin-bottom: 2rem; }
 
+.table-row-summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  position: sticky;
+  top: 2rem;
+  height: 0;
+  width: 95%;
+  background-color: #23324e;
+  margin: 2rem 2rem 2rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 5px 5px 10px #131212;
+  transition: height 0.3s ease-out 1s;
+  font-size: 2rem;
+  font-family: sans-serif;
+  color: white;
+  opacity: 0;
+  overflow: hidden;
+  z-index: 1000; }
+  .table-row-summary__on {
+    animation: show 300ms 0ms ease-in forwards; }
+  .table-row-summary__info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; }
+
+@keyframes show {
+  100% {
+    opacity: 1;
+    height: 15rem;
+    padding: 2rem; } }
+
+.testclass {
+  transition: background-color 5.5s; }
+
 .labsys-table {
   margin: 2rem 6rem 0 2rem;
+  border-radius: 5px;
   opacity: 1;
   animation-name: animatetop;
-  animation-duration: 0.3s; }
+  animation-duration: 0.3s;
+  overflow: auto;
+  height: 95%; }
 
 table.blueTable {
   border: 1px solid #1c6ea4;
   background-color: #eeeeee;
   text-align: center;
   border-collapse: separate;
-  border-radius: .7rem;
+  border-radius: 0.7rem;
   table-layout: fixed;
   width: 100%; }
 
@@ -462,11 +506,11 @@ table.blueTable tbody td {
 
 th:first-child {
   border-left: none;
-  border-radius: .7rem 0 0 0; }
+  border-radius: 0.7rem 0 0 0; }
 
 th:last-child {
   border-left: none;
-  border-radius: 0 .7rem 0 0; }
+  border-radius: 0 0.7rem 0 0; }
 
 table.blueTable tr:nth-child(even) {
   background: #d0e4f5; }
@@ -477,7 +521,7 @@ table.blueTable thead {
   background: -webkit-linear-gradient(top, #5a657a 0%, #39465f 66%, #23324e 100%);
   background: linear-gradient(to bottom, #5a657a 0%, #39465f 66%, #23324e 100%);
   border-bottom: 2px solid #444444;
-  border-radius: .5rem; }
+  border-radius: 0.5rem; }
 
 table.blueTable thead th {
   font-size: 15px;
@@ -517,6 +561,7 @@ table.blueTable thead th {
   position: relative; }
 
 table.blueTable .data-row:hover {
+  cursor: pointer;
   background-color: #1b70b6; }
 
 @keyframes animatetop {
@@ -532,8 +577,8 @@ table.blueTable .data-row:hover {
   display: none;
   flex-direction: column;
   position: absolute;
-  top: 50px;
-  left: 10px;
+  top: 10px;
+  left: 5px;
   background-color: #23324e;
   z-index: 1;
   border-radius: 10px;
@@ -555,5 +600,4 @@ table.blueTable .data-row:hover {
 
 .activity-main {
   width: 85%;
-  height: 100rem;
-  overflow: auto; }
+  height: 100rem; }

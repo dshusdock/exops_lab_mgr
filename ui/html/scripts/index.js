@@ -1,7 +1,7 @@
 console.log("Release the hounds!!......again!");
 
 document.addEventListener("alpine:init", () => {
-  Alpine.store("myData", {
+    Alpine.store("myData", {
     target: "testing...",
     flag: true,
     drop: false,
@@ -64,8 +64,8 @@ document.addEventListener("alpine:init", () => {
     testThis2(event) {
       console.log("Got the focus");
     },
-  });
-  Alpine.store("modalData", {
+    });
+    Alpine.store("modalData", {
     btn: document.getElementById("myBtn"),
     span: document.getElementsByClassName("close")[0],
     // Functions
@@ -93,7 +93,7 @@ document.addEventListener("alpine:init", () => {
         modal.style.display = "none";
       }
     },
-  }),
+    }),
     Alpine.store("hdrData", {
       btn: document.getElementById("myBtn"),
       span: document.getElementsByClassName("close")[0],
@@ -147,10 +147,6 @@ document.addEventListener("alpine:init", () => {
     }),
     Alpine.store("tblehdr", {
       onHdrClick(event) {
-        // let modal = document.getElementById("myDropdown");
-        console.log("header clicked" + event.target.innerText);
-        console.log("header clicked-x" + event.clientX);
-        console.log("header clicked-y" + event.clientY);
         let modal = document.getElementsByClassName("tbl-hdr-modal")[0];
         modal.style.display = "flex";
         modal.style.left = event.clientX - 250 + "px";
@@ -174,6 +170,7 @@ document.addEventListener("alpine:init", () => {
 
       onElementClick(el) {
         let children = el.childNodes;
+
         children.forEach((element) => {
           if (element.tagName === "I") {
             element.className =
@@ -213,7 +210,39 @@ document.addEventListener("alpine:init", () => {
           }
         }, this);        
       },
-    });
+    }),
+    Alpine.store("lstable", {
+      someVar: "",
+      info: { name: "", vip: "", enterprise: "", action: "" },
+     
+
+      onRowClick(el) {
+        console.log("row clicked: ", el);
+        let infoBox = document.getElementsByClassName("table-row-summary")[0];
+        infoBox.classList.add("table-row-summary__on");
+       
+        let children = el.target.parentNode.childNodes;
+        children.forEach((element, i) => {
+          console.log("element: ", element.innerText + " - " + i);
+          switch (i) {
+            case 7:
+              this.info.name = element.innerText;
+              break;
+            case 13:
+              this.info.vip = element.innerText;
+              break;
+            case 21:
+              this.info.enterprise = element.innerText;
+              break;
+            case 25:
+              this.info.action = element.innerText;
+              break;
+          }
+          
+        });
+      },
+      
+    })
 });
 
 

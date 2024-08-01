@@ -1,5 +1,16 @@
 {{define "lstable" }}
+<div class="table-row-summary" x-data >
 
+  <div class="table-row-summary__info">
+    <div><span>Name:&nbsp</span><strong  style="color: red" x-text="$store.lstable.info.name"></strong></div>
+    <div><span>Name:&nbsp</span><strong  style="color: red" x-text="$store.lstable.info.name"></strong></div>
+  </div>
+  <div><div><span>VIP:&nbsp</span><strong  style="" x-text="$store.lstable.info.vip"></strong></div></div>
+  <div><div><span>Enterprise:&nbsp</span><strong  style="" x-text="$store.lstable.info.enterprise"></strong></div></div>
+  <div><div><span>Action:&nbsp</span><strong  style="" x-text="$store.lstable.info.action"></strong></div></div>
+
+  
+</div>
 <div id="labsystbl" class="labsys-table" x-data>
   {{ with.ViewCache.lstablevw.Data }}
   <table class="blueTable" x-data>
@@ -23,7 +34,10 @@
     </thead>
     <tbody>
       {{ range.Tbl }}
-      <tr class="data-row">
+      <tr 
+        class="data-row"
+        @click="$store.lstable.onRowClick($event)"
+      >
         {{range.Data}}
         <td>{{.}}</td>
         {{end}}

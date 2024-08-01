@@ -38,10 +38,10 @@
     & li {
       display: flex;
       flex-direction: row;
-      justify-content: space-around;
+      justify-content: space-between;
       width: 100%;
       height: 4rem;
-      padding: .8rem 0 0 0;
+      padding: .8rem .5rem 0 1.5rem;
       margin: .1rem 0 0 0rem;
       background-color: #1B263B;
       color: #eee;
@@ -101,13 +101,21 @@
 }
 
 .list_container__ul{
+  display: flex;
   max-height: 70rem;
   overflow-y: auto;
   display: block;
   
   & li {
+    display: flex;
     opacity: 1;
     transition: opacity 1s ease-in;
+    align-content: space-between;
+  }
+
+  & p {
+    display: flex;
+    align-content: space-between;
   }
 }
 
