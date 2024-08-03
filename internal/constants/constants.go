@@ -16,6 +16,7 @@ const (
 const (
 	EVENT_CLICK  = "Event_Click"
 	EVENT_SEARCH = "Event_Search"
+	REQUEST_STATUS = "Request_Status"
 )
 
 const (

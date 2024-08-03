@@ -19,7 +19,20 @@
        </ul>
       </div>
       <div class="page">
-        <div class="page__general">This is the general page</div>
+        <div class="page__general">
+          <div class="login-container">
+            <h2>Login</h2>
+            <form action="/login" method="POST">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required><br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required><br>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+
+        </div>
         <div class="page__test">
           <div class="container">
             <p>This is a test button</p>
@@ -39,8 +52,8 @@
           <div class="container">
             <p>This is a test button2</p>
             <button 
-            type="button"
-            hx-post="/element/event/click" 
+              type="button"
+              hx-post="/element/event/click" 
               hx-swap="none" 
               hx-trigger="click"
               hx-target=""

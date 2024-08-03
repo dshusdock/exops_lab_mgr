@@ -213,11 +213,22 @@ document.addEventListener("alpine:init", () => {
     }),
     Alpine.store("lstable", {
       someVar: "",
-      info: { name: "", vip: "", enterprise: "", action: "" },
+      info: 
+        { 
+          name: "", 
+          vip: "", 
+          ip: "", 
+          enterprise: "",
+          role: "", 
+          action: "" 
+        },
      
 
-      onRowClick(el) {
+      async onRowClick(el) {
         console.log("row clicked: ", el);
+        const formData = new FormData(); 
+        const myHeaders = new Headers();       
+
         let infoBox = document.getElementsByClassName("table-row-summary")[0];
         infoBox.classList.add("table-row-summary__on");
        
@@ -228,19 +239,52 @@ document.addEventListener("alpine:init", () => {
             case 7:
               this.info.name = element.innerText;
               break;
+            case 11:
+              this.info.ip = element.innerText;
+              break;
             case 13:
               this.info.vip = element.innerText;
               break;
             case 21:
               this.info.enterprise = element.innerText;
               break;
+            case 23:
+                this.info.role = element.innerText;
+                break;            
             case 25:
               this.info.action = element.innerText;
               break;
-          }
-          
+          }          
+        })
+
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");        
+        formData.append("view_id", "statussvc");
+        formData.append("type", "request");
+        formData.append("target", "vip");
+        formData.append("data", this.info.vip);
+
+        
+        const myRequest = new Request("/request/status", {
+          method: "POST",
+          headers: myHeaders,
+          body: new URLSearchParams(formData)
         });
+
+        const response = await fetch(myRequest);
+
+        console.log("response: ", response);
+
       },
+
+      onUMSClick() {
+        console.log("UMS clicked");
+        var strWindowFeatures = "location=yes,height=570,width=520,scrollbars=yes,status=yes";
+        // var URL = "https://www.linkedin.com/cws/share?mini=true&amp;url=" + location.href;
+        let URL = `https://${this.info.vip}/ums2/index.html?UMSClient=`
+        var win = window.open(URL, "_blank");
+        
+        
+      }
       
     })
 });

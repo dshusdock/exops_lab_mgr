@@ -1,14 +1,19 @@
 {{define "lstable" }}
 <div class="table-row-summary" x-data >
-
-  <div class="table-row-summary__info">
-    <div><span>Name:&nbsp</span><strong  style="color: red" x-text="$store.lstable.info.name"></strong></div>
-    <div><span>Name:&nbsp</span><strong  style="color: red" x-text="$store.lstable.info.name"></strong></div>
+  <div style="margin-right: 1rem;"class="l-side">
+    <div><span class="l-side--width">Name:&nbsp</span><span  style="color: red" x-text="$store.lstable.info.name"></span></div>
+    <div><span class="l-side--width">VIP:&nbsp</span><span  style="" x-text="$store.lstable.info.vip"></span></div>
+    <div><span class="l-side--width">IP:&nbsp</span><span  style="" x-text="$store.lstable.info.ip"></span></div>
+    <div><span class="l-side--width">Action:&nbsp</span><span  style="" x-text="$store.lstable.info.action"></span></div>
   </div>
-  <div><div><span>VIP:&nbsp</span><strong  style="" x-text="$store.lstable.info.vip"></strong></div></div>
-  <div><div><span>Enterprise:&nbsp</span><strong  style="" x-text="$store.lstable.info.enterprise"></strong></div></div>
-  <div><div><span>Action:&nbsp</span><strong  style="" x-text="$store.lstable.info.action"></strong></div></div>
-
+  <div style="margin-left: 1rem;"  class="r-side">
+    <div><span class="l-side--width">Enterprise:&nbsp</span><span  style="" x-text="$store.lstable.info.enterprise"></span></div>
+    <div><span class="l-side--width">Role:&nbsp</span><span  style="" x-text="$store.lstable.info.role"></span></div>
+    <div style="border: none;"  class="r-side__btns">
+      <button type="button" @click="$store.lstable.onUMSClick($event)">Details</button>
+      <button type="button" @click="$store.lstable.onUMSClick($event)">UMS</button>
+    </div>
+  </div>
   
 </div>
 <div id="labsystbl" class="labsys-table" x-data>

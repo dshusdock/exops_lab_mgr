@@ -6,6 +6,7 @@ import (
 	"dshusdock/tw_prac1/internal/handlers/upload"
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/messagebus"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -100,6 +101,41 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 func (m *Repository) Test(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("This is a test")
+}
+
+type Payload struct {
+    Stuff string
+}
+
+func (m *Repository) StatusInfo(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("This is a StatusInfo")
+	err := r.ParseForm()
+	if err != nil {
+		log.Fatal(err)
+	}
+	data := r.PostForm
+	data.Add("event", con.REQUEST_STATUS)
+	v_id := data.Get("view_id")
+
+	fmt.Println("View ID - ", v_id)
+
+	if v_id == "" {
+		_ = fmt.Errorf("no handler for route")
+		fmt.Println("No handler for route")
+		return
+	}
+	
+	// route request to appropriate handler
+	ptr := m.App.ViewCache[v_id]
+	ptr.ProcessRequest(w, data)
+}
+
+func testStatus(w http.ResponseWriter) {
+	t := Payload{Stuff: "This is a StatusInfo"}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(t)
+
+	fmt.Println("This is a StatusInfo")
 }
 
 func (m *Repository) Upload(w http.ResponseWriter, r *http.Request) {

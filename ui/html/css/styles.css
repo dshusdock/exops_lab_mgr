@@ -28,6 +28,30 @@ body {
   margin-right: 16px;
   transition: background-color 200ms; }
 
+.login-container {
+  max-width: 300px;
+  margin: 100px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 10px #888888; }
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px; }
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%; }
+
+button:hover {
+  background-color: #45a049; }
+
 .hdr {
   height: 6rem;
   background-color: #23324e;
@@ -444,7 +468,7 @@ input[type="file"] {
 
 .table-row-summary {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-evenly;
   position: sticky;
   top: 2rem;
@@ -455,8 +479,10 @@ input[type="file"] {
   border-radius: 1rem;
   box-shadow: 5px 5px 10px #131212;
   transition: height 0.3s ease-out 1s;
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-family: sans-serif;
+  font-weight: normal;
+  line-height: 3rem;
   color: white;
   opacity: 0;
   overflow: hidden;
@@ -467,6 +493,38 @@ input[type="file"] {
     display: flex;
     flex-direction: row;
     justify-content: space-between; }
+  .table-row-summary .l-side {
+    margin-top: -1rem;
+    width: 50%;
+    margin-left: 4rem; }
+    .table-row-summary .l-side--width {
+      display: inline-block;
+      width: 10rem; }
+  .table-row-summary .l-side div {
+    border-bottom: 1px solid darkgray; }
+  .table-row-summary .l-side > span {
+    width: 10rem; }
+  .table-row-summary .r-side {
+    margin: -1rem 4rem 0 0;
+    width: 50%; }
+    .table-row-summary .r-side__btns {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      margin: .5rem 0 1rem 4rem;
+      padding: 1rem;
+      border: none; }
+    .table-row-summary .r-side__btns button {
+      height: 4rem;
+      width: 10rem;
+      background-color: #0964b0;
+      color: white;
+      outline: 1px solid #ccc;
+      border-radius: .5rem; }
+  .table-row-summary .r-side div {
+    border-bottom: 1px solid darkgray; }
+  .table-row-summary span {
+    margin-left: 1.5rem; }
 
 @keyframes show {
   100% {

@@ -8,6 +8,7 @@ import (
 	db "dshusdock/tw_prac1/internal/services/database"
 	"dshusdock/tw_prac1/internal/views/labsystemvw"
 	"fmt"
+	"log"
 	"log/slog"
 	"net/http"
 	"net/url"
@@ -90,7 +91,7 @@ func init() {
 }
 
 func (m *SideNav) RegisterView(app config.AppConfig) *SideNav {
-	fmt.Println("Registering AppSideNav...")
+	log.Println("Registering AppSideNav...")
 	AppSideNav.App = &app
 	return AppSideNav
 }

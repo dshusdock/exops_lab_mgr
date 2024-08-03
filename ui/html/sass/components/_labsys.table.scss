@@ -1,8 +1,8 @@
 .table-row-summary {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-evenly;
-  position:sticky;
+  position: sticky;
   top: 2rem;
   height: 0;
   width: 95%;
@@ -11,8 +11,10 @@
   border-radius: 1rem;
   box-shadow: 5px 5px 10px #131212;
   transition: height 0.3s ease-out 1s;
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-family: sans-serif;
+  font-weight: normal;
+  line-height: 3rem;
   color: white;
   opacity: 0;
   overflow: hidden;
@@ -26,6 +28,58 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+  }
+
+  & .l-side {
+    margin-top: -1rem;
+    width: 50%;
+    margin-left: 4rem;
+
+    &--width {
+      display: inline-block;
+      width: 10rem;
+    }
+  }
+
+  & .l-side div {
+    border-bottom: 1px solid darkgray;
+  }
+
+  & .l-side > span {
+    width: 10rem;
+  }
+
+  & .r-side {
+    margin: -1rem 4rem 0 0;
+    width: 50%;
+
+    &__btns {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      margin: .5rem 0 1rem 4rem;
+      padding: 1rem;
+      border: none;
+    }
+
+    &__btns button {
+       
+        height: 4rem;
+        width: 10rem;
+        background-color: #0964b0;
+        color: white;
+        outline: 1px solid #ccc;
+        border-radius: .5rem;
+    }
+  }
+
+  & .r-side div {
+    // padding-right: 10rem;
+    border-bottom: 1px solid darkgray;
+  }
+
+  & span {
+    margin-left: 1.5rem;
   }
 }
 
@@ -59,7 +113,6 @@ table.blueTable {
   border-radius: 0.7rem;
   table-layout: fixed;
   width: 100%;
- 
 }
 table.blueTable td,
 table.blueTable th {
