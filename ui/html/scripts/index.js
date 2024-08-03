@@ -284,6 +284,14 @@ document.addEventListener("alpine:init", () => {
         var win = window.open(URL, "_blank");
         
         
+      },
+
+      onDetailsClick() {
+        console.log("Details clicked");
+        var strWindowFeatures = "location=yes,height=570,width=520,scrollbars=yes,status=yes";
+        // var URL = "https://www.linkedin.com/cws/share?mini=true&amp;url=" + location.href;
+        let URL = `https://${this.info.vip}/haservices/checkHAStatus`
+        var win = window.open(URL, "_blank");
       }
       
     })
