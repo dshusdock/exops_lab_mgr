@@ -86,7 +86,14 @@ func (m *HeaderVw) ProcessClickEvent(w http.ResponseWriter, d  url.Values) {
 	case "settings":
 		render.RenderTemplate_new(w, nil, nil, constants.RM_SETTINGS_MODAL)
 	case "Table":
+		m.App.MainTable = true
+		m.App.Cards = false
 		labsystemvw.AppLSTableVW.LoadTableData(lbl)
 		render.RenderTemplate_new(w, nil, m.App, constants.RM_TABLE)
+	case "Cards":
+		m.App.MainTable = false
+		m.App.Cards = true
+		labsystemvw.AppLSTableVW.LoadTableData(lbl)
+		render.RenderTemplate_new(w, nil, m.App, constants.RM_CARDS)
 	}
 }

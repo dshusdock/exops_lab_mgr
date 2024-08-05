@@ -4,6 +4,7 @@ import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/handlers"
 	"dshusdock/tw_prac1/internal/services/status"
+	"dshusdock/tw_prac1/internal/views/cardsvw"
 	"dshusdock/tw_prac1/internal/views/headervw"
 	"dshusdock/tw_prac1/internal/views/labsystemvw"
 	"dshusdock/tw_prac1/internal/views/layoutvw"
@@ -21,6 +22,7 @@ func initRouteHandlers() {
 	app.ViewCache["lstablevw"] = labsystemvw.AppLSTableVW.RegisterView(app)
 	app.ViewCache["sidenav"] = sidenav.AppSideNav.RegisterView(app)
 	app.ViewCache["statussvc"] = status.AppStatusSvc.RegisterView(app)
+	app.ViewCache["cardsvw"] = cardsvw.AppCardsVW.RegisterView(app)
 
 }
 

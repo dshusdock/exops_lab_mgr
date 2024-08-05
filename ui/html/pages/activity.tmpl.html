@@ -4,7 +4,12 @@
    {{template "sidenav" .}}  
 </div>
 <div class="activity-main">
+   {{if .MainTable}}
    {{template "lstable" .}}
+   {{end}}
+   {{if .Cards}}
+   {{template "cardsvw" .}}
+   {{end}}
 </div>
 
 {{ end }}

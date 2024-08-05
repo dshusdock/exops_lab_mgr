@@ -19,4 +19,5 @@ type AppConfig struct {
 	Bus 		  EventBus.Bus
 	SideNav	      bool
 	MainTable	  bool
+	Cards		  bool
 }

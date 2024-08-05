@@ -69,6 +69,7 @@ const (
 	RM_SNIPPET2
 	RM_SNIPPET3
 	RM_PARTIAL1
+	RM_CARDS
 )
 
 type RenderedFileMap struct {
@@ -82,6 +83,7 @@ type RenderedFileMap struct {
 	SNIPPET2       []string
 	SNIPPET3       []string
 	PARTIAL1       []string
+	CARDS          []string
 }
 
 func RENDERED_FILE_MAP() *RenderedFileMap {
@@ -105,6 +107,7 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 			"./ui/html/pages/activity.tmpl.html",	
 			"./ui/html/pages/lstable.tmpl.html",
 			"./ui/html/pages/partial1.tmpl.html",
+			"./ui/html/pages/cards.tmpl.html",
 		},
 		TABLE_REFRESH: []string{
 			"./ui/html/pages/lstable.tmpl.html",
@@ -130,6 +133,9 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 		},
 		PARTIAL1: []string{
 			"./ui/html/pages/partial1.tmpl.html",
+		},
+		CARDS: []string{
+			"./ui/html/pages/cards.tmpl.html",
 		},
 	}
 }
