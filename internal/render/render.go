@@ -2,6 +2,7 @@ package render
 
 import (
 	"dshusdock/tw_prac1/internal/constants"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -15,6 +16,17 @@ var files = []string{
 	"./ui/html/pages/sidenav.tmpl.html",
 	"./ui/html/pages/system-list.tmpl.html",
 	"./ui/html/pages/test-modal.tmpl.html",
+}
+
+type Payload struct {
+    Server string
+}
+
+func JSONResponse(w http.ResponseWriter, data string) {
+	t := Payload{Server: data}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(t)
 }
 
 // RenderTemplate renders a template

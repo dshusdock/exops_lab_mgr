@@ -19,6 +19,7 @@
   opacity: 0;
   overflow: hidden;
   z-index: 1000;
+  cursor: pointer;
 
   &__on {
     animation: show 300ms 0ms ease-in forwards;
@@ -38,6 +39,15 @@
     &--width {
       display: inline-block;
       width: 10rem;
+    }
+
+    & span:nth-child(2):hover {
+       background-color: #5a657a;
+       border-radius: 5px;
+    }
+
+    & span:nth-child(2):active {
+      background-color: #b5bece;
     }
   }
 
@@ -109,7 +119,7 @@ table.blueTable {
   border: 1px solid #1c6ea4;
   background-color: #eeeeee;
   text-align: center;
-  border-collapse: separate;
+  border-collapse: collapse;
   border-radius: 0.7rem;
   table-layout: fixed;
   width: 100%;
@@ -246,4 +256,8 @@ table.blueTable .data-row:hover {
     cursor: pointer;
     align-self: flex-end;
   }
+}
+
+.data-row td:nth-child(4):hover {
+  color: yellow;
 }

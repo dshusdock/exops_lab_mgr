@@ -1,7 +1,7 @@
 {{define "lstable" }}
 <div class="table-row-summary" x-data >
-  <div style="margin-right: 1rem;"class="l-side">
-    <div><span class="l-side--width">Name:&nbsp</span><span  style="color: red" x-text="$store.lstable.info.name"></span></div>
+  <div style="margin-right: 1rem;"class="l-side" @click="$store.lstable.onInfoLSideClick($event)">
+    <div><span class="l-side--width">Name:&nbsp</span><span  id="thisnameel" style="color: red" x-text="$store.lstable.info.name"></span></div>
     <div><span class="l-side--width">VIP:&nbsp</span><span  style="" x-text="$store.lstable.info.vip"></span></div>
     <div><span class="l-side--width">IP:&nbsp</span><span  style="" x-text="$store.lstable.info.ip"></span></div>
     <div><span class="l-side--width">Action:&nbsp</span><span  style="" x-text="$store.lstable.info.action"></span></div>
@@ -13,8 +13,7 @@
       <button type="button" @click="$store.lstable.onDetailsClick($event)">Details</button>
       <button type="button" @click="$store.lstable.onUMSClick($event)">UMS</button>
     </div>
-  </div>
-  
+  </div>  
 </div>
 <div id="labsystbl" class="labsys-table" x-data>
   {{ with.ViewCache.lstablevw.Data }}

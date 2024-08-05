@@ -1,5 +1,7 @@
 console.log("Release the hounds!!......again!");
 
+
+
 document.addEventListener("alpine:init", () => {
     Alpine.store("myData", {
     target: "testing...",
@@ -260,9 +262,8 @@ document.addEventListener("alpine:init", () => {
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");        
         formData.append("view_id", "statussvc");
         formData.append("type", "request");
-        formData.append("target", "vip");
-        formData.append("data", this.info.vip);
-
+        formData.append("target", "ip");
+        formData.append("data", this.info.ip);
         
         const myRequest = new Request("/request/status", {
           method: "POST",
@@ -271,8 +272,21 @@ document.addEventListener("alpine:init", () => {
         });
 
         const response = await fetch(myRequest);
+        if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+        }
 
-        console.log("response: ", response);
+        // console.log("response: ", response);
+
+        const json = await response.json();
+        console.log(json);
+        if (json.Server === "RUNNING") {
+          document.getElementById("thisnameel").style.color = "green";
+        } else {
+          document.getElementById("thisnameel").style.color = "red";
+        }
+        
+        
 
       },
 
@@ -292,7 +306,20 @@ document.addEventListener("alpine:init", () => {
         // var URL = "https://www.linkedin.com/cws/share?mini=true&amp;url=" + location.href;
         let URL = `https://${this.info.vip}/haservices/checkHAStatus`
         var win = window.open(URL, "_blank");
-      }
+      },
+
+      onInfoLSideClick(ev) {
+        console.log("info clicked" + ev.target.innerText);
+        // navigator.clipboard.writeText(ev.target.innerText);
+        // alert("Copied the text: " + ev.target.innerText);
+        Window.navigator.clipboard.writeText(copyText).then(function() {
+          alert("Text copied to clipboard: " + copyText);
+        }).catch(function(error) {
+          alert("Failed to copy text: " + error);
+        });
+        
+      },
+      
       
     })
 });

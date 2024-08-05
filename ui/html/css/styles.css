@@ -486,7 +486,8 @@ input[type="file"] {
   color: white;
   opacity: 0;
   overflow: hidden;
-  z-index: 1000; }
+  z-index: 1000;
+  cursor: pointer; }
   .table-row-summary__on {
     animation: show 300ms 0ms ease-in forwards; }
   .table-row-summary__info {
@@ -500,6 +501,11 @@ input[type="file"] {
     .table-row-summary .l-side--width {
       display: inline-block;
       width: 10rem; }
+    .table-row-summary .l-side span:nth-child(2):hover {
+      background-color: #5a657a;
+      border-radius: 5px; }
+    .table-row-summary .l-side span:nth-child(2):active {
+      background-color: #b5bece; }
   .table-row-summary .l-side div {
     border-bottom: 1px solid darkgray; }
   .table-row-summary .l-side > span {
@@ -548,7 +554,7 @@ table.blueTable {
   border: 1px solid #1c6ea4;
   background-color: #eeeeee;
   text-align: center;
-  border-collapse: separate;
+  border-collapse: collapse;
   border-radius: 0.7rem;
   table-layout: fixed;
   width: 100%; }
@@ -651,6 +657,9 @@ table.blueTable .data-row:hover {
     margin: 0.2rem 0.6rem 0 0;
     cursor: pointer;
     align-self: flex-end; }
+
+.data-row td:nth-child(4):hover {
+  color: yellow; }
 
 .activity-sidenav {
   width: 15%;
