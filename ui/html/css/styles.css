@@ -265,6 +265,42 @@ button:hover {
     margin: 1rem;
     border-radius: 1.1rem; }
 
+.cardsvw {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 80%;
+  height: 100%;
+  margin: 2rem 0 0 0;
+  overflow: auto; }
+  .cardsvw-card {
+    position: relative;
+    height: 20rem;
+    min-width: 40rem;
+    margin: .5rem;
+    background-color: #0b4975;
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+    border-radius: 1rem; }
+    .cardsvw-card__icon {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      align-self: center;
+      color: #eee;
+      height: 1rem;
+      transform: scale(2.3);
+      font-size: 1rem; }
+      .cardsvw-card__icon:hover {
+        color: green; }
+    .cardsvw-card p {
+      margin-top: 1rem;
+      font-family: sans-serif;
+      font-size: 2rem;
+      font-weight: 200;
+      color: azure;
+      text-align: center; }
+
 /* The Modal (background) */
 .fileupload-modal {
   display: block;

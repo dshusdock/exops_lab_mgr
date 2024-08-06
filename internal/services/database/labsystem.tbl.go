@@ -14,9 +14,8 @@ func GetTableData() ([]DataVw1, error) {
 	defer rows.Close()
 	// Loop through rows, using Scan to assign column data to struct fields.
 	for rows.Next() {
-		fmt.Print("Reading Data")
 		var dv DataVw1
-		if err := rows.Scan(&dv.vip, &dv.enterprise, &dv.name, &dv.swVer); err != nil {
+		if err := rows.Scan(&dv.Vip, &dv.Enterprise, &dv.Name, &dv.SwVer); err != nil {
 			return nil, fmt.Errorf("ERROR: %v", err)
 		}
 		data = append(data, dv)
@@ -36,7 +35,7 @@ func PrintTableData() {
 		return
 	}
 	for _, dv := range data {
-		fmt.Printf("%s %s %s %s\n", dv.vip, dv.swVer, dv.enterprise, dv.name)
+		fmt.Printf("%s %s %s %s\n", dv.Vip, dv.SwVer, dv.Enterprise, dv.Name)
 	}
 }
 
@@ -51,6 +50,7 @@ type labsystem_queries struct {
 	QUERY_3 lsquery
 	QUERY_4 lsquery
 	QUERY_5 lsquery
+	QUERY_6 lsquery
 }
 
 func TBL_LAB_SYSTEM_QRY() *labsystem_queries {
@@ -58,7 +58,9 @@ func TBL_LAB_SYSTEM_QRY() *labsystem_queries {
 		QUERY_1: lsquery{"select unique enterprise from LabSystem", reflect.TypeOf(TBL_EnterpriseList{})},
 		QUERY_2: lsquery{"select * from LabSystem where enterprise = ?", reflect.TypeOf(MdcData{})},
 		QUERY_3: lsquery{`SELECT vip, swVer, enterprise, name FROM LabSystem where role = "Unigy"`, reflect.TypeOf(DataVw1{})},	
-		QUERY_4: lsquery{"select unique swVer from LabSystem", reflect.TypeOf(TBL_SWVerList{})},	
+		QUERY_4: lsquery{"select unique swVer from LabSystem", reflect.TypeOf(TBL_SWVerList{})},
+		QUERY_5: lsquery{`select unique enterprise from LabSystem where role="Unigy"`, reflect.TypeOf(TBL_EnterpriseList{})},
+		QUERY_6: lsquery{`select unique serverType from LabSystem where enterprise = `, reflect.TypeOf(TBL_ServerTypeList{})},	
 	}
 }
 
@@ -66,15 +68,19 @@ type TBL_EnterpriseList struct {
 	Enterprise string	
 }
 
+type TBL_ServerTypeList struct {
+	ServerType string	
+}
+
 type TBL_SWVerList struct {
 	SWVer string	
 }
 
 type DataVw1 struct {
-	vip        string
-	swVer      string
-	enterprise string
-	name       string
+	Vip        string
+	SwVer      string
+	Enterprise string
+	Name       string
 }
 
 type MdcData struct {
