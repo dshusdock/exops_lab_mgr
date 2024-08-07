@@ -1,0 +1,534 @@
+https://10.205.176.140/haservices/testEnterpriseReplication
+
+Enterprise Replication Diagnostic Test passed
+
+
+ZoneID-1(2024-08-06 17:06:25.755UTC) ------> ZoneID-1(2024-08-06 17:06:25.768UTC):  delay(ms)-13
+
+ZoneID-1(2024-08-06 17:06:25.755UTC) ------> ZoneID-2(2024-08-06 17:06:26.787UTC):  delay(ms)-1032
+
+ZoneID-1(2024-08-06 17:06:25.755UTC) ------> ZoneID-3(2024-08-06 17:06:26.791UTC):  delay(ms)-1036
+
+ZoneID-1(2024-08-06 17:06:25.755UTC) ------> ZoneID-4(2024-08-06 17:06:27.804UTC):  delay(ms)-2049
+
+
+
+https://10.205.176.140/haservices/checkEnterpriseConfiguration
+
+
+DATA CENTERS WITH GLOBAL REPLICATION TIER ENABLED/SUSPENDED:
+
+
+     DataCenter: 777 Commerce Dr_2 [ENABLED]  [DEFAULT DC]
+
+         Active Portal Zone : Default Zone 1[1],   VIP = 10.205.176.140
+
+             https://10.205.176.141/haservices/checkGlobalReplicationTier   [ACTIVE]
+             https://10.205.176.141/haservices/checkReplication
+
+             https://10.205.176.142/haservices/checkGlobalReplicationTier   [STANDBY]
+             https://10.205.176.142/haservices/checkReplication
+
+         Local Zones:
+             Zone 2[2],   VIP = 10.205.176.145
+                 https://10.205.176.146/haservices/checkReplication   [ACTIVE]
+                 https://10.205.176.147/haservices/checkReplication   [STANDBY]
+
+
+     DataCenter: South DC [ENABLED]
+
+         Active Portal Zone : Zone 3[3],   VIP = 10.205.176.150
+
+             https://10.205.176.151/haservices/checkGlobalReplicationTier   [ACTIVE]
+             https://10.205.176.151/haservices/checkReplication
+
+             https://10.205.176.152/haservices/checkGlobalReplicationTier   [STANDBY]
+             https://10.205.176.152/haservices/checkReplication
+
+         Local Zones:
+             Zone 4[4],   VIP = 10.205.176.155
+                 https://10.205.176.156/haservices/checkReplication   [ACTIVE]
+                 https://10.205.176.157/haservices/checkReplication   [STANDBY]
+
+
+DATACENTERS WITH GLOBAL REPLICATION TIER DISABLED:
+
+
+https://10.205.176.140/haservices/checkTransientChannel
+
+Transient Channel Status
+This Channel connects the Enterprise and is used to communicate transient entities like Line Status, Presence, MWI and custom topics
+
+
+Jgroups view size: 8
+Co-ordinator: [ref-dopey-z3-ccm1-41571(3,10.205.176.151)|49]
+
+Full DumpStats
+
+UNIGY
+{id=2015
+stats=true
+name=UNIGY
+ergonomics=true
+
+ VERIFY_SUSPECT
+{bind_interface=
+id=13
+bind_addr=/10.205.176.141
+stats=true
+name=VERIFY_SUSPECT
+num_msgs=1
+use_mcast_rsps=false
+ergonomics=true
+timeout=10000
+use_icmp=false
+
+ MERGE3
+{max_participants_in_merge=100
+view_consistency_checker_running=false
+id=54
+merge_task_running=false
+is_coord=false
+check_interval=48000
+views=1
+stats=true
+name=MERGE3
+ergonomics=true
+num_merge_events=0
+info_sender_running=true
+
+ BARRIER
+{id=0
+max_close_time=60000
+opener_scheduled=false
+stats=true
+name=BARRIER
+closed=false
+ergonomics=true
+in_flight_threads_count=0
+
+ FRAG2
+{id=5
+num_frags_received=0
+frag_size=60000
+stats=true
+name=FRAG2
+num_frags_sent=0
+ergonomics=true
+
+ FD_ALL
+{suspected_members=[]
+interval=60000
+local_address=ref-dopey-z1-ccm1-40818(1,10.205.176.141)
+stats=true
+num_heartbeats_received=159534
+has_suspected_mbrs=false
+ergonomics=true
+running=true
+num_heartbeats_sent=20022
+timeout_check_interval=2000
+id=29
+name=FD_ALL
+num_suspect_events=6
+msg_counts_as_heartbeat=false
+members=[ref-dopey-z3-ccm1-41571(3,10.205.176.151)
+ref-dopey-z3-ccm2-34398(3,10.205.176.152)
+ref-dopey-z1-ccm1-40818(1,10.205.176.141)
+ref-dopey-z1-ccm2-14328(1,10.205.176.142)
+ref-dopey-z4-ccm1-1554(4,10.205.176.156)
+ref-dopey-z4-ccm2-5145(4,10.205.176.157)
+ref-dopey-z2-ccm1-12633(2,10.205.176.146)
+ref-dopey-z2-ccm2-15873(2,10.205.176.147)]
+timeout=600000
+
+ UNICAST3
+{num_xmits=132
+num_unacked_msgs=0
+local_address=ref-dopey-z1-ccm1-40818(1,10.205.176.141)
+xmit_table_max_compaction_time=600000
+stats=true
+xmit_table_num_resizes=0
+num_msgs_in_recv_windows=0
+log_not_found_msgs=true
+conn_close_timeout=60000
+xmit_rsps_sent=0
+conn_expiry_timeout=120000
+id=64
+xmit_reqs_received=0
+xmit_task_running=true
+xmit_table_num_rows=100
+xmit_reqs_sent=0
+num_acks_received=12
+name=UNICAST3
+xmit_table_undelivered_messages=0
+members=[ref-dopey-z3-ccm1-41571(3,10.205.176.151)
+ref-dopey-z3-ccm2-34398(3,10.205.176.152)
+ref-dopey-z1-ccm1-40818(1,10.205.176.141)
+ref-dopey-z1-ccm2-14328(1,10.205.176.142)
+ref-dopey-z4-ccm1-1554(4,10.205.176.156)
+ref-dopey-z4-ccm2-5145(4,10.205.176.157)
+ref-dopey-z2-ccm1-12633(2,10.205.176.146)
+ref-dopey-z2-ccm2-15873(2,10.205.176.147)]
+xmit_table_resize_factor=1.2
+xmit_interval=1000
+num_messages_sent=17
+num_acks_sent=1
+max_msg_batch_size=500
+num_messages_received=2
+ack_batches_immediately=true
+age_out_cache_size=0
+xmit_table_num_moves=0
+ergonomics=true
+xmit_table_missing_messages=0
+xmit_table_msgs_per_row=1000
+num_connections=0
+ack_threshold=5
+xmit_table_num_purges=0
+num_send_connections=0
+num_unacked_messages=0
+xmit_table_num_compactions=0
+num_receive_connections=0
+number_of_messages_in_receive_windows=0
+
+ TCP
+{bind_addr=/10.205.176.141
+num_bytes_received=226661
+external_port=0
+regular_queue_size=0
+diagnostics_ttl=8
+receive_interfaces=null
+oob_queue_size=0
+physical_addr_max_fetch_attempts=10
+internal_pool_size=50
+receive_on_all_interfaces=false
+oob_thread_pool.queue_max_size=1000
+internal_thread_pool.keep_alive_time=30000
+timer.queue_max_size=2000
+enable_diagnostics=true
+thread_pool.enabled=true
+internal_thread_pool.queue_enabled=true
+different_version_messages=0
+num_msgs_received=492004
+oob_thread_pool.enabled=true
+send_buf_size=640000
+timer.rejection_policy=Discard
+conn_expire_time=0
+oob_pool_size=0
+enable_bundling=true
+num_incoming_msgs_received=246
+internal_queue_size=0
+suppress_time_different_cluster_warnings=60000
+num_msgs_sent=360333
+client_bind_port=0
+diagnostics_port=7502
+internal_thread_pool.max_threads=75
+external_addr=null
+regular_pool_size=50
+logical_addr_cache_max_size=4000
+reaper_interval=0
+sock_conn_timeout=3000
+defer_client_bind_addr=false
+client_bind_addr=null
+send_queue_size=10000
+internal_thread_pool.min_threads=50
+logical_addr_cache_expiration=600000
+logger_type=log4j
+num_bytes_sent=60881077
+thread_pool.queue_max_size=50000
+timer_queue_size=0
+bundler_buffer_size=0
+diagnostics_bind_interfaces=null
+enable_batching=true
+suppress_time_different_version_warnings=60000
+who_has_cache_timeout=2000
+port_range=0
+stats=true
+peer_addr_read_timeout=3000
+tcp_nodelay=true
+timer_threads=2
+timer.tick_time=50
+internal_thread_pool.rejection_policy=discard
+diagnostics_addr=/224.0.75.75
+id=22
+bind_port=9800
+internal_thread_pool.queue_max_size=500
+num_internal_msgs_received=478637
+loopback=true
+different_cluster_messages=0
+linger=-1
+open_connections=7
+oob_thread_pool.rejection_policy=Discard
+enable_unicast_bundling=true
+name=TCP
+log_discard_msgs_version=true
+thread_naming_pattern=pc1
+internal_thread_pool.enabled=true
+use_send_queues=true
+channel_name=Enterprise040300080027
+num_oob_msgs_received=13120
+thread_pool.rejection_policy=Discard
+discard_incompatible_packets=true
+timer_class=TimeScheduler3
+diagnostics_passcode=null
+thread_pool.queue_enabled=true
+ergonomics=true
+singleton_name=null
+bundler_capacity=20000
+num_threads=359
+oob_thread_pool.queue_enabled=false
+log_discard_msgs=true
+bundler_type=new
+timer_type=new3
+recv_buf_size=20000000
+timer_tasks=7
+timer.wheel_size=200
+
+ TCPPING
+{num_initial_members=2
+always_send_physical_addr_with_discovery_request=false
+current_coord=ref-dopey-z3-ccm1-41571(3,10.205.176.151)
+initial_hosts_list=[10.205.176.151:9800
+10.205.176.146:9800
+10.205.176.147:9800
+10.205.176.157:9800
+10.205.176.156:9800
+10.205.176.152:9800
+10.205.176.142:9800
+10.205.176.141:9800]
+port_range=0
+force_sending_discovery_rsps=true
+stats=true
+ergonomics=true
+max_found_members=0
+num_initial_srv_members=0
+id=10
+max_dynamic_hosts=100
+num_discovery_requests=1
+return_entire_cache=false
+initial_hosts=[10.205.176.151:9800
+10.205.176.146:9800
+10.205.176.147:9800
+10.205.176.157:9800
+10.205.176.156:9800
+10.205.176.152:9800
+10.205.176.142:9800
+10.205.176.141:9800]
+is_coord=false
+break_on_coord_rsp=true
+stagger_timeout=0
+use_disk_cache=false
+name=TCPPING
+view=[ref-dopey-z3-ccm1-41571(3,10.205.176.151)|49]
+dynamic_host_list=[10.205.176.141:9800]
+timeout=200000
+
+ GMS
+{merge_task_running=false
+local_address=ref-dopey-z1-ccm1-40818(1,10.205.176.141)
+stats=true
+log_collect_msgs=true
+number_of_views=14
+resume_task_timeout=20000
+flush_invoker_class=null
+log_view_warnings=true
+num_prev_views=20
+print_physical_addrs=true
+num_members=8
+merge_timeout=60000
+num_prev_mbrs=50
+id=14
+leave_timeout=1000
+view_bundling=true
+view_handler_suspended=false
+name=GMS
+join_timeout=60000
+view_handler_size=0
+max_join_attempts=0
+merge_in_progress=false
+members=[ref-dopey-z3-ccm1-41571(3,10.205.176.151)
+ref-dopey-z3-ccm2-34398(3,10.205.176.152)
+ref-dopey-z1-ccm1-40818(1,10.205.176.141)
+ref-dopey-z1-ccm2-14328(1,10.205.176.142)
+ref-dopey-z4-ccm1-1554(4,10.205.176.156)
+ref-dopey-z4-ccm2-5145(4,10.205.176.157)
+ref-dopey-z2-ccm1-12633(2,10.205.176.146)
+ref-dopey-z2-ccm2-15873(2,10.205.176.147)]
+merge_killer_running=false
+print_local_addr=true
+merge_id=null
+max_bundling_time=50
+use_flush_if_present=true
+ergonomics=true
+handle_concurrent_startup=true
+view_ack_collection_timeout=10000
+view=[ref-dopey-z3-ccm1-41571(3,10.205.176.151)|49]
+
+ NAKACK2
+{use_mcast_xmit_req=false
+suppress_time_non_member_warnings=60000
+current_seqno=108
+xmit_table_max_compaction_time=10000
+stats=true
+size_of_all_messages_incl_headers=0
+xmit_table_num_resizes=0
+log_not_found_msgs=true
+discard_delivered_msgs=true
+print_stability_history_on_failed_xmit=false
+xmit_table_num_current_rows=50
+xmit_rsps_sent=0
+id=57
+max_rebroadcast_timeout=2000
+msgs=ref-dopey-z1-ccm1-40818(1,10.205.176.141):
+ref-dopey-z4-ccm2-5145(4,10.205.176.157): [0 | 0 | 0] (0 elements
+0 missing)
+ref-dopey-z2-ccm2-15873(2,10.205.176.147): [0 | 0 | 0] (0 elements
+0 missing)
+ref-dopey-z1-ccm2-14328(1,10.205.176.142): [0 | 0 | 0] (0 elements
+0 missing)
+ref-dopey-z1-ccm1-40818(1,10.205.176.141): [108 | 108 | 108] (0 elements
+0 missing)
+ref-dopey-z4-ccm1-1554(4,10.205.176.156): [16 | 16 | 16] (0 elements
+0 missing)
+ref-dopey-z3-ccm1-41571(3,10.205.176.151): [13146 | 13146 | 13146] (0 elements
+0 missing)
+ref-dopey-z3-ccm2-34398(3,10.205.176.152): [0 | 0 | 0] (0 elements
+0 missing)
+ref-dopey-z2-ccm1-12633(2,10.205.176.146): [58 | 58 | 58] (0 elements
+0 missing)
+
+xmit_reqs_received=0
+xmit_task_running=true
+become_server_queue_size_actual=0
+xmit_reqs_sent=0
+xmit_table_num_rows=50
+name=NAKACK2
+xmit_table_capacity=500000
+xmit_interval=1000
+xmit_table_resize_factor=1.2
+num_messages_sent=108
+use_mcast_xmit=false
+max_msg_batch_size=100
+xmit_from_random_member=false
+num_messages_received=13364
+xmit_table_num_moves=0
+non_member_messages=0
+size_of_all_messages=0
+ergonomics=true
+become_server_queue_size=50
+xmit_table_missing_messages=0
+xmit_table_msgs_per_row=10000
+log_discard_msgs=true
+xmit_table_num_purges=13120
+xmit_table_num_compactions=0
+xmit_rsps_received=0
+xmit_table_undelivered_msgs=0
+
+ STATE_TRANSFER
+{id=17
+average_state_size=0.0
+barrier_closed=false
+stats=true
+name=STATE_TRANSFER
+number_of_state_bytes_sent=0
+number_of_state_requests=0
+ergonomics=true
+
+ STABLE
+{stable_task_running=true
+max_bytes=400000
+num_bytes_received=0
+cap=0.1
+stats=true
+stability_received=13120
+stable_received=0
+bytes_received=0
+ergonomics=true
+suspended=false
+desired_avg_gossip=60000
+id=16
+stable_sent=20054
+name=STABLE
+stability_sent=0
+send_stable_msgs_to_coord_only=true
+stability_delay=2000
+
+ channel
+{sent_msgs=108
+sent_bytes=97633
+received_msgs=230
+received_bytes=224097}}
+
+https://10.205.176.140/haservices/checkReplicationStatus
+
+Replication is enabled.
+
+Partial Replication is enabled.
+
+Jgroups view size: 4
+Jgroups expected view size: 4
+Jgroups view members: 
+	AddressPayload [vip=10.205.176.140, physicalIp=10.205.176.141, schemaVersion=0.806, instanceId=1]
+	AddressPayload [vip=10.205.176.140, physicalIp=10.205.176.142, schemaVersion=0.806, instanceId=1]
+	AddressPayload [vip=10.205.176.145, physicalIp=10.205.176.146, schemaVersion=0.806, instanceId=1]
+	AddressPayload [vip=10.205.176.145, physicalIp=10.205.176.147, schemaVersion=0.806, instanceId=1]
+AddressPayload [vip=10.205.176.140, physicalIp=10.205.176.141, schemaVersion=0.806, instanceId=1]
+
+InitStatus:Initialized.
+
+ReplicatorFSM state: active 	timeRequiredForRoleChangeToActive = 56793 ms
+
+GlobalReplicationTier Status : ENABLED GlobalReplicationTier Role:APZA ZookeeperState :ActiveActive channel Name:Enterprise040300080027
+GlobalReplicationTier Operation: No GlobalReplicationTier operation is running.
+
+
+Zone Availability Status: available
+
+Delta-Sync Enabled?: [true]
+Delta-Sync Activated?: true
+
+Last database sync from "["10.205.176.150"]" at "["Tue Jul 23 15:25:14 EDT 2024"]" with Delta Sync = true. Time Required for Delta Sync = [4235] ms
+
+ReplicatorInfo.queueState: realtime
+
+Data captured for the period Tue Aug 06 12:55:48 EDT 2024 to Tue Aug 06 13:09:48 EDT 2024
+OUTGOING:
+	Messages (total): 56
+	Messages(total)/second: 0.0
+	Bytes sent (total): 548245
+	Bytes(total)/second: 653.0
+INCOMING:
+	Messages (from zone 2): 29
+	Messages (from zone 2)/second: 0.0
+	Bytes received (from zone 2): 188149
+	Bytes received (from zone 2)/second: 224.0
+	Messages (from zone 3): 20
+	Messages (from zone 3)/second: 0.0
+	Bytes received (from zone 3): 10000
+	Bytes received (from zone 3)/second: 11.0
+	Messages (from zone 4): 14
+	Messages (from zone 4)/second: 0.0
+	Bytes received (from zone 4): 7000
+	Bytes received (from zone 4)/second: 8.0
+	Messages (total): 63
+	Messages(total)/second: 0.0
+	Bytes received (total): 205149
+	Bytes(total)/second: 244.0
+
+
+JGROUPS STAT DUMP: {UNIGY={id=2015, stats=true, name=UNIGY, ergonomics=true}, VERIFY_SUSPECT={id=13, bind_interface=, bind_addr=/10.205.176.141, stats=true, name=VERIFY_SUSPECT, num_msgs=1, ergonomics=true, use_mcast_rsps=false, use_icmp=false, timeout=10000}, FRAG2={id=5, num_frags_received=0, frag_size=60000, stats=true, name=FRAG2, num_frags_sent=0, ergonomics=true}, BARRIER={id=0, max_close_time=60000, opener_scheduled=false, stats=true, name=BARRIER, closed=false, ergonomics=true, in_flight_threads_count=0}, MERGE3={id=54, view_consistency_checker_running=true, max_participants_in_merge=100, merge_task_running=true, is_coord=true, stats=true, views=0, check_interval=48000, name=MERGE3, ergonomics=true, num_merge_events=0, info_sender_running=true}, AUTH={id=33, stats=true, name=AUTH, ergonomics=true}, FD_ALL={suspected_members=[], interval=60000, local_address=ref-dopey-z1-ccm1-39902(10.205.176.140,10.205.176.141,Schema_Version 0.806,1), num_heartbeats_received=69177, stats=true, has_suspected_mbrs=false, ergonomics=true, num_heartbeats_sent=17416, running=true, timeout_check_interval=2000, id=29, name=FD_ALL, num_suspect_events=0, msg_counts_as_heartbeat=false, timeout=600000, members=[ref-dopey-z1-ccm1-39902(10.205.176.140,10.205.176.141,Schema_Version 0.806,1), ref-dopey-z1-ccm2-591(10.205.176.140,10.205.176.142,Schema_Version 0.806,1), ref-dopey-z2-ccm1-55012(10.205.176.145,10.205.176.146,Schema_Version 0.806,1), ref-dopey-z2-ccm2-21422(10.205.176.145,10.205.176.147,Schema_Version 0.806,1)]}, UNICAST3={num_xmits=120, num_unacked_msgs=0, local_address=ref-dopey-z1-ccm1-39902(10.205.176.140,10.205.176.141,Schema_Version 0.806,1), stats=true, xmit_table_max_compaction_time=600000, num_msgs_in_recv_windows=0, xmit_table_num_resizes=0, log_not_found_msgs=true, conn_close_timeout=60000, id=64, conn_expiry_timeout=120000, xmit_rsps_sent=0, xmit_reqs_received=0, xmit_task_running=true, xmit_reqs_sent=0, xmit_table_num_rows=100, name=UNICAST3, num_acks_received=12, xmit_table_undelivered_messages=0, members=[ref-dopey-z1-ccm1-39902(10.205.176.140,10.205.176.141,Schema_Version 0.806,1), ref-dopey-z1-ccm2-591(10.205.176.140,10.205.176.142,Schema_Version 0.806,1), ref-dopey-z2-ccm1-55012(10.205.176.145,10.205.176.146,Schema_Version 0.806,1), ref-dopey-z2-ccm2-21422(10.205.176.145,10.205.176.147,Schema_Version 0.806,1)], xmit_interval=1000, xmit_table_resize_factor=1.2, num_messages_sent=16, max_msg_batch_size=500, num_acks_sent=20, ack_batches_immediately=true, num_messages_received=31, xmit_table_num_moves=0, age_out_cache_size=0, ergonomics=true, xmit_table_missing_messages=0, xmit_table_msgs_per_row=1000, num_connections=0, xmit_table_num_purges=0, ack_threshold=5, num_send_connections=0, xmit_table_num_compactions=0, num_unacked_messages=0, number_of_messages_in_receive_windows=0, num_receive_connections=0}, ENCRYPT={sym_provider=null, alias=1, stats=true, sym_init=128, key_password=ef675510092260c3, asym_provider=null, sym_algorithm=Blowfish, asym_init=512, ergonomics=true, id=25, name=ENCRYPT, asym_algorithm=RSA, store_password=ef675510092260c3, encrypt_entire_message=false, key_store_name=jgroupsksjceks}, TCP={bind_addr=/10.205.176.141, num_bytes_received=914797208, external_port=0, regular_queue_size=0, diagnostics_ttl=8, oob_queue_size=0, receive_interfaces=null, physical_addr_max_fetch_attempts=10, internal_pool_size=50, receive_on_all_interfaces=false, oob_thread_pool.queue_max_size=1000, internal_thread_pool.keep_alive_time=30000, timer.queue_max_size=2000, enable_diagnostics=true, internal_thread_pool.queue_enabled=true, thread_pool.enabled=true, num_msgs_received=377388, different_version_messages=0, timer.rejection_policy=Discard, send_buf_size=640000, oob_thread_pool.enabled=true, conn_expire_time=0, oob_pool_size=2, num_incoming_msgs_received=105662, enable_bundling=true, internal_queue_size=0, num_msgs_sent=379509, suppress_time_different_cluster_warnings=60000, diagnostics_port=7501, client_bind_port=0, internal_thread_pool.max_threads=75, external_addr=null, regular_pool_size=50, logical_addr_cache_max_size=4000, reaper_interval=0, sock_conn_timeout=3000, defer_client_bind_addr=false, internal_thread_pool.min_threads=50, send_queue_size=10000, client_bind_addr=null, logger_type=log4j, logical_addr_cache_expiration=600000, num_bytes_sent=773905585, thread_pool.queue_max_size=50000, bundler_buffer_size=0, timer_queue_size=0, diagnostics_bind_interfaces=null, suppress_time_different_version_warnings=60000, enable_batching=true, who_has_cache_timeout=2000, port_range=0, stats=true, peer_addr_read_timeout=3000, tcp_nodelay=true, timer_threads=2, timer.tick_time=50, id=22, diagnostics_addr=/224.0.75.75, internal_thread_pool.rejection_policy=discard, internal_thread_pool.queue_max_size=500, bind_port=9802, num_internal_msgs_received=207592, different_cluster_messages=0, loopback=true, linger=-1, open_connections=7, name=TCP, enable_unicast_bundling=true, oob_thread_pool.rejection_policy=Discard, log_discard_msgs_version=true, thread_naming_pattern=pc1, internal_thread_pool.enabled=true, channel_name=Enterprise040300080027, use_send_queues=true, num_oob_msgs_received=64133, discard_incompatible_packets=true, thread_pool.rejection_policy=Discard, timer_class=TimeScheduler3, diagnostics_passcode=null, ergonomics=true, thread_pool.queue_enabled=true, bundler_capacity=20000, singleton_name=null, num_threads=193, oob_thread_pool.queue_enabled=false, log_discard_msgs=true, bundler_type=new, timer_type=new3, recv_buf_size=20000000, timer_tasks=8, timer.wheel_size=200}, TCPPING={always_send_physical_addr_with_discovery_request=false, num_initial_members=2, port_range=0, initial_hosts_list=[10.205.176.146:9802, 10.205.176.147:9802, 10.205.176.142:9802, 10.205.176.157:9802, 10.205.176.156:9802, 10.205.176.151:9802, 10.205.176.152:9802, 10.205.176.141:9802], current_coord=ref-dopey-z1-ccm1-39902(10.205.176.140,10.205.176.141,Schema_Version 0.806,1), force_sending_discovery_rsps=true, stats=true, ergonomics=true, max_found_members=0, num_initial_srv_members=0, id=10, max_dynamic_hosts=100, num_discovery_requests=1, is_coord=true, initial_hosts=[10.205.176.146:9802, 10.205.176.147:9802, 10.205.176.142:9802, 10.205.176.157:9802, 10.205.176.156:9802, 10.205.176.151:9802, 10.205.176.152:9802, 10.205.176.141:9802], return_entire_cache=false, break_on_coord_rsp=true, use_disk_cache=false, stagger_timeout=0, name=TCPPING, view=[ref-dopey-z1-ccm1-39902(10.205.176.140,10.205.176.141,Schema_Version 0.806,1)|5], dynamic_host_list=[10.205.176.141:9802], timeout=200000}, GMS={merge_task_running=false, local_address=ref-dopey-z1-ccm1-39902(10.205.176.140,10.205.176.141,Schema_Version 0.806,1), stats=true, log_collect_msgs=true, resume_task_timeout=20000, number_of_views=6, num_prev_views=20, log_view_warnings=true, flush_invoker_class=null, print_physical_addrs=true, merge_timeout=60000, num_members=4, id=14, num_prev_mbrs=50, leave_timeout=1000, view_bundling=true, view_handler_suspended=false, name=GMS, join_timeout=6000, view_handler_size=0, max_join_attempts=0, merge_killer_running=false, members=[ref-dopey-z1-ccm1-39902(10.205.176.140,10.205.176.141,Schema_Version 0.806,1), ref-dopey-z1-ccm2-591(10.205.176.140,10.205.176.142,Schema_Version 0.806,1), ref-dopey-z2-ccm1-55012(10.205.176.145,10.205.176.146,Schema_Version 0.806,1), ref-dopey-z2-ccm2-21422(10.205.176.145,10.205.176.147,Schema_Version 0.806,1)], merge_in_progress=false, print_local_addr=true, max_bundling_time=50, merge_id=null, ergonomics=true, use_flush_if_present=true, handle_concurrent_startup=true, view_ack_collection_timeout=10000, view=[ref-dopey-z1-ccm1-39902(10.205.176.140,10.205.176.141,Schema_Version 0.806,1)|5]}, STATE_TRANSFER={id=17, average_state_size=0.0, stats=true, barrier_closed=false, name=STATE_TRANSFER, number_of_state_bytes_sent=0, ergonomics=true, number_of_state_requests=0}, NAKACK2={use_mcast_xmit_req=false, suppress_time_non_member_warnings=60000, current_seqno=83406, stats=true, xmit_table_max_compaction_time=10000, size_of_all_messages_incl_headers=0, xmit_table_num_resizes=0, log_not_found_msgs=true, discard_delivered_msgs=true, print_stability_history_on_failed_xmit=false, xmit_table_num_current_rows=50, id=57, xmit_rsps_sent=0, max_rebroadcast_timeout=2000, msgs=ref-dopey-z1-ccm1-39902(10.205.176.140,10.205.176.141,Schema_Version 0.806,1):
+ref-dopey-z2-ccm2-21422(10.205.176.145,10.205.176.147,Schema_Version 0.806,1): [0 | 0 | 0] (0 elements, 0 missing)
+ref-dopey-z1-ccm1-39902(10.205.176.140,10.205.176.141,Schema_Version 0.806,1): [83392 | 83406 | 83406] (0 elements, 0 missing)
+ref-dopey-z1-ccm2-591(10.205.176.140,10.205.176.142,Schema_Version 0.806,1): [0 | 0 | 0] (0 elements, 0 missing)
+ref-dopey-z2-ccm1-55012(10.205.176.145,10.205.176.146,Schema_Version 0.806,1): [31815 | 31815 | 31815] (0 elements, 0 missing)
+, xmit_reqs_received=0, xmit_task_running=true, xmit_table_num_rows=50, xmit_reqs_sent=0, become_server_queue_size_actual=0, name=NAKACK2, xmit_table_capacity=500000, xmit_table_resize_factor=1.2, xmit_interval=1000, use_mcast_xmit=false, num_messages_sent=83406, max_msg_batch_size=100, xmit_from_random_member=false, num_messages_received=118238, xmit_table_num_moves=0, non_member_messages=0, size_of_all_messages=0, ergonomics=true, become_server_queue_size=50, xmit_table_missing_messages=0, xmit_table_msgs_per_row=10000, log_discard_msgs=true, xmit_table_num_purges=12580, xmit_table_num_compactions=0, xmit_table_undelivered_msgs=0, xmit_rsps_received=0}, STABLE={stable_task_running=true, max_bytes=400000, num_bytes_received=55048, stats=true, cap=0.1, bytes_received=55048, stable_received=49918, stability_received=12580, ergonomics=true, suspended=false, id=16, desired_avg_gossip=60000, stable_sent=17330, name=STABLE, stability_sent=12580, send_stable_msgs_to_coord_only=true, stability_delay=2000}, channel={sent_msgs=70825, sent_bytes=690599414, received_bytes=914356650, received_msgs=105656}}
+
+My Current Role is Receiver
+
+Provider Zone info: 
+		Providing / Provided Dump to ref-dopey-z2-ccm1-55012(10.205.176.145,10.205.176.146,Schema_Version 0.806,1) at TimeStamp 2024/07/26 15:40:06
+		Providing / Provided Dump to ref-dopey-z2-ccm1-50684(10.205.176.145,10.205.176.146,Schema_Version 0.806,1) at TimeStamp 2024/07/23 15:54:28
+Receiver Zone info: 
+		Receiving / Received Dump from AddressPayload [vip=10.205.176.150, physicalIp=10.205.176.151, schemaVersion=0.806, instanceId=1].
+
+
+

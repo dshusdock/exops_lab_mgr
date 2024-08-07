@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"reflect"
+	"time"
 
 	"github.com/go-sql-driver/mysql"
 	_ "github.com/go-sql-driver/mysql"
@@ -13,18 +14,11 @@ import (
 
 var DBHandle2 *sql.DB = nil
 
-func Connect() *sql.DB {
+func Connect(cfg mysql.Config) *sql.DB {
 	var db *sql.DB
 
-	// Capture connection properties.
-	cfg := mysql.Config{
-		User:                 "root",         //os.Getenv("DBUSER"),
-		Passwd:               "my-secret-pw", //os.Getenv("DBPASS"),
-		Net:                  "tcp",
-		Addr:                 "127.0.0.1:3306",
-		DBName:               "testdb",
-		AllowNativePasswords: true,
-	}
+	cfg.Timeout, _ = time.ParseDuration("5s")
+	
 	// Get a database handle.
 	var err error
 	db, err = sql.Open("mysql", cfg.FormatDSN())
@@ -42,6 +36,10 @@ func Connect() *sql.DB {
 
 func Disconnect(db *sql.DB) {
 	db.Close()
+	pingErr := db.Ping()
+	if pingErr != nil {
+		fmt.Println("Connection Closed!")
+	}
 }
 
 func Write(db *sql.DB, sql string) {

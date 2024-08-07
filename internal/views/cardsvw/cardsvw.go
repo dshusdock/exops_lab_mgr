@@ -70,7 +70,8 @@ func (m *CardsVW) ProcessRequest(w http.ResponseWriter, d url.Values) {
 }
 
 func (m *CardsVW) LoadCardDefData() {
-
+	m.Cards = []CardDef{}
+	
 	rslt := db.ReadDatabase[db.TBL_EnterpriseList](db.TBL_LAB_SYSTEM_QRY().QUERY_5.Qry)
 	for _, result := range rslt {				
 		p := CardDef{}

@@ -1,21 +1,19 @@
 .cardsvw {
-    
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: wrap;
-    width: 80%;
-    height: 100%;
-    margin: 2rem 0 0 0;
-    overflow: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 80%;
+  height: 100%;
+  margin: 2rem 0 2rem 0;
 
   &-card {
     position: relative;
-    height: 20rem;
+    height: 30rem;
     min-width: 40rem;
-    margin: .5rem;
+    margin: 0.5rem 0.5rem 2.0rem 0.5rem;
     background-color: #0b4975;
-    box-shadow: 0 1rem 2rem rgba(0, 0, 0, .2);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
     border-radius: 1rem;
 
     &__icon {
@@ -25,25 +23,51 @@
       align-self: center;
       color: #eee;
       height: 1rem;
-     
+
       transform: scale(2.3);
       // margin: 0 7rem;
       font-size: 1rem;
-  
+
       &:hover {
-        color: green;  
+        color: green;
       }
     }
-    
+
     & p {
-        margin-top: 1rem;
-        font-family: sans-serif;
-        font-size: 2rem;
-        font-weight: 200;
-        color: azure;
-        text-align: center;
+      margin-top: 1rem;
+      font-family: sans-serif;
+      font-size: 2rem;
+      font-weight: 200;
+      color: azure;
+      text-align: center;
     }
-    
   }
 }
 
+.zonetbl-container {
+  display: flex;
+  flex-direction: row;
+  outline: 1px solid gray;
+  justify-content: center;
+  margin: 1rem 2rem 0 2rem;
+  border-radius: 0.5rem;
+}
+
+.zone-table {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1rem 0 0.5rem 0;
+
+  & i {
+    color: green;
+    padding: 0.5rem;
+    transform: scale(1.5);
+  }
+
+  & th {
+    padding: 0 0.5rem 0 0.6rem;
+    font-size: 1.5rem;
+    color: white;
+  }
+}

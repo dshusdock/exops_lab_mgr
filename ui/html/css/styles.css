@@ -11,7 +11,8 @@ html {
 body {
   box-sizing: border-box;
   background-color: #415A77;
-  overflow: hidden; }
+  height: 100%;
+  width: 100%; }
 
 .test1 {
   font-size: 10rem; }
@@ -272,13 +273,12 @@ button:hover {
   flex-wrap: wrap;
   width: 80%;
   height: 100%;
-  margin: 2rem 0 0 0;
-  overflow: auto; }
+  margin: 2rem 0 2rem 0; }
   .cardsvw-card {
     position: relative;
-    height: 20rem;
+    height: 30rem;
     min-width: 40rem;
-    margin: .5rem;
+    margin: 0.5rem 0.5rem 2.0rem 0.5rem;
     background-color: #0b4975;
     box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
     border-radius: 1rem; }
@@ -300,6 +300,28 @@ button:hover {
       font-weight: 200;
       color: azure;
       text-align: center; }
+
+.zonetbl-container {
+  display: flex;
+  flex-direction: row;
+  outline: 1px solid gray;
+  justify-content: center;
+  margin: 1rem 2rem 0 2rem;
+  border-radius: 0.5rem; }
+
+.zone-table {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1rem 0 0.5rem 0; }
+  .zone-table i {
+    color: green;
+    padding: 0.5rem;
+    transform: scale(1.5); }
+  .zone-table th {
+    padding: 0 0.5rem 0 0.6rem;
+    font-size: 1.5rem;
+    color: white; }
 
 /* The Modal (background) */
 .fileupload-modal {
@@ -399,7 +421,7 @@ input[type="file"] {
 .settings-modal {
   position: relative;
   margin: 2rem 0 0 0;
-  border-radius: 1.0rem;
+  border-radius: 1rem;
   height: 50rem;
   width: 80rem;
   display: flex;
@@ -453,7 +475,7 @@ input[type="file"] {
       overflow: hidden;
       text-overflow: ellipsis; }
     .settings-modal__container .menu {
-      width: 25%;
+      max-width: 30rem;
       border-right: 1px solid #ccc;
       margin-bottom: 1rem; }
       .settings-modal__container .menu li {
@@ -473,7 +495,7 @@ input[type="file"] {
         background-color: #5075b9; }
     .settings-modal__container .page {
       width: 100%;
-      margin-bottom: .5rem;
+      margin-bottom: 0.5rem;
       font-size: 1.6rem;
       font-weight: 500;
       font-family: sans-serif;
@@ -494,9 +516,27 @@ input[type="file"] {
           background-color: #0964b0;
           color: white;
           outline: 1px solid #ccc;
-          border-radius: .5rem; }
+          border-radius: 0.5rem; }
         .settings-modal__container .page__test button:hover {
           background-color: #5075b9; }
+      .settings-modal__container .page__unigydb {
+        margin: 1rem; }
+        .settings-modal__container .page__unigydb input {
+          margin: 1rem;
+          height: 4rem;
+          width: 20rem;
+          border-radius: 0.5rem;
+          border: 1px solid #ccc; }
+        .settings-modal__container .page__unigydb button {
+          margin: 1rem 1rem 0 0;
+          height: 4rem;
+          width: 10rem;
+          background-color: #0964b0;
+          color: white;
+          outline: 1px solid #ccc;
+          border-radius: 0.5rem; }
+        .settings-modal__container .page__unigydb button:active {
+          outline: 2px solid #ccc; }
   .settings-modal__button {
     width: 30%;
     height: 5rem;
@@ -699,8 +739,8 @@ table.blueTable .data-row:hover {
 
 .activity-sidenav {
   width: 15%;
-  height: 100rem; }
+  height: 95rem; }
 
 .activity-main {
   width: 85%;
-  height: 100rem; }
+  height: 95rem; }

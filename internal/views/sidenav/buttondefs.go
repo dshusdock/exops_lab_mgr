@@ -4,7 +4,7 @@ package sidenav
 type side_nav_btn_lbl struct {
 	ENTERPRISE      string
 	SOFTWARE_VER    string
-	RECORDING       string
+	UNIGY       	string
 	BUTTON          string
 	RESOURCE_AOR    string
 	OPEN_CONNECTION string
@@ -16,7 +16,7 @@ func SIDE_NAV_BTN_LBL() *side_nav_btn_lbl {
 	return &side_nav_btn_lbl{
 		ENTERPRISE:      "Enterprise",
 		SOFTWARE_VER:    "Software Version",
-		RECORDING:       "Recording",
+		UNIGY:		     "Unigy",
 		BUTTON:          "Button",
 		RESOURCE_AOR:    "Resource AOR",
 		OPEN_CONNECTION: "Open Connection",

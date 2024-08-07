@@ -86,6 +86,19 @@ func init() {
 				EntListPart: []string{},
 				Htmx:    nil,
 			},
+			{
+				Type:    "caret",
+				ID:	  	 "Unigy",
+				Lbl:     pa.UNIGY,
+				Caret:   false,
+				Class:   "fa-solid fa-chevron-right rotate_back",
+				SubLbl:  nil,
+				RepoDlg: []string{},
+				DBList:  []string{},
+				EntList: []string{},
+				EntListPart: []string{},
+				Htmx:    nil,
+			},
 		},
 	}
 }
@@ -122,7 +135,7 @@ func (m *SideNav) processClickEvent(w http.ResponseWriter, d url.Values) {
 		
 		render.RenderTemplate_new(w, nil, m.App, constants.RM_SNIPPET1)
 	case "button":
-		fmt.Printf("In the button case - %s\n", id)
+		fmt.Printf("In the button case - %s - lbl - %s\n", id, lbl)
 				
 		labsystemvw.AppLSTableVW.LoadTblDataByQuery(getListFromId(id, lbl))
 		render.RenderTemplate_new(w, nil, m.App, constants.RM_TABLE_REFRESH)
@@ -175,6 +188,8 @@ func getListFromId(id string, lbl string) string {
 		str = fmt.Sprintf(part + "Enterprise = \"%s\"", lbl)
 	case "swver":
 		str = fmt.Sprintf(part + "swVer = \"%s\"", lbl)
+	case "Unigy":
+		str = fmt.Sprintf(part + "Enterprise = \"%s\"", lbl)
 	}
 
 	return str
@@ -238,6 +253,8 @@ func (m *SideNav) LoadDropdownData(x int) {
 		rslt = db.ReadDatabase[db.TBL_EnterpriseList](db.TBL_LAB_SYSTEM_QRY().QUERY_1.Qry)
 	case 1:
 		rslt = db.ReadDatabase[db.TBL_SWVerList](db.TBL_LAB_SYSTEM_QRY().QUERY_4.Qry)
+	case 2:
+		rslt = db.ReadDatabase[db.TBL_EnterpriseList](db.TBL_LAB_SYSTEM_QRY().QUERY_5.Qry)
 	}
 
 	m.Data[x].EntList = nil

@@ -16,7 +16,9 @@ html {
 body {
   box-sizing: border-box;
   background-color: #415A77;
-  overflow: hidden;
+  // overflow: hidden;
+  height: 100%;
+  width: 100%;
 }
 
 div {

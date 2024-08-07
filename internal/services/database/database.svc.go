@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"dshusdock/tw_prac1/internal/apis"
 	con "dshusdock/tw_prac1/internal/constants"
+
+	"github.com/go-sql-driver/mysql"
 )
 
 type DBAccess struct {
@@ -14,7 +16,16 @@ type DBAccess struct {
 var DBA DBAccess
 
 func Init() {
-	DBA.DBHandle = apis.Connect()
+	cfg := mysql.Config{
+		User:                 "root",         //os.Getenv("DBUSER"),
+		Passwd:               "my-secret-pw", //os.Getenv("DBPASS"),
+		Net:                  "tcp",
+		Addr:                 "127.0.0.1:3306",
+		DBName:               "testdb",
+		AllowNativePasswords: true,
+	}
+
+	DBA.DBHandle = apis.Connect(cfg)
 	DBA.active = true
 }
 

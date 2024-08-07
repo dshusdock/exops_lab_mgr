@@ -9,11 +9,9 @@
     @keyup="$store.sidenav.onSearchChange($el)"
     @search="$store.sidenav.onSearchChange($el)"
   />
-  <ul
-    class="sidenav__ul"
-    
-  >
-    {{ $data := .Data }} {{range $data}}
+  <ul class="sidenav__ul">
+    {{ $data := .Data }} 
+    {{range $data}}
     <li
       class=""
       @click="$store.sidenav.onElementClick($el)"

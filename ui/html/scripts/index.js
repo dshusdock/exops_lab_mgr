@@ -126,24 +126,24 @@ document.addEventListener("alpine:init", () => {
 
         if (text === "General") {
           console.log("General clicked");
-          let modal = document.getElementsByClassName("page__general")[0];
-          modal.style.display = "flex";
-          if (this.active) {
-            this.active.style.display = "none";
-            this.active = modal;
-          }
+          document.getElementsByClassName("page__general")[0].style.display = "flex";
+          document.getElementsByClassName("page__test")[0].style.display = "none";
+          document.getElementsByClassName("page__unigydb")[0].style.display = "none";
         }
 
         if (text === "Test") {
-          console.log("Test clicked");
-          let modal = document.getElementsByClassName("page__test")[0];
-          modal.style.display = "flex";
+          console.log("Test clicked");      
+          document.getElementsByClassName("page__test")[0].style.display = "flex";
+          document.getElementsByClassName("page__general")[0].style.display = "none";
+          document.getElementsByClassName("page__unigydb")[0].style.display = "none";
+          
+        }
 
-          this.active = document.getElementsByClassName("page__general")[0];
-          if (this.active) {
-            this.active.style.display = "none";
-            this.active = modal;
-          }
+        if (text === "Unigy Database") {
+          console.log("Unigy Database clicked");
+          document.getElementsByClassName("page__unigydb")[0].style.display = "flex";
+          document.getElementsByClassName("page__general")[0].style.display = "none";
+          document.getElementsByClassName("page__test")[0].style.display = "none";
         }
       },
     }),

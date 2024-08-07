@@ -5,7 +5,8 @@ import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
-	
+	"dshusdock/tw_prac1/internal/services/database"
+
 	"dshusdock/tw_prac1/internal/views/cardsvw"
 	"io"
 
@@ -70,6 +71,19 @@ func (m *SettingsVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
 		fmt.Println("Test Button2 Clicked")
 		// database.PrintTableData()	
 		cardsvw.AppCardsVW.LoadCardDefData()
+	case "Enter Button":
+		fmt.Println("Enter Button Clicked")
+		s := d.Get("ip")
+		fmt.Println("IP: ", s)
+
+		database.UnigyDB.ConnectDB(s)
+	case "Close Button":
+		fmt.Println("Close Button Clicked")
+		s := d.Get("ip")
+		fmt.Println("IP: ", s)
+
+		database.UnigyDB.DisConnectDB(s)
+		
 	}
 }
 

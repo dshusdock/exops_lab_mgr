@@ -13,7 +13,7 @@
        <ul class="" @click="$store.settings.onMenuClick($event)">
         <li>General</li>
         <li>Test</li>
-        <li>Item 2</li>
+        <li>Unigy Database</li>
         <li>Item 3</li>
         <li>Item 4</li>
        </ul>
@@ -29,9 +29,7 @@
                 <input type="password" id="password" name="password" required><br>
                 <button type="submit">Login</button>
             </form>
-        </div>
-
-
+          </div>
         </div>
         <div class="page__test">
           <div class="container">
@@ -65,7 +63,39 @@
               }'>Test Button2</button>
           </div>          
         </div>
+        <div class="page__unigydb">
+          <form action="/url" method="GET">
+            <p>Enter IP Address of Unigy System:</p>
+            <input type="text" name="ip" placeholder="xxx.xxx.xxx.xxx">
+            <button 
+              type="button"
+              hx-post="/element/event/click" 
+              hx-swap="none" 
+              hx-trigger="click"
+              hx-target=""
+              hx-vals='{
+                "type": "button",
+                "label": "Enter Button",
+                "view_id": "settingsvw",
+                "view_str": ""
+              }'>Enter</button>
+
+              <button 
+              type="button"
+              hx-post="/element/event/click" 
+              hx-swap="none" 
+              hx-trigger="click"
+              hx-target=""
+              hx-vals='{
+                "type": "button",
+                "label": "Close Button",
+                "view_id": "settingsvw",
+                "view_str": ""
+              }'>Close</button>
+          </form>
+        </div>
       </div>
+      
     </div>
   
 </div>
