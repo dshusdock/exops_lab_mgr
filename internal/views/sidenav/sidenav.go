@@ -250,11 +250,14 @@ func (m *SideNav) LoadDropdownData(x int) {
 
 	switch x {
 	case 0:
-		rslt = db.ReadDatabase[db.TBL_EnterpriseList](db.TBL_LAB_SYSTEM_QRY().QUERY_1.Qry)
+		// rslt = db.ReadDatabase[db.TBL_EnterpriseList](db.TBL_LAB_SYSTEM_QRY().QUERY_1.Qry)
+		rslt = db.ReadDatabase[db.TBL_EnterpriseList](db.SQL_QUERIES_LOCAL["QUERY_1"].Qry)
 	case 1:
-		rslt = db.ReadDatabase[db.TBL_SWVerList](db.TBL_LAB_SYSTEM_QRY().QUERY_4.Qry)
+		// rslt = db.ReadDatabase[db.TBL_SWVerList](db.TBL_LAB_SYSTEM_QRY().QUERY_4.Qry)
+		rslt = db.ReadDatabase[db.TBL_SWVerList](db.SQL_QUERIES_LOCAL["QUERY_4"].Qry)
 	case 2:
-		rslt = db.ReadDatabase[db.TBL_EnterpriseList](db.TBL_LAB_SYSTEM_QRY().QUERY_5.Qry)
+		// rslt = db.ReadDatabase[db.TBL_EnterpriseList](db.TBL_LAB_SYSTEM_QRY().QUERY_5.Qry)
+		rslt = db.ReadDatabase[db.TBL_EnterpriseList](db.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
 	}
 
 	m.Data[x].EntList = nil

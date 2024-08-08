@@ -1,43 +1,41 @@
 package database
 
-import "reflect"
+import (
+	"reflect"
+)
+var SQL_QUERIES_LOCAL = make (map[string]lsquery)
+var SQL_QUERIES_UNIGY = make (map[string]lsquery)
+
 
 type lsquery struct {
 	Qry string
 	model interface{}
 }
 
-type labsystem_queries struct {
-	QUERY_1 lsquery
-	QUERY_2 lsquery
-	QUERY_3 lsquery
-	QUERY_4 lsquery
-	QUERY_5 lsquery
-	QUERY_6 lsquery
-	QUERY_7 lsquery
+func init() {
+	
+	// LOCAL DATABASE
+	SQL_QUERIES_LOCAL["QUERY_1"] = lsquery{"select unique enterprise from LabSystem", reflect.TypeOf(TBL_EnterpriseList{})}
+	SQL_QUERIES_LOCAL["QUERY_2"] = lsquery{"select * from LabSystem where enterprise = ?", reflect.TypeOf(MdcData{})}	
+	SQL_QUERIES_LOCAL["QUERY_3"] = lsquery{`SELECT vip, swVer, enterprise, name FROM LabSystem where role = "Unigy"`, reflect.TypeOf(DataVw1{})}
+	SQL_QUERIES_LOCAL["QUERY_4"] = lsquery{"select unique swVer from LabSystem", reflect.TypeOf(TBL_SWVerList{})}
+	SQL_QUERIES_LOCAL["QUERY_5"] = lsquery{`select unique enterprise from LabSystem where role="Unigy"`, reflect.TypeOf(TBL_EnterpriseList{})}
+	SQL_QUERIES_LOCAL["QUERY_6"] = lsquery{`select unique serverType from LabSystem where enterprise = `, reflect.TypeOf(TBL_ServerTypeList{})}
+	SQL_QUERIES_LOCAL["QUERY_7"] = lsquery{`select unique iPAddress from LabSystem where enterprise = `, reflect.TypeOf(TBL_CcmIPList{})}
+	
+	// UNIGY DATABASE
+	SQL_QUERIES_UNIGY["QUERY_1"] = lsquery{`select server1,server2,vip,zid from NewZoneData`, reflect.TypeOf(TBL_NZData{})}
 }
 
-func TBL_LAB_SYSTEM_QRY() *labsystem_queries {
-	return &labsystem_queries{
-		QUERY_1: lsquery{"select unique enterprise from LabSystem", reflect.TypeOf(TBL_EnterpriseList{})},
-		QUERY_2: lsquery{"select * from LabSystem where enterprise = ?", reflect.TypeOf(MdcData{})},
-		QUERY_3: lsquery{`SELECT vip, swVer, enterprise, name FROM LabSystem where role = "Unigy"`, reflect.TypeOf(DataVw1{})},	
-		QUERY_4: lsquery{"select unique swVer from LabSystem", reflect.TypeOf(TBL_SWVerList{})},
-		QUERY_5: lsquery{`select unique enterprise from LabSystem where role="Unigy"`, reflect.TypeOf(TBL_EnterpriseList{})},
-		QUERY_6: lsquery{`select unique serverType from LabSystem where enterprise = `, reflect.TypeOf(TBL_ServerTypeList{})},
-		QUERY_7: lsquery{`select server1,server2,vip,zid from NewZoneData`, reflect.TypeOf(TBL_NZData{})},	
-	}
-}
 
-type TBL_NZData struct {
-	Server1 string
-	Server2 string
-	Vip     string
-	Zid     string
-}
 
+// LOCAL DATABASE
 type TBL_EnterpriseList struct {
 	Enterprise string	
+}
+
+type TBL_CcmIPList struct {
+	iPAddress string	
 }
 
 type TBL_ServerTypeList struct {
@@ -71,3 +69,33 @@ type MdcData struct {
 	Comments          string
 	VmLabServerHostIp string
 }
+
+// UNIGY DATABASE
+type TBL_NZData struct {
+	Server1 string
+	Server2 string
+	Vip     string
+	Zid     string
+}
+
+// type labsystem_queries struct {
+// 	QUERY_1 lsquery
+// 	QUERY_2 lsquery
+// 	QUERY_3 lsquery
+// 	QUERY_4 lsquery
+// 	QUERY_5 lsquery
+// 	QUERY_6 lsquery
+// 	QUERY_7 lsquery
+// }
+
+// func TBL_LAB_SYSTEM_QRY() *labsystem_queries {
+// 	return &labsystem_queries{
+// 		QUERY_1: lsquery{"select unique enterprise from LabSystem", reflect.TypeOf(TBL_EnterpriseList{})},
+// 		QUERY_2: lsquery{"select * from LabSystem where enterprise = ?", reflect.TypeOf(MdcData{})},
+// 		QUERY_3: lsquery{`SELECT vip, swVer, enterprise, name FROM LabSystem where role = "Unigy"`, reflect.TypeOf(DataVw1{})},	
+// 		QUERY_4: lsquery{"select unique swVer from LabSystem", reflect.TypeOf(TBL_SWVerList{})},
+// 		QUERY_5: lsquery{`select unique enterprise from LabSystem where role="Unigy"`, reflect.TypeOf(TBL_EnterpriseList{})},
+// 		QUERY_6: lsquery{`select unique serverType from LabSystem where enterprise = `, reflect.TypeOf(TBL_ServerTypeList{})},
+// 		QUERY_7: lsquery{`select server1,server2,vip,zid from NewZoneData`, reflect.TypeOf(TBL_NZData{})},	
+// 	}
+// }

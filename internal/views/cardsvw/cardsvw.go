@@ -11,12 +11,26 @@ import (
 	"net/url"
 )
 
+type Ccm struct {
+	Role 		string
+	CcmIP 		string
+	SWVersion 	string
+}
+
+
+type ZoneInfo struct {
+	Zid 	string
+	Vip  	string
+	Ccm1 	Ccm
+	Ccm2 	Ccm	
+}
+
 type CardDef struct {
 	Enterprise  string
 	Vip		 	string
 	SWVersion   string
 	Name		string
-	HaPair		bool
+	Zones		[]ZoneInfo
 	Active		bool
 	Standby		bool
 	VM     		bool
@@ -72,28 +86,59 @@ func (m *CardsVW) ProcessRequest(w http.ResponseWriter, d url.Values) {
 func (m *CardsVW) LoadCardDefData() {
 	m.Cards = []CardDef{}
 	
-	rslt := db.ReadDatabase[db.TBL_EnterpriseList](db.TBL_LAB_SYSTEM_QRY().QUERY_5.Qry)
+	rslt := db.ReadDatabase[db.TBL_EnterpriseList](db.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
+
+	// Range over list of enterprise names and create a CardDef for each
 	for _, result := range rslt {				
 		p := CardDef{}
 		p.Enterprise = result.Data[0]
-
 		m.Cards = append(m.Cards, p)
-	}
-	
+	}	
 	rslt = nil
 	
+	// Range over list of CardDefs and load the data for each
 	for x:=0; x<len(m.Cards); x++ {
-		m.Cards[x].VM = false
-		m.Cards[x].Hardware = false
-		s :=fmt.Sprintf(db.TBL_LAB_SYSTEM_QRY().QUERY_6.Qry + "\"%s\"\n", m.Cards[x].Enterprise)
-		rslt := db.ReadDatabase[db.TBL_ServerTypeList](s)
-		for _, result := range rslt {
-			if result.Data[0] == "VM" {
-				m.Cards[x].VM = true
-			} else {
-				m.Cards[x].Hardware = true
-			}
+
+		// Check for VM, Hardware, or Mixed server types
+		r := checkServerType(m.Cards[x].Enterprise)
+		if r == "mixed" {
+			m.Cards[x].VM = true
+			m.Cards[x].Hardware = true
+		} else if r == "vm" {
+			m.Cards[x].VM = true
+		} else {
+			m.Cards[x].Hardware = true
 		}
+
+		// Load the data for each zone
+		// Get a list of IP's based on the enterprise name
+		s := fmt.Sprintf(db.SQL_QUERIES_LOCAL["QUERY_7"].Qry + "\"%s\"\n", m.Cards[x].Enterprise)
+		rslt = db.ReadDatabase[db.TBL_ServerTypeList](s)
+		fmt.Println("IP List: ", rslt)
+
+		
+	}
+}
+
+func checkServerType(ent string) string {
+	vm := false
+	hw := false
+
+	s :=fmt.Sprintf(db.SQL_QUERIES_LOCAL["QUERY_6"].Qry + "\"%s\"\n", ent)
+	rslt := db.ReadDatabase[db.TBL_ServerTypeList](s)
+	for _, result := range rslt {
+		if result.Data[0] == "VM" {
+			vm = true
+		} else {
+			hw = true
+		}
+	}
+	if vm && hw {
+		return "mixed"
+	} else if vm {
+		return "vm"
+	} else {
+		return "hw"
 	}
 }
 

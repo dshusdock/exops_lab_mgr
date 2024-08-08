@@ -8,7 +8,7 @@ func GetTableData() ([]DataVw1, error) {
 	// An albums slice to hold data from returned rows.
 	var data []DataVw1
 
-	rows := DBA.Read(TBL_LAB_SYSTEM_QRY().QUERY_3.Qry)
+	rows := DBA.Read(SQL_QUERIES_LOCAL["QUERY_3"].Qry)
 
 	defer rows.Close()
 	// Loop through rows, using Scan to assign column data to struct fields.
