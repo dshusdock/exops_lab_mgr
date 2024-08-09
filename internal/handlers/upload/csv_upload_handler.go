@@ -1,7 +1,7 @@
 package upload
 
 import (
-	"dshusdock/tw_prac1/internal/services/database"
+	d "dshusdock/tw_prac1/internal/services/database"
 	"encoding/csv"
 	"io"
 	"log"
@@ -28,7 +28,6 @@ type LabDataRow struct {
 func ProcessLabInfo(f multipart.File) ([]LabDataRow) {
 	var result []LabDataRow
 	reader := csv.NewReader(f)
-	dba := database.DBA
 
 	for {
 		record, err := reader.Read()
@@ -74,7 +73,7 @@ func ProcessLabInfo(f multipart.File) ([]LabDataRow) {
 		}
 		var sqlStr = "INSERT into LabSystem values('" + x.Cab + "', '" + x.U + "', '" + x.ISO + "', '" + x.Name + "', '" + x.SerialNbr + "', '" + x.IP + "', '" + x.VIP + "', '" + x.IdracIP + "', '" + x.SWVer + "', '" + x.ServerType + "', '" + x.Enterprise + "', '" + x.Role + "', '" + x.Comments + "', '" + x.VMLabServerHostIP + "')"
 		log.Println(sqlStr)							
-		dba.Write(sqlStr)
+		d.WriteLocalDB(sqlStr)
 
 		result = append(result, x)
 	}

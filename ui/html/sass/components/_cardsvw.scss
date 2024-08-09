@@ -11,8 +11,9 @@
     position: relative;
     height: 30rem;
     min-width: 40rem;
-    margin: 0.5rem 0.5rem 2.0rem 0.5rem;
-    background-color: #0b4975;
+    margin: 0.5rem 0.5rem 2rem 0.5rem;
+    // background-color: #0b4975;
+    background-color: $color-primary-dark;
     box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
     border-radius: 1rem;
 

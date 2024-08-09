@@ -14,27 +14,29 @@ import (
 
 var DBHandle2 *sql.DB = nil
 
-func Connect(cfg mysql.Config) *sql.DB {
+func Connect(cfg mysql.Config) (*sql.DB, error) {
 	var db *sql.DB
 
-	cfg.Timeout, _ = time.ParseDuration("5s")
+	cfg.Timeout, _ = time.ParseDuration("3s")
 	
 	// Get a database handle.
 	var err error
 	db, err = sql.Open("mysql", cfg.FormatDSN())
 	if err != nil {
-		log.Fatal(err)
+		// log.Println(err)
+		return nil, err
 	}
 
 	pingErr := db.Ping()
 	if pingErr != nil {
-		log.Fatal(pingErr)
+		// log.Println(pingErr)
+		return nil, pingErr
 	}
 	log.Println("SQL Database Connected!...")
-	return db
+	return db, nil
 }
 
-func Disconnect(db *sql.DB) {
+func Close(db *sql.DB) {
 	db.Close()
 	pingErr := db.Ping()
 	if pingErr != nil {
@@ -45,14 +47,14 @@ func Disconnect(db *sql.DB) {
 func Write(db *sql.DB, sql string) {
 	_, err := db.Exec(sql)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 }
 
 func Read(db *sql.DB, sql string) *sql.Rows {
 	rows, err := db.Query(sql)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	return rows
 }
@@ -62,7 +64,8 @@ func ReadDB[T any](db *sql.DB, s string) []con.RowData {
 
 	rows, err := db.Query(s)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return nil
 	}
 	defer rows.Close()
 
@@ -72,7 +75,6 @@ func ReadDB[T any](db *sql.DB, s string) []con.RowData {
 		s := reflect.ValueOf(&e).Elem()
 
 		numCols := s.NumField()
-		//fmt.Println("numCols is", numCols)
 		columns := make([]interface{}, numCols)
 
 		for i := 0; i < numCols; i++ {
@@ -81,7 +83,8 @@ func ReadDB[T any](db *sql.DB, s string) []con.RowData {
 		}
 
 		if err := rows.Scan(columns...); err != nil {
-			log.Fatal(err)
+			log.Println(err)
+			return nil
 		}
 		tableDef = append(tableDef, e)
 	}

@@ -5,7 +5,7 @@ import (
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/messagebus"
-	"dshusdock/tw_prac1/internal/views/cardsvw"
+	// "dshusdock/tw_prac1/internal/views/cardsvw"
 	"dshusdock/tw_prac1/internal/views/labsystemvw"
 
 	// "dshusdock/tw_prac1/internal/views/labsystemvw"
@@ -95,7 +95,7 @@ func (m *HeaderVw) ProcessClickEvent(w http.ResponseWriter, d  url.Values) {
 		m.App.MainTable = false
 		m.App.Cards = true
 		// labsystemvw.AppLSTableVW.LoadTableData(lbl)
-		cardsvw.AppCardsVW.LoadCardDefData()
+		// cardsvw.AppCardsVW.LoadCardDefData()
 		render.RenderTemplate_new(w, nil, m.App, constants.RM_CARDS)
 	}
 }

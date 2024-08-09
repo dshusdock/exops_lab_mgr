@@ -5,6 +5,7 @@ import (
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/database"
+	q "dshusdock/tw_prac1/internal/services/database/queries"
 	"fmt"
 	"log"
 	"net/http"
@@ -85,7 +86,7 @@ func (m *LSTableVW) ProcessRequest(w http.ResponseWriter, d url.Values) {
 func (m *LSTableVW) LoadTableData(t string) {
 	fmt.Println("\nDisplaying SQL Table: ", t)
 	m.ViewFlags[0] = true
-	ptr := database.DB_VIEW_TYPE_MAP[t]
+	ptr := q.DB_VIEW_TYPE_MAP[t]
 
 	m.Data.Start = 0
 	m.Data.Tbl = database.ReadTableData(t)
@@ -105,13 +106,14 @@ func (m *LSTableVW) LoadTableData(t string) {
 	
 }
 
-func (m *LSTableVW) LoadTblDataByQuery(q string) {
-	fmt.Println("\nLoadDataByQuery - ", q)
+func (m *LSTableVW) LoadTblDataByQuery(qry string) {
+	
+	fmt.Println("\nLoadDataByQuery - ", qry)
 	m.ViewFlags[0] = true
-	ptr := database.DB_VIEW_TYPE_MAP["Table"]
+	ptr := q.DB_VIEW_TYPE_MAP["Table"]
 
 	m.Data.Start = 0
-	m.Data.Tbl = database.ReadTblWithQry(q)
+	m.Data.Tbl = database.ReadTblWithQry(qry)
 	m.Data.Table = "QUERY"
 
 	var end int
@@ -127,4 +129,3 @@ func (m *LSTableVW) LoadTblDataByQuery(q string) {
 	m.Data.HdrDef = ptr.HdrDef
 	
 }
-

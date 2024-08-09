@@ -76,13 +76,13 @@ func (m *SettingsVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
 		s := d.Get("ip")
 		fmt.Println("IP: ", s)
 
-		database.UnigyDB.ConnectDB(s)
+		database.ConnectUnigyDB(s)
 	case "Close Button":
 		fmt.Println("Close Button Clicked")
 		s := d.Get("ip")
 		fmt.Println("IP: ", s)
 
-		database.UnigyDB.DisConnectDB(s)
+		database.CloseUnigyDB(s)
 		
 	}
 }

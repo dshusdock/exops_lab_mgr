@@ -15,7 +15,7 @@ type AppConfig struct {
 	InfoLog       *log.Logger
 	InProduction  bool
 	ViewCache     map[string]constants.ViewInteface
-	DBA 		  *database.DBAccess
+	DBA 		  *database.LocalDBAccess
 	Bus 		  EventBus.Bus
 	SideNav	      bool
 	MainTable	  bool

@@ -4,7 +4,8 @@ import (
 	"dshusdock/tw_prac1/config"
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
-	db "dshusdock/tw_prac1/internal/services/database"
+	d "dshusdock/tw_prac1/internal/services/database"
+	q "dshusdock/tw_prac1/internal/services/database/queries"
 	"fmt"
 	"log"
 	"net/http"
@@ -48,7 +49,7 @@ type CardsVW struct {
 	RenderFile 	string
 	ViewFlags  	[]bool
 	Cards       []CardDef
-	Data		[]db.DataVw1
+	Data		[]q.DataVw1
 	Htmx       	any
 }
 
@@ -86,7 +87,7 @@ func (m *CardsVW) ProcessRequest(w http.ResponseWriter, d url.Values) {
 func (m *CardsVW) LoadCardDefData() {
 	m.Cards = []CardDef{}
 	
-	rslt := db.ReadDatabase[db.TBL_EnterpriseList](db.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
+	rslt := d.ReadLocalDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
 
 	// Range over list of enterprise names and create a CardDef for each
 	for _, result := range rslt {				
@@ -94,38 +95,75 @@ func (m *CardsVW) LoadCardDefData() {
 		p.Enterprise = result.Data[0]
 		m.Cards = append(m.Cards, p)
 	}	
-	rslt = nil
 	
 	// Range over list of CardDefs and load the data for each
 	for x:=0; x<len(m.Cards); x++ {
+		fmt.Printf("----------------------Enterprise: %s ----------------------\n", m.Cards[x].Enterprise)
+		StuffTheData(&m.Cards[x])	
+	}
+	fmt.Printf("%+v\n", m.Cards)
+}
 
-		// Check for VM, Hardware, or Mixed server types
-		r := checkServerType(m.Cards[x].Enterprise)
-		if r == "mixed" {
-			m.Cards[x].VM = true
-			m.Cards[x].Hardware = true
-		} else if r == "vm" {
-			m.Cards[x].VM = true
-		} else {
-			m.Cards[x].Hardware = true
+func StuffTheData(ptr *CardDef) {
+
+	// Check for VM, Hardware, or Mixed server types
+	r := checkServerType(ptr.Enterprise)
+	if r == "mixed" {
+		ptr.VM = true
+		ptr.Hardware = true
+	} else if r == "vm" {
+		ptr.VM = true
+	} else {
+		ptr.Hardware = true
+	}
+
+	// Get the number of zones for the enterprise and the zone id's
+		
+	//  1 - Get a list of IP's based on the enterprise name
+	s := fmt.Sprintf(q.SQL_QUERIES_LOCAL["QUERY_7"].Qry + "\"%s\"\n", ptr.Enterprise)
+	rslt := d.ReadLocalDBwithType[q.TBL_ServerTypeList](s)
+	count := 0
+	for _, result := range rslt {
+		// fmt.Println("IP: ", result.Data[0])
+		err := d.ConnectUnigyDB(result.Data[0])
+		if err != nil {
+			count++
+			// fmt.Println("Error connecting to UnigyDB: ", err)
+			if count > 3 {
+				break
+			}
+			continue
 		}
 
-		// Load the data for each zone
-		// Get a list of IP's based on the enterprise name
-		s := fmt.Sprintf(db.SQL_QUERIES_LOCAL["QUERY_7"].Qry + "\"%s\"\n", m.Cards[x].Enterprise)
-		rslt = db.ReadDatabase[db.TBL_ServerTypeList](s)
-		fmt.Println("IP List: ", rslt)
+		// Found server to talk to 
+		//  2 - Get the zone id's for the enterprise
 
+		s := fmt.Sprintf(q.SQL_QUERIES_UNIGY["QUERY_1"].Qry )
+		// fmt.Println(s)
+		da := d.ReadUnigyDBwithType[q.TBL_NZData](s)
 		
-	}
+		fmt.Println("NZData: ", da)
+		for _, el := range da {
+			ptr.Zones = append(ptr.Zones, 
+				ZoneInfo{
+					Zid: el.Data[3], 
+					Vip: el.Data[2], 
+					Ccm1: Ccm{CcmIP: el.Data[0]}, 
+					Ccm2:Ccm{CcmIP: el.Data[0]},
+				})
+		}
+		
+		d.CloseUnigyDB(result.Data[0])
+	}		
+
 }
 
 func checkServerType(ent string) string {
 	vm := false
 	hw := false
 
-	s :=fmt.Sprintf(db.SQL_QUERIES_LOCAL["QUERY_6"].Qry + "\"%s\"\n", ent)
-	rslt := db.ReadDatabase[db.TBL_ServerTypeList](s)
+	s :=fmt.Sprintf(q.SQL_QUERIES_LOCAL["QUERY_6"].Qry + "\"%s\"\n", ent)
+	rslt := d.ReadLocalDBwithType[q.TBL_ServerTypeList](s)
 	for _, result := range rslt {
 		if result.Data[0] == "VM" {
 			vm = true
@@ -140,5 +178,12 @@ func checkServerType(ent string) string {
 	} else {
 		return "hw"
 	}
+}
+
+func getZoneInfo() []ZoneInfo {
+
+	z := []ZoneInfo{}
+	return z
+
 }
 

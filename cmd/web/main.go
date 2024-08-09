@@ -4,7 +4,9 @@ import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/handlers"
-	"dshusdock/tw_prac1/internal/services/database"
+	d "dshusdock/tw_prac1/internal/services/database"
+
+	// "dshusdock/tw_prac1/internal/views/cardsvw"
 	"fmt"
 	"log"
 	"log/slog"
@@ -46,25 +48,8 @@ func main() {
 
 func initApp() {
 	// init the app
-	database.Init()
+	d.ConnectLocalDB("127.0.0.1")
+
 	// sidenav.AppSideNav.LoadDropdownData()
-
-	// queueSize := 100
-	// bus := messagebus.New(queueSize)
-
-	// var wg sync.WaitGroup
-	// wg.Add(2)
-
-	// _ = bus.Subscribe("topic", func(v bool) {
-	//     defer wg.Done()
-	//     fmt.Println(v)
-	// })
-
-	// _ = bus.Subscribe("topic", func(v bool) {
-	//     defer wg.Done()
-	//     fmt.Println(v)
-	// })
-
-	// bus.Publish("topic", true)
-	// wg.Wait()
+	//cardsvw.AppCardsVW.LoadCardDefData()
 }
