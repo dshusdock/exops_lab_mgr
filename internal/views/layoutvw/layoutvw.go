@@ -3,7 +3,7 @@ package layoutvw
 import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/render"
-	"dshusdock/tw_prac1/internal/services/messagebus"
+	// "dshusdock/tw_prac1/internal/services/messagebus"
 	"fmt"
 	"log"
 	"net/http"
@@ -37,19 +37,19 @@ func init() {
 
 func (m *LayoutVw) RegisterView(app config.AppConfig) *LayoutVw{
 	log.Println("Registering AppLayoutVw...")
-	messagebus.GetBus().Subscribe("Event:Change", AppLayoutVw.ProcessChangEvent)
+	// messagebus.GetBus().Subscribe("Event:Change", AppLayoutVw.ProcessChangEvent)
 	AppLayoutVw.App = &app
 	return AppLayoutVw
-}
-
-func (m *LayoutVw) ProcessChangEvent() {
-	fmt.Println("\n[lyoutvw] Process Change Event")
-
 }
 
 func (m *LayoutVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
 	fmt.Println("[lyoutvw] - Processing request")
 	render.RenderModal(w, nil, nil)
+}
+
+func (m *LayoutVw) ProcessChangEvent() {
+	fmt.Println("\n[lyoutvw] Process Change Event")
+
 }
 
 func (m *LayoutVw) ToggleView() {

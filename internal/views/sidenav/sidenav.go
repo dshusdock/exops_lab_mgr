@@ -10,7 +10,6 @@ import (
 	"dshusdock/tw_prac1/internal/views/labsystemvw"
 	"fmt"
 	"log"
-	"log/slog"
 	"net/http"
 	"net/url"
 	"strings"
@@ -50,8 +49,6 @@ type SideNav struct {
 var AppSideNav *SideNav
 
 func init() {
-	slog.Info("In sidenav init \n")
-
 	pa := SIDE_NAV_BTN_LBL()
 	// pb := SYS_SUB_BTN_LBL()
 

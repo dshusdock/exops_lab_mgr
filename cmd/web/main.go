@@ -7,7 +7,7 @@ import (
 	d "dshusdock/tw_prac1/internal/services/database"
 
 	// "dshusdock/tw_prac1/internal/views/cardsvw"
-	"fmt"
+
 	"log"
 	"log/slog"
 	"net/http"
@@ -34,7 +34,7 @@ func main() {
 	initRouteHandlers()
 	initApp()
 
-	fmt.Printf("Starting application on port %s\n", portNumber)
+	slog.Info("Starting application -", "Port", portNumber)
 	srv := &http.Server{
 		Addr:    portNumber,
 		Handler: routes(&app),

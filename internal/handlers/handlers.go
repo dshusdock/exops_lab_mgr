@@ -54,8 +54,8 @@ func (m *Repository) HandleClickEvents(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	messagebus.GetBus().Publish("Event:Click", w, data)
-	messagebus.GetBus().Publish("Event:Change")
+	// messagebus.GetBus().Publish("Event:Click", w, data)
+	// messagebus.GetBus().Publish("Event:Change")
 
 	// route request to appropriate handler
 	ptr := m.App.ViewCache[v_id]

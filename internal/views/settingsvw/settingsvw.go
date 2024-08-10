@@ -6,8 +6,9 @@ import (
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/database"
+	"dshusdock/tw_prac1/internal/services/unigy/unigydata"
 
-	"dshusdock/tw_prac1/internal/views/cardsvw"
+	// "dshusdock/tw_prac1/internal/views/cardsvw"
 	"io"
 
 	// "dshusdock/tw_prac1/internal/services/datetime"
@@ -70,7 +71,8 @@ func (m *SettingsVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
 	case "Test Button2":
 		fmt.Println("Test Button2 Clicked")
 		// database.PrintTableData()	
-		cardsvw.AppCardsVW.LoadCardDefData()
+		// cardsvw.AppCardsVW.LoadCardData()
+		unigydata.LoadZoneData()
 	case "Enter Button":
 		fmt.Println("Enter Button Clicked")
 		s := d.Get("ip")

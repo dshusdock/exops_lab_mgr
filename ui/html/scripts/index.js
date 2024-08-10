@@ -260,7 +260,7 @@ document.addEventListener("alpine:init", () => {
         })
 
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");        
-        formData.append("view_id", "statussvc");
+        formData.append("view_id", "unigystatus");
         formData.append("type", "request");
         formData.append("target", "ip");
         formData.append("data", this.info.ip);

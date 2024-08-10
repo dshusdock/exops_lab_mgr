@@ -2,10 +2,15 @@ package cardsvw
 
 import (
 	"dshusdock/tw_prac1/config"
+	"log/slog"
+
+	// "dshusdock/tw_prac1/internal/constants"
+	"dshusdock/tw_prac1/internal/constants"
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	d "dshusdock/tw_prac1/internal/services/database"
 	q "dshusdock/tw_prac1/internal/services/database/queries"
+	"dshusdock/tw_prac1/internal/services/messagebus"
 	"fmt"
 	"log"
 	"net/http"
@@ -65,6 +70,8 @@ func init() {
 		Cards:      []CardDef{},
 		Htmx:       nil,
 	}
+
+	messagebus.GetBus().Subscribe("Event:ViewChange", AppCardsVW.ProcessViewChangeRequest)
 }
 
 func (m *CardsVW) RegisterView(app config.AppConfig) *CardsVW {
@@ -84,7 +91,17 @@ func (m *CardsVW) ProcessRequest(w http.ResponseWriter, d url.Values) {
 	}
 }
 
-func (m *CardsVW) LoadCardDefData() {
+func (m *CardsVW) ProcessViewChangeRequest(w http.ResponseWriter, d url.Values) {
+	slog.Info("[ProcessViewChangeRequest", "ID", m.Id)
+	s := d.Get("label")
+	slog.Info("Target - ", "Label", s)
+
+
+	AppCardsVW.LoadCardData()
+	render.RenderTemplate_new(w, nil, m.App, constants.RM_CARDS)
+}
+
+func (m *CardsVW) LoadCardData() {
 	m.Cards = []CardDef{}
 	
 	rslt := d.ReadLocalDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
@@ -99,24 +116,22 @@ func (m *CardsVW) LoadCardDefData() {
 	// Range over list of CardDefs and load the data for each
 	for x:=0; x<len(m.Cards); x++ {
 		fmt.Printf("----------------------Enterprise: %s ----------------------\n", m.Cards[x].Enterprise)
-		StuffTheData(&m.Cards[x])	
+
+		// Check for VM, Hardware, or Mixed server types
+		r := checkServerType(m.Cards[x].Enterprise)
+		if r == "mixed" {
+			m.Cards[x].VM = true
+			m.Cards[x].Hardware = true
+		} else if r == "vm" {
+			m.Cards[x].VM = true
+		} else {
+			m.Cards[x].Hardware = true
+		}
+		LoadZoneData(&m.Cards[x])	
 	}
-	fmt.Printf("%+v\n", m.Cards)
 }
 
-func StuffTheData(ptr *CardDef) {
-
-	// Check for VM, Hardware, or Mixed server types
-	r := checkServerType(ptr.Enterprise)
-	if r == "mixed" {
-		ptr.VM = true
-		ptr.Hardware = true
-	} else if r == "vm" {
-		ptr.VM = true
-	} else {
-		ptr.Hardware = true
-	}
-
+func LoadZoneData(ptr *CardDef) {
 	// Get the number of zones for the enterprise and the zone id's
 		
 	//  1 - Get a list of IP's based on the enterprise name
@@ -124,11 +139,9 @@ func StuffTheData(ptr *CardDef) {
 	rslt := d.ReadLocalDBwithType[q.TBL_ServerTypeList](s)
 	count := 0
 	for _, result := range rslt {
-		// fmt.Println("IP: ", result.Data[0])
 		err := d.ConnectUnigyDB(result.Data[0])
 		if err != nil {
 			count++
-			// fmt.Println("Error connecting to UnigyDB: ", err)
 			if count > 3 {
 				break
 			}
@@ -137,12 +150,9 @@ func StuffTheData(ptr *CardDef) {
 
 		// Found server to talk to 
 		//  2 - Get the zone id's for the enterprise
-
 		s := fmt.Sprintf(q.SQL_QUERIES_UNIGY["QUERY_1"].Qry )
-		// fmt.Println(s)
 		da := d.ReadUnigyDBwithType[q.TBL_NZData](s)
 		
-		fmt.Println("NZData: ", da)
 		for _, el := range da {
 			ptr.Zones = append(ptr.Zones, 
 				ZoneInfo{
@@ -151,11 +161,9 @@ func StuffTheData(ptr *CardDef) {
 					Ccm1: Ccm{CcmIP: el.Data[0]}, 
 					Ccm2:Ccm{CcmIP: el.Data[0]},
 				})
-		}
-		
+		}		
 		d.CloseUnigyDB(result.Data[0])
 	}		
-
 }
 
 func checkServerType(ent string) string {

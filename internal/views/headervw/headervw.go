@@ -5,12 +5,13 @@ import (
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/messagebus"
+	"log/slog"
+
+	// "dshusdock/tw_prac1/internal/views/cardsvw"
 	// "dshusdock/tw_prac1/internal/views/cardsvw"
 	"dshusdock/tw_prac1/internal/views/labsystemvw"
 
 	// "dshusdock/tw_prac1/internal/views/labsystemvw"
-	"log"
-
 	// "dshusdock/tw_prac1/internal/views/tablevw"
 	"fmt"
 	"net/http"
@@ -40,46 +41,35 @@ func init() {
 		Data:       "",
 		Htmx:       nil,
 	}
-	messagebus.GetBus().Subscribe("Event:Click", AppHeaderVw.ProcessClickEvent)
+	messagebus.GetBus().Subscribe("Event:ViewChange", AppHeaderVw.ProcessInternalRequest)
 }
 
 func (m *HeaderVw) RegisterView(app config.AppConfig) *HeaderVw {
-	log.Println("Registering AppHeaderVw...")
+	slog.Info("Registering AppHeaderVw...")
 	AppHeaderVw.App = &app
 	return AppHeaderVw
 }
 
 func (m *HeaderVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
 
-	fmt.Printf("[%s] - Processing request\n", m.Id)
+	slog.Info("Processing request", "ID", m.Id)
 	s := d.Get("label")
-	fmt.Println("Label: ", s)
+	slog.Info("Incoming: ", "Label", s)
 
-	// Commented this out to use the message bus
-	// switch s {
-	// case "upload":
-	// 	render.RenderTemplate_new(w, nil, nil, constants.RM_UPLOAD_MODAL)
-	// case "settings":
-	// 	render.RenderTemplate_new(w, nil, nil, constants.RM_SETTINGS_MODAL)
-	// case "Table":
-	// 	render.RenderTemplate_new(w, nil, m.App, constants.RM_LSTABLE)
-
-	// }
-
+	m.ProcessClickEvent(w, d)
 }
 
-func (m *HeaderVw) ToggleView() {
-	if m.ViewFlags[0] {
-		m.ViewFlags[0] = false
-	} else {
-		m.ViewFlags[0] = true
-	}
+func (m *HeaderVw) ProcessInternalRequest(w http.ResponseWriter, d url.Values) {
+
+	fmt.Printf("[%s] - Processing Internal request\n", m.Id)
+	s := d.Get("label")
+	fmt.Println("Label: ", s)	
 }
 
 func (m *HeaderVw) ProcessClickEvent(w http.ResponseWriter, d  url.Values) {
 	if d.Get("view_id") != m.Id {return}
 	lbl := d.Get("label")
-	fmt.Printf("[%s] ProcessClickEvent - %s\n", m.Id, lbl)
+	slog.Info("ProcessClickEvent - ", "ID", lbl)
 
 	switch lbl {
 	case "upload":
@@ -94,8 +84,17 @@ func (m *HeaderVw) ProcessClickEvent(w http.ResponseWriter, d  url.Values) {
 	case "Cards":
 		m.App.MainTable = false
 		m.App.Cards = true
-		// labsystemvw.AppLSTableVW.LoadTableData(lbl)
+
+		messagebus.GetBus().Publish("Event:ViewChange", w, d)
 		// cardsvw.AppCardsVW.LoadCardDefData()
-		render.RenderTemplate_new(w, nil, m.App, constants.RM_CARDS)
+		// render.RenderTemplate_new(w, nil, m.App, constants.RM_CARDS)
+	}	
+}
+
+func (m *HeaderVw) ToggleView() {
+	if m.ViewFlags[0] {
+		m.ViewFlags[0] = false
+	} else {
+		m.ViewFlags[0] = true
 	}
 }

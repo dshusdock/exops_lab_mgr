@@ -3,7 +3,8 @@ package main
 import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/handlers"
-	"dshusdock/tw_prac1/internal/services/status"
+	"dshusdock/tw_prac1/internal/services/unigy/unigydata"
+	"dshusdock/tw_prac1/internal/services/unigy/unigystatus"
 	"dshusdock/tw_prac1/internal/views/cardsvw"
 	"dshusdock/tw_prac1/internal/views/headervw"
 	"dshusdock/tw_prac1/internal/views/labsystemvw"
@@ -16,13 +17,17 @@ import (
 )
 
 func initRouteHandlers() {
+	// Register the views
 	app.ViewCache["lyoutvw"] = layoutvw.AppLayoutVw.RegisterView(app)
 	app.ViewCache["headervw"] = headervw.AppHeaderVw.RegisterView(app)
 	app.ViewCache["settingsvw"] = settingsvw.AppSettingsVw.RegisterView(app) 
 	app.ViewCache["lstablevw"] = labsystemvw.AppLSTableVW.RegisterView(app)
-	app.ViewCache["sidenav"] = sidenav.AppSideNav.RegisterView(app)
-	app.ViewCache["statussvc"] = status.AppStatusSvc.RegisterView(app)
+	app.ViewCache["sidenav"] = sidenav.AppSideNav.RegisterView(app)	
 	app.ViewCache["cardsvw"] = cardsvw.AppCardsVW.RegisterView(app)
+
+	// Register the services
+	app.ViewCache["unigystatus"] = unigystatus.AppStatusSvc.RegisterService(app)
+	app.ViewCache["unigydata"] = unigydata.AppUnigyDataSvc.RegisterService(app)
 
 }
 
