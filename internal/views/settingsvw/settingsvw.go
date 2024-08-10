@@ -72,7 +72,7 @@ func (m *SettingsVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
 		fmt.Println("Test Button2 Clicked")
 		// database.PrintTableData()	
 		// cardsvw.AppCardsVW.LoadCardData()
-		unigydata.LoadZoneData()
+		unigydata.LoadUnigyTargets2Db()
 	case "Enter Button":
 		fmt.Println("Enter Button Clicked")
 		s := d.Get("ip")

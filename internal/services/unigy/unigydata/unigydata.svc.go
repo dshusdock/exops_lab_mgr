@@ -45,35 +45,34 @@ func (m *UnigyDataSvc) ProcessRequest(w http.ResponseWriter, d url.Values) {
 	slog.Info("Processing request", "ID", m.Id)
 }
 
-func LoadZoneData() {
-
+func LoadUnigyTargets2Db() {
+	
+	//  Get the list of enterprise names
 	entList := d.ReadLocalDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
-	for _, ent := range entList {
-		//  1 - Get a list of IP's based on the enterprise name
+	for _, ent := range entList {	
+		// Get a list of IP's based on the enterprise name	
 		str := fmt.Sprintf(q.SQL_QUERIES_LOCAL["QUERY_7"].Qry + "\"%s\"\n", ent.Data[0])
 		ipList := d.ReadLocalDBwithType[q.TBL_ServerTypeList](str)
-		count := 0
+
 		for _, ip := range ipList {
+			slog.Info("LoadUnigyTargets2Db() - Checking IP", "IP", ip.Data[0])
 			// Check if the IP is reachable
 			err := d.ConnectUnigyDB(ip.Data[0])
-			if err != nil {
-				count++
-				if count > 3 {
-					// Mark as inactive
-					wrStr := fmt.Sprintf("INSERT into UnigyDatabaseTargets values (\"%s\", \"%s\", \"%s\")", ent.Data[0], ip.Data[0], "inactive")	
-					database.WriteLocalDB(wrStr)				
-					break
-				}
+			if err != nil {				
+				// Mark as inactive
+				wrStr := fmt.Sprintf("INSERT into UnigyDatabaseTargets values (\"%s\", \"%s\", \"%s\")", ent.Data[0], ip.Data[0], "unavailable")	
+				database.WriteLocalDB(wrStr)								
 				continue
 			} 
 			// Mark as active
-			wrStr := fmt.Sprintf("INSERT into UnigyDatabaseTargets values (\"%s\", \"%s\", \"%s\")", ent.Data[0], ip.Data[0], "active")
-			database.WriteLocalDB(wrStr)
-				
-			
-			
+			wrStr := fmt.Sprintf("INSERT into UnigyDatabaseTargets values (\"%s\", \"%s\", \"%s\")", ent.Data[0], ip.Data[0], "available")
+			database.WriteLocalDB(wrStr)										
 		}		
-	}
-		
-	
+	}	
+	slog.Info("LoadUnigyTargets2Db() - Done")		
 }
+
+//me.txt
+//mycluster.txt
+//haservices/checkBasicStatus
+//ums/about.xml
