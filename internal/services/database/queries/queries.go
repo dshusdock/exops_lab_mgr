@@ -22,6 +22,8 @@ func init() {
 	SQL_QUERIES_LOCAL["QUERY_5"] = lsquery{`select unique enterprise from LabSystem where role="Unigy"`, reflect.TypeOf(TBL_EnterpriseList{})}
 	SQL_QUERIES_LOCAL["QUERY_6"] = lsquery{`select unique serverType from LabSystem where enterprise = `, reflect.TypeOf(TBL_ServerTypeList{})}
 	SQL_QUERIES_LOCAL["QUERY_7"] = lsquery{`select unique iPAddress from LabSystem where enterprise = `, reflect.TypeOf(TBL_CcmIPList{})}
+	SQL_QUERIES_UNIGY["QUERY_8"] = lsquery{`select targetIP from UnigyDatabaseTargets where enterprise=%s and status="available" limit 1`, reflect.TypeOf(StringVal{})}
+
 	
 	// UNIGY DATABASE
 	SQL_QUERIES_UNIGY["QUERY_1"] = lsquery{`select server1,server2,vip,zid from NewZoneData`, reflect.TypeOf(TBL_NZData{})}
@@ -68,6 +70,10 @@ type MdcData struct {
 	Role              string
 	Comments          string
 	VmLabServerHostIp string
+}
+
+type StringVal struct {
+	Val	string
 }
 
 // UNIGY DATABASE

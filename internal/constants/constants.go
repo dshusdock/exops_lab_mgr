@@ -144,3 +144,15 @@ type HeaderDef struct {
 	Header string
 	Width  string
 }
+
+type ZoneInfo struct {
+	Enterprise 	string
+	Zid 		string
+	Vip  		string
+	Ccm1 		string
+	Ccm2 		string
+	Online 		bool
+	Status 		string
+}
+
+

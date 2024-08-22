@@ -58,7 +58,7 @@ func ReadUnigyDBwithType[T any](sql string) []con.RowData {
 func ReadUnigyDB(sql string) *sql.Rows {
 	return apis.Read(UnigyDB.DBHandle, sql)
 }
-func CloseUnigyDB(ip string) {
+func CloseUnigyDB() {
 	apis.Close(UnigyDB.DBHandle)
 }
 

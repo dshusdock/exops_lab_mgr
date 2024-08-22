@@ -3,9 +3,6 @@ package cardsvw
 import (
 	"dshusdock/tw_prac1/config"
 	"log/slog"
-
-	// "dshusdock/tw_prac1/internal/constants"
-	"dshusdock/tw_prac1/internal/constants"
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	d "dshusdock/tw_prac1/internal/services/database"
@@ -17,26 +14,13 @@ import (
 	"net/url"
 )
 
-type Ccm struct {
-	Role 		string
-	CcmIP 		string
-	SWVersion 	string
-}
-
-
-type ZoneInfo struct {
-	Zid 	string
-	Vip  	string
-	Ccm1 	Ccm
-	Ccm2 	Ccm	
-}
 
 type CardDef struct {
 	Enterprise  string
 	Vip		 	string
 	SWVersion   string
 	Name		string
-	Zones		[]ZoneInfo
+	Zones		[]con.ZoneInfo
 	Active		bool
 	Standby		bool
 	VM     		bool
@@ -98,7 +82,7 @@ func (m *CardsVW) ProcessViewChangeRequest(w http.ResponseWriter, d url.Values) 
 
 
 	AppCardsVW.LoadCardData()
-	render.RenderTemplate_new(w, nil, m.App, constants.RM_CARDS)
+	render.RenderTemplate_new(w, nil, m.App, con.RM_CARDS)
 }
 
 func (m *CardsVW) LoadCardData() {
@@ -127,6 +111,7 @@ func (m *CardsVW) LoadCardData() {
 		} else {
 			m.Cards[x].Hardware = true
 		}
+		
 		LoadZoneData(&m.Cards[x])	
 	}
 }
@@ -155,14 +140,14 @@ func LoadZoneData(ptr *CardDef) {
 		
 		for _, el := range da {
 			ptr.Zones = append(ptr.Zones, 
-				ZoneInfo{
+				con.ZoneInfo{
 					Zid: el.Data[3], 
 					Vip: el.Data[2], 
-					Ccm1: Ccm{CcmIP: el.Data[0]}, 
-					Ccm2:Ccm{CcmIP: el.Data[0]},
+					Ccm1: el.Data[0], 
+					Ccm2: el.Data[0],
 				})
 		}		
-		d.CloseUnigyDB(result.Data[0])
+		d.CloseUnigyDB()
 	}		
 }
 
@@ -186,12 +171,5 @@ func checkServerType(ent string) string {
 	} else {
 		return "hw"
 	}
-}
-
-func getZoneInfo() []ZoneInfo {
-
-	z := []ZoneInfo{}
-	return z
-
 }
 
