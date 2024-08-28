@@ -2,7 +2,6 @@ package cardsvw
 
 import (
 	"dshusdock/tw_prac1/config"
-	"log/slog"
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	d "dshusdock/tw_prac1/internal/services/database"
@@ -10,26 +9,20 @@ import (
 	"dshusdock/tw_prac1/internal/services/messagebus"
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 
 type CardDef struct {
 	Enterprise  string
 	Vip		 	string
-	SWVersion   string
 	Name		string
 	Zones		[]con.ZoneInfo
-	Active		bool
-	Standby		bool
 	VM     		bool
 	Hardware	bool      
-	Start       int
-	End         int
-	Query       string
-	SearchInput string
-	Width       []int
 }
 
 type CardsVW struct {
@@ -99,8 +92,6 @@ func (m *CardsVW) LoadCardData() {
 	
 	// Range over list of CardDefs and load the data for each
 	for x:=0; x<len(m.Cards); x++ {
-		fmt.Printf("----------------------Enterprise: %s ----------------------\n", m.Cards[x].Enterprise)
-
 		// Check for VM, Hardware, or Mixed server types
 		r := checkServerType(m.Cards[x].Enterprise)
 		if r == "mixed" {
@@ -111,44 +102,38 @@ func (m *CardsVW) LoadCardData() {
 		} else {
 			m.Cards[x].Hardware = true
 		}
-		
 		LoadZoneData(&m.Cards[x])	
 	}
 }
 
 func LoadZoneData(ptr *CardDef) {
-	// Get the number of zones for the enterprise and the zone id's
-		
-	//  1 - Get a list of IP's based on the enterprise name
-	s := fmt.Sprintf(q.SQL_QUERIES_LOCAL["QUERY_7"].Qry + "\"%s\"\n", ptr.Enterprise)
-	rslt := d.ReadLocalDBwithType[q.TBL_ServerTypeList](s)
-	count := 0
-	for _, result := range rslt {
-		err := d.ConnectUnigyDB(result.Data[0])
-		if err != nil {
-			count++
-			if count > 3 {
-				break
-			}
-			continue
-		}
+	s :=fmt.Sprintf(q.SQL_QUERIES_LOCAL["QUERY_9"].Qry + "\"%s\"", ptr.Enterprise)
+	rslt := d.ReadLocalDBwithType[con.LocalZoneData](s)
 
-		// Found server to talk to 
-		//  2 - Get the zone id's for the enterprise
-		s := fmt.Sprintf(q.SQL_QUERIES_UNIGY["QUERY_1"].Qry )
-		da := d.ReadUnigyDBwithType[q.TBL_NZData](s)
-		
-		for _, el := range da {
-			ptr.Zones = append(ptr.Zones, 
-				con.ZoneInfo{
-					Zid: el.Data[3], 
-					Vip: el.Data[2], 
-					Ccm1: el.Data[0], 
-					Ccm2: el.Data[0],
-				})
-		}		
-		d.CloseUnigyDB()
-	}		
+	for _, result := range rslt {
+		z := con.ZoneInfo{}
+		z.Id, _ = strconv.Atoi(result.Data[0])
+		z.Enterprise = result.Data[1]
+		z.Zid = result.Data[2]
+		z.Vip = result.Data[3]
+		z.Ccm1 = con.Server{
+			IP: result.Data[4],
+			SWVersion: "" ,
+			State: result.Data[6],
+			Active: false,
+			Standby: false,
+		}
+		z.Ccm2 = con.Server{
+			IP: result.Data[5],
+			SWVersion: "" ,
+			State: result.Data[7],
+			Active: false,
+			Standby: false,
+		}
+		z.Online, _ = strconv.ParseBool(result.Data[8]) 
+		z.Status = result.Data[9]
+		ptr.Zones = append(ptr.Zones, z)
+	}
 }
 
 func checkServerType(ent string) string {

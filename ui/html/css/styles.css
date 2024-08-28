@@ -160,7 +160,9 @@ button:hover {
   grid-area: _main;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly; }
+  justify-content: space-evenly;
+  width: 100%;
+  overflow-x: auto; }
 
 .sidenav {
   display: block;
@@ -520,6 +522,7 @@ input[type="file"] {
         .settings-modal__container .page__test button:hover {
           background-color: #5075b9; }
       .settings-modal__container .page__unigydb {
+        display: none;
         margin: 1rem; }
         .settings-modal__container .page__unigydb input {
           margin: 1rem;

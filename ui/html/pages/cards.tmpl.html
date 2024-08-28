@@ -3,7 +3,7 @@
     
     {{ with.ViewCache.cardsvw }}
     {{ range.Cards }}
-    <div class="cardsvw-card" x-data>
+    <div class="cardsvw-card">
         {{if .VM}}
         <i class="fa-solid fa-cloud cardsvw-card__icon" ></i>
         {{end}}
@@ -12,38 +12,48 @@
         {{end}}
         <p>{{.Enterprise}}</p>
         <div class="zonetbl-container">
+        
+          {{ $zones := .Zones }}
+         
           <table class="zone-table">
             <thead>
               <tr>
-                <th>1</th>
-                <th>2</th>
-                <th>3</th>
-                <th>1</th>
-                <th>2</th>
-                <th>3</th>
+                {{range $zone := $zones}}
+                <th>{{$zone.Zid}}</th>
+                {{end}}
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><i class="fa-solid fa-square"></i></td>
-                <td><i class="fa-solid fa-square"></i></td>
-                <td><i class="fa-solid fa-square"></i></td>
-                <td><i class="fa-solid fa-square"></i></td>
-                <td><i class="fa-solid fa-square"></i></td>
-                <td><i class="fa-solid fa-square"></i></td>
+                {{range $zone := $zones}}
+                 
+                {{if eq $zone.Ccm1.State "online"}}
+                <td><i style="color: green" class="fa-solid fa-square"></i></td>
+                {{else}}                                 
+                <td><i style="color: red" class="fa-solid fa-square"></i></td>
+                {{end}}
+
+                {{end}}
               </tr>
               <tr>
-                <td><i class="fa-solid fa-square"></i></td>
-                <td><i style="color: red;" class="fa-solid fa-square"></i></td>
-                <td><i class="fa-solid fa-square"></i></td>
-                <td><i class="fa-solid fa-square"></i></td>
-                <td><i style="color: red;" class="fa-solid fa-square"></i></td>
-                <td><i class="fa-solid fa-square"></i></td>
+                {{range $zone := $zones}}
+                                               
+                {{if eq $zone.Ccm2.State "online"}}
+                  <td><i style="color: green" class="fa-solid fa-square"></i></td>
+                {{else}}                                 
+                  <td><i style="color: red" class="fa-solid fa-square"></i></td>
+                {{end}}
+                {{end}}
+                
               </tr>
             </tbody>
           </table>
+         
         </div>
+        
     </div>
-    {{end}}
 {{end}}
+{{end}}
+</div>
+<div style="color: white" class="">{{ print "This is a test"}}</div>
 {{end}}

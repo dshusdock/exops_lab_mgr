@@ -1,36 +1,50 @@
 {{define "lstable" }}
-<div class="table-row-summary" x-data >
-  <div style="margin-right: 1rem;"class="l-side" @click="$store.lstable.onInfoLSideClick($event)">
-    <div><span class="l-side--width">Name:&nbsp</span><span  id="thisnameel" style="color: red" x-text="$store.lstable.info.name"></span></div>
-    <div><span class="l-side--width">VIP:&nbsp</span><span  style="" x-text="$store.lstable.info.vip"></span></div>
-    <div><span class="l-side--width">IP:&nbsp</span><span  style="" x-text="$store.lstable.info.ip"></span></div>
-    <div><span class="l-side--width">Action:&nbsp</span><span  style="" x-text="$store.lstable.info.action"></span></div>
-  </div>
-  <div style="margin-left: 1rem;"  class="r-side">
-    <div><span class="l-side--width">Enterprise:&nbsp</span><span  style="" x-text="$store.lstable.info.enterprise"></span></div>
-    <div><span class="l-side--width">Role:&nbsp</span><span  style="" x-text="$store.lstable.info.role"></span></div>
-    <div style="border: none;"  class="r-side__btns">
-      <button type="button" @click="$store.lstable.onDetailsClick($event)">Details</button>
-      <button type="button" @click="$store.lstable.onUMSClick($event)">UMS</button>
+<div class="table-row-summary"  x-data="lstable">
+  <div style="margin-right: 1rem" class="l-side" @click="onInfoLSideClick($event)">
+    <div>
+      <span class="l-side--width">Name:&nbsp</span
+      ><span id="info_box1" style="color: red" x-text="info.name"></span>
     </div>
-  </div>  
+    <div>
+      <span class="l-side--width">VIP:&nbsp</span
+      ><span id="info_box2" style="" x-text="info.vip"></span>
+    </div>
+    <div>
+      <span class="l-side--width">IP:&nbsp</span
+      ><span id="info_box3" style="" x-text="info.ip"></span>
+    </div>
+    <div>
+      <span class="l-side--width">Action:&nbsp</span
+      ><span id="info_box4" style="" x-text="info.action"></span>
+    </div>
+  </div>
+  <div style="margin-left: 1rem" class="r-side">
+    <div>
+      <span class="l-side--width">Enterprise:&nbsp</span
+      ><span id="info_box5" style="" x-text="info.enterprise"></span>
+    </div>
+    <div>
+      <span class="l-side--width">Role:&nbsp</span
+      ><span id="info_box6" style="" x-text="info.role"></span>
+    </div>
+    <div style="border: none" class="r-side__btns">
+      <button type="button" @click="onDetailsClick($event)">Details</button>
+      <button type="button" @click="onUMSClick($event)">UMS</button>
+    </div>
+  </div>
 </div>
-<div id="labsystbl" class="labsys-table" x-data>
+<div id="labsystbl" class="labsys-table" x-data="tblehdr">
   {{ with.ViewCache.lstablevw.Data }}
-  <table class="blueTable" x-data>
+  <table class="blueTable">
     <thead>
       <tr>
         {{ range.HdrDef }}
-        <th style="{{.Width}}" @click="$store.tblehdr.onHdrClick($event)">
-          {{.Header}}
-        </th>
+        <th style="{{.Width}}" @click="onHdrClick($event)">{{.Header}}</th>
         {{end}}
       </tr>
 
       <div class="tbl-hdr-modal">
-        <span
-          class="tbl-hdr-modal__close"
-          @click="$store.tblehdr.onCloseClick($event)"
+        <span class="tbl-hdr-modal__close" @click="onCloseClick($event)"
           >&times;</span
         >
         <p class="tbl-hdr-modal__text">Test</p>
@@ -38,10 +52,7 @@
     </thead>
     <tbody>
       {{ range.Tbl }}
-      <tr 
-        class="data-row"
-        @click="$store.lstable.onRowClick($event)"
-      >
+      <tr class="data-row" x-data="lstable" @click="onRowClick($event)">
         {{range.Data}}
         <td>{{.}}</td>
         {{end}}
@@ -51,5 +62,4 @@
   </table>
 </div>
 
-{{end}}
-{{end}}
+{{end}} {{end}}

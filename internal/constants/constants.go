@@ -145,14 +145,37 @@ type HeaderDef struct {
 	Width  string
 }
 
-type ZoneInfo struct {
+type LocalZoneData struct {
+	Id 			int
 	Enterprise 	string
 	Zid 		string
 	Vip  		string
 	Ccm1 		string
 	Ccm2 		string
+	Ccm1_state 	string
+	Ccm2_state 	string
 	Online 		bool
 	Status 		string
+}
+
+
+type ZoneInfo struct {
+	Id 			int
+	Enterprise 	string
+	Zid 		string
+	Vip  		string
+	Ccm1 		Server
+	Ccm2 		Server
+	Online 		bool
+	Status 		string
+}
+
+type Server struct { 
+	IP 			string
+	SWVersion   string
+	State 		string
+	Active		bool
+	Standby		bool
 }
 
 

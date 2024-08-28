@@ -5,6 +5,7 @@ import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/render"
 	"strings"
+	"time"
 
 	// "dshusdock/tw_prac1/internal/services/datetime"
 	"fmt"
@@ -72,7 +73,7 @@ func (m *StatusSvc) ProcessRequest(w http.ResponseWriter, d url.Values) {
 	case "ip":
 		fmt.Println("--------------------------------------------------")
 		// GetHaStatus(da)
-		s :=getServerStatus(da)
+		s :=GetServerStatus(da)
 		render.JSONResponse(w, s)
 	case "sometarget":
 
@@ -80,7 +81,7 @@ func (m *StatusSvc) ProcessRequest(w http.ResponseWriter, d url.Values) {
 	}
 }
 
-func getServerStatus(ip string) string{
+func GetServerStatus(ip string) string {
 	fmt.Println("Getting server status")
 	fmt.Println("IP: ", ip)
 	fmt.Println("--------------------------------------------------")
@@ -104,13 +105,13 @@ func GetHaStatus(vip string) (HAStatusInfo, error) {
 	var info HAStatusServiceInfo
 	retVal = HAStatusInfo{}
 
-	rslt, err := CheckHAStatusParser(vip)
+	rslt, err := GetHTMLTextNodes(vip, "/haservices/checkMyStatus")
 	if err != nil {
 		return HAStatusInfo{}, err
 	}
 
 	if len(rslt) < 20 {
-		return HAStatusInfo{}, fmt.Errorf("Error parsing the HA status")
+		return HAStatusInfo{}, fmt.Errorf("error parsing the HA status")
 	}
 
 	for i, v := range rslt {
@@ -159,16 +160,27 @@ func GetHaStatus(vip string) (HAStatusInfo, error) {
 	return retVal, nil
 }
 
-func CheckHAStatusParser(ip string) ([]string, error) {
+func GetServerState(ip string) (string, error) {
+	rslt, err := GetHTMLTextNodes(ip, "/me.txt")
+	if err != nil {
+		return "offline", err
+	}
+	if strings.Contains(rslt[0], ip) {
+		return "online", nil
+	}
+	return "wrong ip", nil
+}
+
+func GetHTMLTextNodes(ip string, url string) ([]string, error) {
 	var result []string
 
 	// Accept the certificate
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify : true},
 	}
-	client := &http.Client{Transport: tr}
+	client := &http.Client{Timeout: 3 * time.Second, Transport: tr}
 	// str := "https://" + vip + "/haservices/CheckHAStatus"
-	str := "https://" + ip + "/haservices/checkMyStatus"
+	str := "https://" + ip + url
 	resp, err := client.Get(str)
 	if err != nil {
 		fmt.Println("Error getting the response from the URL")
@@ -191,7 +203,7 @@ func CheckHAStatusParser(ip string) ([]string, error) {
 			if 	!strings.Contains(n.Data, "########") && 
 			   	!strings.Contains(n.Data, "=======") && 
 				!strings.Contains(n.Data, "HTTP 200 OK") {
-				fmt.Println("===>" + n.Data)
+				// fmt.Println("===>" + n.Data)
 				result = append(result, n.Data)
 			}
 		 }
@@ -204,7 +216,6 @@ func CheckHAStatusParser(ip string) ([]string, error) {
 	 traverse(doc)
 	 return result, nil
 }
-
 
 
 

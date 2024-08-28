@@ -51,10 +51,32 @@ func GetEnterpriseList() []con.RowData{
 
 func WriteZoneInfoData(z con.ZoneInfo) {
 			
-	str := fmt.Sprintf(`INSERT into ZoneInfo (enterprise, zid, vip, ccm1, ccm2, online, status) values("%s","%s","%s","%s","%s","%v","%s")`, 
-		z.Enterprise, z.Zid, z.Vip, z.Ccm1, z.Ccm2, z.Online, z.Status)
+	str := fmt.Sprintf(`INSERT into ZoneInfo (enterprise, zid, vip, ccm1, ccm2, ccm1_state, ccm2_state, online, status) values("%s","%s","%s","%s","%s","%s","%s","%v","%s")`, 
+		z.Enterprise, z.Zid, z.Vip, z.Ccm1.IP, z.Ccm2.IP, z.Ccm1.State, z.Ccm2.State, z.Online, z.Status)
 
 		d.WriteLocalDB(str)
+}
+
+func WriteZoneDeploymentType() {
+
+	
+	// // Range over list of CardDefs and load the data for each
+	// for x:=0; x<len(m.Cards); x++ {
+	// 	fmt.Printf("----------------------Enterprise: %s ----------------------\n", m.Cards[x].Enterprise)
+
+	// 	// Check for VM, Hardware, or Mixed server types
+	// 	r := checkServerType(m.Cards[x].Enterprise)
+	// 	if r == "mixed" {
+	// 		m.Cards[x].VM = true
+	// 		m.Cards[x].Hardware = true
+	// 	} else if r == "vm" {
+	// 		m.Cards[x].VM = true
+	// 	} else {
+	// 		m.Cards[x].Hardware = true
+	// 	}
+		
+	// 	LoadZoneData(&m.Cards[x])	
+	// }
 }
 
 
