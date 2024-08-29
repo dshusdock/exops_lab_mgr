@@ -1,16 +1,16 @@
 {{define "settings-modal"}}
 
 <!-- The Modal -->
-<div id="myModal" class="settings-modal"  x-data>
+<div id="myModal" class="settings-modal"  x-data="settings">
     <!-- Modal content -->
     <div class="settings-modal__header">
       <h2>Settings</h2>   
-      <span class="close" @click="$store.settings.onCloseClick($event)">&times;</span>   
+      <span class="close" @click="onCloseClick($event)">&times;</span>   
     </div>
     <hr>
     <div class="settings-modal__container">
       <div class="menu">
-       <ul class="" @click="$store.settings.onMenuClick($event)">
+       <ul class="" @click="onMenuClick($event)">
         <li>General</li>
         <li>Test</li>
         <li>Unigy Database</li>

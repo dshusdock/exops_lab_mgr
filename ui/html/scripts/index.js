@@ -3,7 +3,7 @@ console.log("Release the hounds!!......again!");
 
 
 document.addEventListener("alpine:init", () => {
-    Alpine.store("myData", {
+    Alpine.data('myData', () => ({
     target: "testing...",
     flag: true,
     drop: false,
@@ -66,8 +66,8 @@ document.addEventListener("alpine:init", () => {
     testThis2(event) {
       console.log("Got the focus");
     },
-    });
-    Alpine.store("modalData", {
+    })),
+    Alpine.data('modalData', () => ({
     btn: document.getElementById("myBtn"),
     span: document.getElementsByClassName("close")[0],
     // Functions
@@ -95,8 +95,8 @@ document.addEventListener("alpine:init", () => {
         modal.style.display = "none";
       }
     },
-    }),
-    Alpine.store("hdrData", {
+    })),
+    Alpine.data('hdrData', () => ({
       btn: document.getElementById("myBtn"),
       span: document.getElementsByClassName("close")[0],
       // Functions
@@ -116,8 +116,8 @@ document.addEventListener("alpine:init", () => {
         let modal = document.getElementById("myDropdown");
         modal.style.display = "none";
       },
-    }),
-    Alpine.store("settings", {
+    })),
+    Alpine.data('settings', () => ({
       active: document.getElementsByClassName("page__general")[0],
       parm2: "",
       onMenuClick(event) {
@@ -146,8 +146,8 @@ document.addEventListener("alpine:init", () => {
           document.getElementsByClassName("page__test")[0].style.display = "none";
         }
       },
-    }),
-    Alpine.store("tblehdr", {
+    })),
+    Alpine.data('tblehdr', () => ({
       onHdrClick(event) {
         let modal = document.getElementsByClassName("tbl-hdr-modal")[0];
         modal.style.display = "flex";
@@ -163,8 +163,8 @@ document.addEventListener("alpine:init", () => {
         let modal = document.getElementsByClassName("tbl-hdr-modal")[0];
         modal.style.display = "none";
       },
-    }),
-    Alpine.store("sidenav", {
+    })),
+    Alpine.data('sidenav', () => ({
       list_search: "",
       chevronRotated: false,
       nodeListCopy: [],
@@ -212,8 +212,8 @@ document.addEventListener("alpine:init", () => {
           }
         }, this);        
       },
-    })// ,
-    Alpine.store("lstable", {
+    })),
+    Alpine.data('lstable', () => ({
       someVar: "",
       info: 
         { 
@@ -224,39 +224,52 @@ document.addEventListener("alpine:init", () => {
           role: "", 
           action: "" 
         },
-     
+        onHdrClick(event) {
+          let modal = document.getElementsByClassName("tbl-hdr-modal")[0];
+          modal.style.display = "flex";
+          modal.style.left = event.clientX - 250 + "px";
+          modal.style.top = event.clientY - 100 + "px";
+          let modalText = document.getElementsByClassName(
+            "tbl-hdr-modal__text"
+          )[0];
+          modalText.innerText = event.target.innerText;
+        },
+        onCloseClick(event) {
+          console.log("close clicked");
+          let modal = document.getElementsByClassName("tbl-hdr-modal")[0];
+          modal.style.display = "none";
+        },  
+        async onRowClick(el) {
+          console.log("row clicked: ", el);
+          const formData = new FormData(); 
+          const myHeaders = new Headers();       
 
-      async onRowClick(el) {
-        console.log("row clicked: ", el);
-        const formData = new FormData(); 
-        const myHeaders = new Headers();       
-
-        let infoBox = document.getElementsByClassName("table-row-summary")[0];
-        infoBox.classList.add("table-row-summary__on");
-       
-        let children = el.target.parentNode.childNodes;
-        children.forEach((element, i) => {
-          console.log("element: ", element.innerText + " - " + i);
-          switch (i) {
-            case 7:
-              this.info.name = element.innerText;
-              break;
-            case 11:
-              this.info.ip = element.innerText;
-              break;
-            case 13:
-              this.info.vip = element.innerText;
-              break;
-            case 21:
-              this.info.enterprise = element.innerText;
-              break;
-            case 23:
-                this.info.role = element.innerText;
-                break;            
-            case 25:
-              this.info.action = element.innerText;
-              break;
-          }          
+          let infoBox = document.getElementsByClassName("table-row-summary")[0];
+          infoBox.classList.add("table-row-summary__on");
+        
+          let children = el.target.parentNode.childNodes;
+          children.forEach((element, i) => {
+            console.log("element: ", element.innerText + " - " + i);
+            switch (i) {
+              case 7:
+                this.info.name = element.innerText;
+                break;
+              case 11:
+                this.info.ip = element.innerText;
+                break;
+              case 13:
+                this.info.vip = element.innerText;
+                break;
+              case 21:
+                this.info.enterprise = element.innerText;
+                break;
+              case 23:
+                  this.info.role = element.innerText;
+                  break;            
+              case 25:
+                this.info.action = element.innerText;
+                break;
+            }          
         })
 
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");        
@@ -318,10 +331,8 @@ document.addEventListener("alpine:init", () => {
           alert("Failed to copy text: " + error);
         });
         
-      },
-      
-      
-    })
+      },          
+    }))
 });
 
 

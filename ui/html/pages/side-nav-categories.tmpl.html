@@ -1,20 +1,20 @@
 {{define "side-nav-categories"}} {{with .ViewCache.sidenav}}
-<div class="sidenav__btnlist" x-data>
+<div class="sidenav__btnlist" x-data="sidenav">
   <span>Categories</span>
   <input
     type="search"
     name="search"
     placeholder="Begin Typing To Search..."
-    x-model="$store.sidenav.list_search"
-    @keyup="$store.sidenav.onSearchChange($el)"
-    @search="$store.sidenav.onSearchChange($el)"
+    x-model="list_search"
+    @keyup="onSearchChange($el)"
+    @search="onSearchChange($el)"
   />
   <ul class="sidenav__ul">
     {{ $data := .Data }} 
     {{range $data}}
     <li
       class=""
-      @click="$store.sidenav.onElementClick($el)"
+      @click="onElementClick($el)"
       hx-post="/element/event/click"
       hx-swap="outerHTML swap:.1s"
       hx-target=".sidenav__btnlist"

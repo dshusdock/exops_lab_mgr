@@ -1,16 +1,16 @@
 {{define "test-modal"}}
 
 <!-- The Modal -->
-<div id="myModal" class="fileupload-modal"  x-data>
+<div id="myModal" class="fileupload-modal"  x-data="modalData">
 
     <!-- Modal content -->
-    <div class="fileupload-modal__content" @click.outside="$store.modalData.onOutsideClick(event)">
-      <span class="close" @click="$store.modalData.onCloseClick($event)">&times;</span>
+    <div class="fileupload-modal__content" @click.outside="onOutsideClick(event)">
+      <span class="close" @click="onCloseClick($event)">&times;</span>
       <form id='form' hx-encoding='multipart/form-data' hx-post='/upload' hx-swap="none" class="upload-form">        
 
         <div class="upload-form__container">
-          <input type="file" id="fileInput" name="myFile" @change.debounce="$store.modalData.onChange($event)"/>
-          <button type="button" class="upload-form__button" @click="$store.modalData.onFileClick($event)">File Chooser</button>
+          <input type="file" id="fileInput" name="myFile" @change.debounce="onChange($event)"/>
+          <button type="button" class="upload-form__button" @click="onFileClick($event)">File Chooser</button>
           <h3 id="fileChoice">No File Chosen</h3>  
         </div>
         
