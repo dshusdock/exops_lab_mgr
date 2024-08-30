@@ -26,5 +26,10 @@ export default () => ({
         document.getElementsByClassName("page__general")[0].style.display = "none";
         document.getElementsByClassName("page__test")[0].style.display = "none";
       }
+    },
+    onCloseClick(event) {
+      console.log("close clicked");
+      let modal = document.getElementById("myModal");
+      modal.style.display = "none";
     }
 })
