@@ -80,14 +80,14 @@ export default () => ({
             throw new Error(`Response status: ${response.status}`);
         }
 
-        // console.log("response: ", response);
+        console.log("response: ", response);
 
         const json = await response.json();
         console.log(json);
         if (json.Server === "RUNNING") {
-            document.getElementById("thisnameel").style.color = "green";
+            document.getElementById("info_box1").style.color = "green";
         } else {
-            document.getElementById("thisnameel").style.color = "red";
+            document.getElementById("info_box1").style.color = "red";
         }
     },
     onUMSClick() {

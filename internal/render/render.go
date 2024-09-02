@@ -49,6 +49,8 @@ func RenderTemplate_new(w http.ResponseWriter, r *http.Request, data any, _type 
 	switch _type {
 	case constants.RM_HOME:
 		template.Must(template.ParseFiles(ptr.HOME...)).ExecuteTemplate(w, "base", data)
+	case constants.RM_LOGIN:
+		template.Must(template.ParseFiles(ptr.HOME...)).ExecuteTemplate(w, "base", data)
 	case constants.RM_ADD_FORM:
 		template.Must(template.ParseFiles(ptr.ADD_FORM...)).ExecuteTemplate(w, "base", data)
 	case constants.RM_UPLOAD_MODAL:

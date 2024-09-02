@@ -60,6 +60,7 @@ type RowData struct {
 // /////////////Rendered File Map///////////////
 const (
 	RM_HOME = iota
+	RM_LOGIN
 	RM_TABLE
 	RM_TABLE_REFRESH
 	RM_ADD_FORM
@@ -99,6 +100,7 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 			"./ui/html/pages/side-nav-categories.tmpl.html",
 			"./ui/html/pages/lstable.tmpl.html",
 			"./ui/html/pages/activity.tmpl.html",
+			"./ui/html/pages/login.tmpl.html",
 		},
 		TABLE: []string{
 			// "./ui/html/pages/layout.tmpl.html",			

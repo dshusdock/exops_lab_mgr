@@ -24,6 +24,7 @@ func main() {
 	app.SideNav = false
 	app.MainTable = false
 	app.ViewCache = make(map[string]constants.ViewInteface)
+	app.LoggedIn = false
 
 	repo := handlers.NewRepo(&app)
 	handlers.NewHandlers(repo)

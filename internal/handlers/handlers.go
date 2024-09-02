@@ -6,6 +6,7 @@ import (
 	"dshusdock/tw_prac1/internal/handlers/upload"
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/messagebus"
+	"dshusdock/tw_prac1/internal/services/token"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -94,14 +95,25 @@ func (m *Repository) HandleSearchEvents(w http.ResponseWriter, r *http.Request) 
  * 	Home is the handler for the home page
  */
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	
+	m.App.LoggedIn = true
 	render.RenderTemplate_new(w, r, m.App, con.RM_HOME)
+}
+
+func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
+	
+	render.RenderTemplate_new(w, r, m.App, con.RM_LOGIN)
 }
 
 func (m *Repository) Test(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("This is a test")
 }
+
+func (m *Repository) Logoff(w http.ResponseWriter, r *http.Request) {
+	m.App.LoggedIn = false
+	render.RenderTemplate_new(w, r, m.App, con.RM_HOME)
+}
+
 
 type Payload struct {
     Stuff string
@@ -157,3 +169,30 @@ func (m *Repository) Upload(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Number of records - ", len(p))
 
 }
+
+type User struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+func LoginHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+   
+	var u User
+	json.NewDecoder(r.Body).Decode(&u)
+	fmt.Printf("The user request value %v", u)
+	
+	if u.Username == "Chek" && u.Password == "123456" {
+	  tokenString, err := token.CreateToken(u.Username)
+	  if err != nil {
+		 w.WriteHeader(http.StatusInternalServerError)
+		 fmt.Errorf("No username found")
+	   }
+	  w.WriteHeader(http.StatusOK)
+	  fmt.Fprint(w, tokenString)
+	  return
+	} else {
+	  w.WriteHeader(http.StatusUnauthorized)
+	  fmt.Fprint(w, "Invalid credentials")
+	}
+  }

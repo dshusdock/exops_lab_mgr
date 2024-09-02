@@ -1,6 +1,6 @@
 .hdr {
   height: 6rem;
-  //background-color: #18141d; 
+  //background-color: #18141d;
   background-color: $color-primary-dark;
   background-size: cover;
   background-position: top;
@@ -8,9 +8,10 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  box-shadow: 0 1rem 2rem rgba(0, 0, 0, .2);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
 
-  &__nav, &__control{
+  &__nav,
+  &__control {
     display: flex;
     flex-direction: row;
     // justify-content: space-between;
@@ -27,15 +28,15 @@
     }
 
     & > a {
-      padding: .7rem;
-      margin: 1.0rem -6rem .5rem 0rem;
+      padding: 0.7rem;
+      margin: 1rem -6rem 0.5rem 0rem;
 
       font-family: sans-serif;
       text-decoration: none;
       color: #eee;
       display: inline-block;
       transform: translateY(5px);
-      transition: all .1s;
+      transition: all 0.1s;
       border-bottom: 4px transparent;
     }
 
@@ -44,32 +45,29 @@
     }
 
     &--img {
-      transform: scale(.5);
+      transform: scale(0.5);
       border-radius: 1.5rem;
-      box-shadow: 0 1rem 2rem rgba(0, 0, 0, .2);
-
+      box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
     }
 
     &-stats {
-      
     }
 
-    
-
-    &-version {}
+    &-version {
+    }
   }
 
   &__icon {
     align-self: center;
     color: #eee;
     height: 1rem;
-   
+
     transform: scale(2.3);
     // margin: 0 7rem;
     font-size: 1rem;
 
     &:hover {
-      color: green;  
+      color: green;
     }
   }
 
@@ -78,7 +76,7 @@
     overflow: hidden;
     cursor: pointer;
     z-index: 1;
-    transition: all .1s;
+    transition: all 0.1s;
 
     &:hover {
       border-bottom: 4px solid green;
@@ -99,15 +97,13 @@
     cursor: pointer;
   }
 
-
-
   &__dropdown-content {
     display: none;
     position: absolute;
     top: 6rem;
     background-color: $color-primary-dark;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
 
     & a {
@@ -119,8 +115,7 @@
       display: block;
       text-align: left;
       width: 100%;
-     
-    }   
+    }
 
     & a:hover {
       background-color: $color-secondary-dark;
@@ -128,10 +123,17 @@
     }
   }
 
-  &__dropdown:hover  &__dropdown-content {
+  &__dropdown:hover &__dropdown-content {
     // display: none;
   }
+
+  &__logout {
+    background: transparent;
+    margin-top: 1.5rem;
+    transform: scale(1.5);
+
+    & i:hover {
+      color: green;
+    }
+  }
 }
-
-
-

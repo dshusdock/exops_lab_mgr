@@ -16,8 +16,11 @@
 </head>
 
 <body>
- 
-    {{template "layout" .}}
+    {{if .LoggedIn}}
+      {{template "layout" .}}
+    {{else}}
+      {{template "login" .}}
+    {{end}}
 
   <script src="/html/dist/main.js"></script>
  

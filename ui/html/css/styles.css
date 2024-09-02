@@ -50,9 +50,6 @@ button {
   cursor: pointer;
   width: 100%; }
 
-button:hover {
-  background-color: #45a049; }
-
 .hdr {
   height: 6rem;
   background-color: #23324e;
@@ -75,14 +72,14 @@ button:hover {
       .hdr__nav--space-around i, .hdr__control--space-around i {
         margin-left: 5rem; }
     .hdr__nav > a, .hdr__control > a {
-      padding: .7rem;
-      margin: 1.0rem -6rem .5rem 0rem;
+      padding: 0.7rem;
+      margin: 1rem -6rem 0.5rem 0rem;
       font-family: sans-serif;
       text-decoration: none;
       color: #eee;
       display: inline-block;
       transform: translateY(5px);
-      transition: all .1s;
+      transition: all 0.1s;
       border-bottom: 4px transparent; }
     .hdr__nav > a:hover, .hdr__control > a:hover {
       border-bottom: 4px solid green; }
@@ -103,7 +100,7 @@ button:hover {
     overflow: hidden;
     cursor: pointer;
     z-index: 1;
-    transition: all .1s; }
+    transition: all 0.1s; }
     .hdr__dropdown:hover {
       border-bottom: 4px solid green; }
   .hdr__dropdown .hdr__dropbtn {
@@ -138,6 +135,12 @@ button:hover {
     .hdr__dropdown-content a:hover {
       background-color: #0D1B2A;
       color: #eee; }
+  .hdr__logout {
+    background: transparent;
+    margin-top: 1.5rem;
+    transform: scale(1.5); }
+    .hdr__logout i:hover {
+      color: green; }
 
 .container {
   display: grid;
