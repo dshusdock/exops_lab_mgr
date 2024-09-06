@@ -10,7 +10,7 @@ html {
 
 body {
   box-sizing: border-box;
-  background-color: #415A77;
+  background-color: #376ba0;
   height: 100%;
   width: 100%; }
 
@@ -29,26 +29,66 @@ body {
   margin-right: 16px;
   transition: background-color 200ms; }
 
+.main-login {
+  background-image: url("/html/dist/dc3_opac1.png");
+  background-blend-mode: lighten;
+  background-attachment: fixed;
+  background-size: cover;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
 .login-container {
-  max-width: 300px;
-  margin: 100px auto;
-  padding: 20px;
-  background-color: #ffffff;
-  box-shadow: 0px 0px 10px #888888; }
-
-input[type="text"],
-input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px; }
-
-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  width: 100%; }
+  position: absolute;
+  top: 25%;
+  left: 35%;
+  margin: 1rem 0 0 0;
+  border-radius: 1rem;
+  height: 45rem;
+  width: 60rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-content: center;
+  align-items: center;
+  background-color: #23324e;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+  opacity: 0.95;
+  font-family: sans-serif; }
+  .login-container p {
+    color: #fff;
+    font-size: 3.5rem;
+    padding-bottom: 2rem; }
+  .login-container label {
+    color: azure;
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin: 1rem 0 0.2rem 0;
+    width: 10rem; }
+  .login-container form {
+    margin-top: -5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; }
+  .login-container button {
+    margin-top: 4rem;
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    width: 30rem;
+    border-radius: 0.7rem; }
+  .login-container button:hover {
+    background-color: #45a049; }
+  .login-container input[type="text"],
+  .login-container input[type="password"] {
+    width: 30rem;
+    padding: 10px;
+    border-radius: 0.7rem;
+    background-color: #aaa; }
 
 .hdr {
   height: 6rem;
@@ -69,8 +109,6 @@ button {
     background-color: #23324e; }
     .hdr__nav--space-around, .hdr__control--space-around {
       justify-content: space-around; }
-      .hdr__nav--space-around i, .hdr__control--space-around i {
-        margin-left: 5rem; }
     .hdr__nav > a, .hdr__control > a {
       padding: 0.7rem;
       margin: 1rem -6rem 0.5rem 0rem;
@@ -136,9 +174,14 @@ button {
       background-color: #0D1B2A;
       color: #eee; }
   .hdr__logout {
-    background: transparent;
-    margin-top: 1.5rem;
+    background-color: transparent;
+    border: none;
+    margin-top: 2.3rem;
     transform: scale(1.5); }
+    .hdr__logout i {
+      color: #eee;
+      font-size: 1.5rem;
+      cursor: pointer; }
     .hdr__logout i:hover {
       color: green; }
 

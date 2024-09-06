@@ -22,9 +22,9 @@
 
     &--space-around {
       justify-content: space-around;
-      & i {
-        margin-left: 5rem;
-      }
+      // & i {
+      //   margin-left: 5rem;
+      // }
     }
 
     & > a {
@@ -128,9 +128,16 @@
   }
 
   &__logout {
-    background: transparent;
-    margin-top: 1.5rem;
+    background-color: transparent;
+    border: none;
+    margin-top: 2.3rem;
     transform: scale(1.5);
+
+    & i {
+      color: #eee;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
 
     & i:hover {
       color: green;

@@ -1,27 +1,76 @@
+.main-login {
+  background-image: url("/html/dist/dc3_opac1.png");
+  background-blend-mode: lighten;
+  background-attachment: fixed;
+  background-size: cover;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 .login-container {
-    max-width: 300px;
-    margin: 100px auto;
-    padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0px 0px 10px #888888;
-}
+  position: absolute;
+  top: 25%;
+  left: 35%;
+  margin: 1rem 0 0 0;
+  border-radius: 1rem;
+  height: 45rem;
+  width: 60rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-content: center;
+  align-items: center;
+  background-color: $color-primary-dark;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+  opacity: 0.95;
+  font-family: sans-serif;
 
-input[type="text"],
-input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-}
+  & p {
+    color: #fff;
+    font-size: 3.5rem;
+    // font-weight: bold;
+    padding-bottom: 2rem;
+  }
 
-button {
-    background-color: #4CAF50;
+  & label {
+    color: azure;
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin: 1rem 0 0.2rem 0;
+    width: 10rem;
+  }
+
+  & form {
+    margin-top: -5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  & button {
+    margin-top: 4rem;
+    background-color: #4caf50;
     color: white;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
-    width: 100%;
-}
+    width: 30rem;
+    border-radius: 0.7rem;
+  }
 
-button:hover {
-    // background-color: #45a049;
+  & button:hover {
+    background-color: #45a049;
+  }
+
+  & input[type="text"],
+  input[type="password"] {
+    width: 30rem;
+    padding: 10px;
+    border-radius: 0.7rem;
+    background-color: #aaa;
+  }
 }

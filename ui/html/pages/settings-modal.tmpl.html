@@ -33,7 +33,6 @@
         </div>
         <div class="page__test">
           <div class="container">
-            <p>This is a test button</p>
             <button 
               type="button"
               hx-post="/element/event/click" 
@@ -48,7 +47,6 @@
               }'>Test Button</button>
           </div> 
           <div class="container">
-            <p>This is a test button2</p>
             <button 
               type="button"
               hx-post="/element/event/click" 
@@ -61,7 +59,35 @@
                 "view_id": "settingsvw",
                 "view_str": ""
               }'>Test Button2</button>
-          </div>          
+          </div> 
+          <div class="container">
+            <button 
+              type="button"
+              hx-post="/element/event/click" 
+              hx-swap="none" 
+              hx-trigger="click"
+              hx-target=""
+              hx-vals='{
+                "type": "button",
+                "label": "Test Button3",
+                "view_id": "settingsvw",
+                "view_str": ""
+              }'>Test Button3</button>
+          </div>     
+          <div class="container">
+            <button 
+              type="button"
+              hx-post="/element/event/click" 
+              hx-swap="none" 
+              hx-trigger="click"
+              hx-target=""
+              hx-vals='{
+                "type": "button",
+                "label": "Test Button4",
+                "view_id": "settingsvw",
+                "view_str": ""
+              }'>Test Button4</button>
+          </div>              
         </div>
         <div class="page__unigydb">
           <form action="/url" method="GET">

@@ -6,7 +6,9 @@ import (
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/database"
+	"dshusdock/tw_prac1/internal/services/token"
 	"dshusdock/tw_prac1/internal/services/unigy/unigydata"
+
 	// "dshusdock/tw_prac1/internal/services/unigy/unigystatus"
 
 	// "dshusdock/tw_prac1/internal/views/cardsvw"
@@ -76,6 +78,13 @@ func (m *SettingsVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
 		// cardsvw.AppCardsVW.LoadCardData()
 		unigydata.PopulateZoneInfo()
 		// unigystatus.GetServerState("10.205.176.115")
+	case "Test Button3":
+		fmt.Println("Test Button3 Clicked")
+		token.TestEncrypt2()
+	case "Test Button4":
+		fmt.Println("Test Button3 Clicked")
+		token.TestDecrypt2()
+	
 	case "Enter Button":
 		fmt.Println("Enter Button Clicked")
 		s := d.Get("ip")
