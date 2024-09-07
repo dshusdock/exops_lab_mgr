@@ -61,6 +61,7 @@ type RowData struct {
 const (
 	RM_HOME = iota
 	RM_LOGIN
+	RM_ACCOUNT_CREATE
 	RM_TABLE
 	RM_TABLE_REFRESH
 	RM_ADD_FORM
@@ -75,6 +76,8 @@ const (
 
 type RenderedFileMap struct {
 	HOME           []string
+	LOGIN		   []string
+	ACCOUNT_CREATE []string
 	TABLE          []string
 	TABLE_REFRESH  []string
 	ADD_FORM       []string
@@ -138,6 +141,12 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 		},
 		CARDS: []string{
 			"./ui/html/pages/cards.tmpl.html",
+		},
+		LOGIN: []string{
+			"./ui/html/pages/login.tmpl.html",
+		},
+		ACCOUNT_CREATE: []string{
+			"./ui/html/pages/login.tmpl.html",
 		},
 	}
 }

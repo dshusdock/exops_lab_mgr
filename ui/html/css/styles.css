@@ -29,6 +29,10 @@ body {
   margin-right: 16px;
   transition: background-color 200ms; }
 
+.main_view {
+  width: 100%;
+  height: 100%; }
+
 .main-login {
   background-image: url("/html/dist/dc3_opac1.png");
   background-blend-mode: lighten;
@@ -89,6 +93,92 @@ body {
     padding: 10px;
     border-radius: 0.7rem;
     background-color: #aaa; }
+
+.create-account {
+  position: absolute;
+  top: 20%;
+  left: 35%;
+  margin: 1rem 0 0 0;
+  border-radius: 1rem;
+  height: 60rem;
+  width: 60rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-content: center;
+  align-items: center;
+  background-color: #23324e;
+  opacity: 0.95;
+  font-family: sans-serif; }
+  .create-account p {
+    color: #fff;
+    font-size: 3.5rem;
+    padding-bottom: 2rem; }
+  .create-account label {
+    color: azure;
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin: 1rem 0 0.2rem 0;
+    width: 10rem; }
+  .create-account form {
+    margin-top: -5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; }
+  .create-account button {
+    margin-top: 4rem;
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    width: 30rem;
+    border-radius: 0.7rem; }
+  .create-account button:hover {
+    background-color: #45a049; }
+  .create-account input[type="text"],
+  .create-account input[type="password"],
+  .create-account input[type="email"] {
+    width: 30rem;
+    padding: 10px;
+    border-radius: 0.7rem;
+    background-color: #aaa; }
+
+.acct-create-response {
+  position: absolute;
+  top: 20%;
+  left: 35%;
+  margin: 1rem 0 0 0;
+  border-radius: 1rem;
+  height: 30rem;
+  width: 60rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-content: center;
+  align-items: center;
+  background-color: #23324e;
+  opacity: 0.95;
+  font-family: sans-serif; }
+  .acct-create-response p {
+    color: #fff;
+    font-size: 3.5rem;
+    padding: 0 5rem 2rem 0; }
+  .acct-create-response div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%; }
+  .acct-create-response i {
+    transform: scale(2);
+    color: #eee;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding-right: 2rem;
+    margin-bottom: 1.7rem; }
+  .acct-create-response i:hover {
+    color: green; }
 
 .hdr {
   height: 6rem;

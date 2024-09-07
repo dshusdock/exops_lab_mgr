@@ -5,6 +5,7 @@ import hdrData from './hdrdata'
 import settings from './settings'
 import sidenav from './sidenav'
 import lstable from './lstable'
+import login from './login'
 
 Alpine.data('myData', myData)
 Alpine.data('modalData', modalData)
@@ -12,6 +13,7 @@ Alpine.data('hdrData', hdrData)
 Alpine.data('settings', settings)
 Alpine.data('sidenav', sidenav)
 Alpine.data('lstable', lstable)
+Alpine.data('login', login)
 
 Alpine.start()
 

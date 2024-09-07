@@ -9,15 +9,18 @@ import (
 )
 
 type AppConfig struct {
-	UseCache      bool
-	LoggedIn	  bool
-	TemplateCache map[string]*template.Template
-	InfoLog       *log.Logger
-	InProduction  bool
-	ViewCache     map[string]constants.ViewInteface
-	DBA 		  *database.LocalDBAccess
-	Bus 		  EventBus.Bus
-	SideNav	      bool
-	MainTable	  bool
-	Cards		  bool
+	UseCache      			bool
+	LoggedIn	  			bool
+	DisplayLogin  			bool
+	DisplayCreateAccount 	bool
+	DisplayCreatAcctResponse bool
+	TemplateCache 			map[string]*template.Template
+	InfoLog       			*log.Logger
+	InProduction  			bool
+	ViewCache     			map[string]constants.ViewInteface
+	DBA 		  			*database.LocalDBAccess
+	Bus 		  			EventBus.Bus
+	SideNav	      			bool
+	MainTable	  			bool
+	Cards		  			bool
 }

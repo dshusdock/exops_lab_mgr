@@ -10,6 +10,7 @@ import (
 	"dshusdock/tw_prac1/internal/views/headervw"
 	"dshusdock/tw_prac1/internal/views/labsystemvw"
 	"dshusdock/tw_prac1/internal/views/layoutvw"
+	"dshusdock/tw_prac1/internal/views/login"
 	"dshusdock/tw_prac1/internal/views/settingsvw"
 	"dshusdock/tw_prac1/internal/views/sidenav"
 
@@ -27,6 +28,7 @@ func initRouteHandlers() {
 	app.ViewCache["lstablevw"] = labsystemvw.AppLSTableVW.RegisterView(app)
 	app.ViewCache["sidenav"] = sidenav.AppSideNav.RegisterView(app)	
 	app.ViewCache["cardsvw"] = cardsvw.AppCardsVW.RegisterView(app)
+	app.ViewCache["loginvw"] = login.AppLoginVw.RegisterView(app)
 
 	// Register the services
 	app.ViewCache["unigystatus"] = unigystatus.AppStatusSvc.RegisterService(app)

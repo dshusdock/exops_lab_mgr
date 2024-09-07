@@ -1,6 +1,8 @@
 {{define "login"}}
-<div class="main-login">
-  <div class="login-container" x-data>
+
+<div id="main-login" class="main-login"  x-data="login">
+  {{if .DisplayLogin}}
+  <div class="login-container">
     <p>LabMan Login</p>
     <form action="/login" method="POST">
       <label for="username">Username:</label>
@@ -8,8 +10,72 @@
       <label for="password">Password:</label>
       <input type="password" id="password" name="password" required /><br />
       <button type="submit" @click="onLoginClick()">Login</button>
-      <button type="button">Create Account</button>
+      <button 
+        type="button"
+        hx-post="/element/event/click" 
+        hx-swap="internalHTML settle:1" 
+        hx-trigger="click"
+        hx-target="#main-login"
+        hx-vals='{
+        "type": "button",
+        "label": "create-account-request",
+        "view_id": "loginvw",
+        "view_str": ""
+      }'>Create Account</button>
     </form>
+  </div>
+  {{end}}
+
+  {{if .DisplayCreateAccount}}
+  <div id="create-account" class="create-account">
+    <p>Create Account</p>
+    <form>
+      <label for="firstname">First Name:</label>
+      <input type="text" id="firstname" name="firstname" required /><br />
+      <label for="lastname">Last Name:</label>
+      <input type="text" id="lastname" name="lastname" required /><br />
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required /><br />
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required /><br />
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required /><br />
+      <button 
+        type="button"
+        hx-post="/element/event/click" 
+        hx-swap="internalHTML settle:1" 
+        hx-trigger="click"
+        hx-target="#main-login"
+        hx-vals='{
+        "type": "button",
+        "label": "create-account",
+        "view_id": "loginvw",
+        "view_str": ""
+      }'>Create Account</button>
+    </form>
+  </div>
+  {{end}}
+  
+  {{if .DisplayCreatAcctResponse}}
+  <div class="acct-create-response">
+    <p>Create Account Succesfull!</p>
+    <div>
+      <p>Login</p>
+      <i 
+        class="fa-solid fa-sign-in"
+        hx-post="/element/event/click" 
+        hx-swap="internalHTML settle:1" 
+        hx-trigger="click"
+        hx-target="#main-login"
+        hx-vals='{
+        "type": "button",
+        "label": "login",
+        "view_id": "loginvw",
+        "view_str": "" }'></i>
+    </div>
+    
+  </div>
+  {{end}}
 </div>
-</div>
+
 {{end}}

@@ -3,13 +3,13 @@
   background-blend-mode: lighten;
   background-attachment: fixed;
   background-size: cover;
+
   height: 100vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
 
 .login-container {
   position: absolute;
@@ -73,4 +73,116 @@
     border-radius: 0.7rem;
     background-color: #aaa;
   }
+}
+
+.create-account {
+  position: absolute;
+  top: 20%;
+  left: 35%;
+  margin: 1rem 0 0 0;
+  border-radius: 1rem;
+  height: 60rem;
+  width: 60rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-content: center;
+  align-items: center;
+  background-color: $color-primary-dark;
+  // box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+  opacity: 0.95;
+  font-family: sans-serif;
+
+  & p {
+    color: #fff;
+    font-size: 3.5rem;
+    // font-weight: bold;
+    padding-bottom: 2rem;
+  }
+
+  & label {
+    color: azure;
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin: 1rem 0 0.2rem 0;
+    width: 10rem;
+  }
+
+  & form {
+    margin-top: -5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  & button {
+    margin-top: 4rem;
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    width: 30rem;
+    border-radius: 0.7rem;
+  }
+
+  & button:hover {
+    background-color: #45a049;
+  }
+
+  & input[type="text"],
+  input[type="password"],
+  input[type="email"] {
+    width: 30rem;
+    padding: 10px;
+    border-radius: 0.7rem;
+    background-color: #aaa;
+  }
+}
+
+.acct-create-response {
+  position: absolute;
+  top: 20%;
+  left: 35%;
+  margin: 1rem 0 0 0;
+  border-radius: 1rem;
+  height: 30rem;
+  width: 60rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-content: center;
+  align-items: center;
+  background-color: $color-primary-dark;
+  // box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+  opacity: 0.95;
+  font-family: sans-serif;
+
+  & p {
+    color: #fff;
+    font-size: 3.5rem;
+    // font-weight: bold;
+    padding: 0 5rem 2rem 0;
+  }
+
+    & div {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    & i {
+      transform: scale(2.0);
+      color: #eee;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding-right: 2rem;
+      margin-bottom: 1.7rem;
+    }
+
+    & i:hover {
+      color: green;
+    }
 }

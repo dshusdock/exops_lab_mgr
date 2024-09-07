@@ -69,6 +69,9 @@ func RenderTemplate_new(w http.ResponseWriter, r *http.Request, data any, _type 
 		template.Must(template.ParseFiles(ptr.PARTIAL1...)).ExecuteTemplate(w, "partial1", data)
 	case constants.RM_CARDS:
 		template.Must(template.ParseFiles(ptr.CARDS...)).ExecuteTemplate(w, "cardsvw", data)
+	case constants.RM_ACCOUNT_CREATE:
+		template.Must(template.ParseFiles(ptr.ACCOUNT_CREATE...)).ExecuteTemplate(w, "acct-create-response", data)
+	
 	default:
 		template.Must(template.ParseFiles(ptr.HOME...)).ExecuteTemplate(w, "base", data)
 	}
