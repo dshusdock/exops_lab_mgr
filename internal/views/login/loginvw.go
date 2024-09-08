@@ -71,8 +71,10 @@ func (m *LoginVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
 		fmt.Println("Account Info: ", ai)
 
 		// Save the account info to the database
-		am.CreateAccount(ai)
-
+		err = am.CreateAccount(ai)
+		if err != nil {
+			fmt.Println(err)
+		}
 				
 		// If this is successful, then we will display the response
 		// Eventaully I think I will want to change this approach
