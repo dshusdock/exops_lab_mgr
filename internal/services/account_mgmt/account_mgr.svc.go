@@ -4,6 +4,7 @@ import (
 	con "dshusdock/tw_prac1/internal/constants"
 	d "dshusdock/tw_prac1/internal/services/database"
 	"dshusdock/tw_prac1/internal/services/database/local"
+	"dshusdock/tw_prac1/internal/services/token"
 	"errors"
 	"fmt"
 	"log"
@@ -37,4 +38,23 @@ func CreateAccount(ac con.AccountInfo) error {
 	return nil
 }
 
+func ValidateUser(un, pw string) bool {
+	ui := local.GetUserInfo(un)
+	
+	for _, u := range ui {
+		if u.Data[0] == un {
+			pwb := []byte(u.Data[1])
+			dv, err := token.DecryptValue(pwb)
+			if err != nil {
+				fmt.Println("Error decrypting password")
+				return false
+			}
+			if dv == pw {
+				fmt.Println("Password match")
+				return true
+			}
+		}
+	}
+	return false
+}	
 

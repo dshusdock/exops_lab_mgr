@@ -25,6 +25,8 @@ func init() {
 	SQL_QUERIES_UNIGY["QUERY_8"] = lsquery{`select targetIP from UnigyDatabaseTargets where enterprise=%s and status="available" limit 1`, reflect.TypeOf(StringVal{})}
 	SQL_QUERIES_LOCAL["QUERY_9"] = lsquery{`select * from ZoneInfo where enterprise= `, reflect.TypeOf(TBL_ServerTypeList{})}
 	SQL_QUERIES_LOCAL["QUERY_10"] = lsquery{`select username from User`, reflect.TypeOf(TBL_UserNames{})}
+	SQL_QUERIES_LOCAL["QUERY_11"] = lsquery{`select username, password from User where username= `, reflect.TypeOf(TBL_UserInfo{})}
+
 
 
 	// UNIGY DATABASE
@@ -32,6 +34,12 @@ func init() {
 }
 
 // LOCAL DATABASE
+
+type TBL_UserInfo struct {
+	Username string
+	Password string
+}
+
 type TBL_UserNames struct {
 	Username string
 }

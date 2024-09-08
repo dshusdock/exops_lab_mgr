@@ -7,6 +7,7 @@ import (
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/messagebus"
 	"dshusdock/tw_prac1/internal/services/token"
+	am "dshusdock/tw_prac1/internal/services/account_mgmt"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -100,6 +101,18 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Fatal(err)
+	}
+	d := r.PostForm
+	// Check the username and password
+	if am.ValidateUser(d.Get("username"), d.Get("password")) {
+		fmt.Println("User is valid")
+		m.App.LoggedIn = true
+		render.RenderTemplate_new(w, r, m.App, con.RM_HOME)	
+		return
+	}
 	
 	render.RenderTemplate_new(w, r, m.App, con.RM_LOGIN)
 }

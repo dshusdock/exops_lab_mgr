@@ -215,4 +215,31 @@ import (
 	
 		return gcm.Seal(nonce, nonce, []byte(text), nil), nil
 	}	
+
+	func DecryptValue(ciphertext []byte) (string, error) {
+		// key := []byte("passphrasewhichneedstobe32bytes!")
+		key := []byte("keepstrackofthepreviousvalueok!!")
+		c, err := aes.NewCipher(key)
+		if err != nil {
+			return "", err
+		}
+	
+		gcm, err := cipher.NewGCM(c)
+		if err != nil {
+			return "", err
+		}
+	
+		nonceSize := gcm.NonceSize()
+		if len(ciphertext) < nonceSize {
+			return "", err
+		}
+	
+		nonce, ciphertext := ciphertext[:nonceSize], ciphertext[nonceSize:]
+		plaintext, err := gcm.Open(nil, nonce, ciphertext, nil)
+		if err != nil {
+			return "", err
+		}
+	
+		return string(plaintext), nil
+	}
 		

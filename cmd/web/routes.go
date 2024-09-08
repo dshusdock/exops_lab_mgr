@@ -41,7 +41,7 @@ func routes(app *config.AppConfig) http.Handler {
 
 	mux.Get("/", handlers.Repo.Login)
 	mux.Get("/test", handlers.Repo.Test)
-	mux.Post("/login", handlers.Repo.Home)
+	mux.Post("/login", handlers.Repo.Login)
 	mux.Post("/logoff", handlers.Repo.Logoff)
 	mux.Post("/request/status", handlers.Repo.StatusInfo)
 	mux.Post("/upload", handlers.Repo.Upload)

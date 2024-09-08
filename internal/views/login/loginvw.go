@@ -87,6 +87,8 @@ func (m *LoginVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
 		m.App.DisplayLogin = true
 		m.App.DisplayCreateAccount = false
 		m.App.DisplayCreatAcctResponse = false
+
+		
 		
 		render.RenderTemplate_new(w, nil, m.App, con.RM_LOGIN)
 	default:

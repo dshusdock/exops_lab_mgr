@@ -56,6 +56,13 @@ func GetUserNames() []con.RowData{
 	return  d.ReadLocalDBwithType[q.TBL_UserNames](q.SQL_QUERIES_LOCAL["QUERY_10"].Qry)	
 }
 
+func GetUserInfo(name string) []con.RowData{
+	
+	s :=fmt.Sprintf(q.SQL_QUERIES_LOCAL["QUERY_11"].Qry + "\"%s\"", name)
+	fmt.Println("SQL: ", s)
+	return d.ReadLocalDBwithType[q.TBL_UserInfo](s)
+}
+
 func WriteZoneInfoData(z con.ZoneInfo) {
 			
 	str := fmt.Sprintf(`INSERT into ZoneInfo (enterprise, zid, vip, ccm1, ccm2, ccm1_state, ccm2_state, online, status) values("%s","%s","%s","%s","%s","%s","%s","%v","%s")`, 
