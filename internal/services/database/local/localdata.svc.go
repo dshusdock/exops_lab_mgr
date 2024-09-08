@@ -45,8 +45,15 @@ func (m *LocalDataSvc) ProcessRequest(w http.ResponseWriter, d url.Values) {
 	slog.Info("Processing request", "ID", m.Id)
 }
 
+
+
+
 func GetEnterpriseList() []con.RowData{
 	return  d.ReadLocalDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)	
+}
+
+func GetUserNames() []con.RowData{
+	return  d.ReadLocalDBwithType[q.TBL_UserNames](q.SQL_QUERIES_LOCAL["QUERY_10"].Qry)	
 }
 
 func WriteZoneInfoData(z con.ZoneInfo) {

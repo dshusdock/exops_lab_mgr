@@ -24,14 +24,18 @@ func init() {
 	SQL_QUERIES_LOCAL["QUERY_7"] = lsquery{`select unique iPAddress from LabSystem where enterprise = `, reflect.TypeOf(TBL_CcmIPList{})}
 	SQL_QUERIES_UNIGY["QUERY_8"] = lsquery{`select targetIP from UnigyDatabaseTargets where enterprise=%s and status="available" limit 1`, reflect.TypeOf(StringVal{})}
 	SQL_QUERIES_LOCAL["QUERY_9"] = lsquery{`select * from ZoneInfo where enterprise= `, reflect.TypeOf(TBL_ServerTypeList{})}
+	SQL_QUERIES_LOCAL["QUERY_10"] = lsquery{`select username from User`, reflect.TypeOf(TBL_UserNames{})}
+
 
 	// UNIGY DATABASE
 	SQL_QUERIES_UNIGY["QUERY_1"] = lsquery{`select server1,server2,vip,zid from NewZoneData`, reflect.TypeOf(TBL_NZData{})}
 }
 
-
-
 // LOCAL DATABASE
+type TBL_UserNames struct {
+	Username string
+}
+
 type TBL_EnterpriseList struct {
 	Enterprise string	
 }

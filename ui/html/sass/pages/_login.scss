@@ -138,6 +138,10 @@
     border-radius: 0.7rem;
     background-color: #aaa;
   }
+
+  & input:invalid {
+    border: 1px solid red;
+  }
 }
 
 .acct-create-response {

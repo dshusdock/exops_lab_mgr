@@ -189,4 +189,13 @@ type Server struct {
 	Standby		bool
 }
 
+type AccountInfo struct {
+	FirstName string
+	LastName  string
+	Email     string
+	Username  string
+	Password  []byte
+}
+
+
 

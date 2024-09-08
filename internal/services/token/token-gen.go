@@ -194,4 +194,25 @@ import (
 		}
 		fmt.Println(string(plaintext))
 	}
+
+	func EncryptValue(text string) ([]byte, error) {
+		// key := []byte("passphrasewhichneedstobe32bytes!")
+		key := []byte("keepstrackofthepreviousvalueok!!")
+		c, err := aes.NewCipher(key)
+		if err != nil {
+			return nil, err
+		}
+	
+		gcm, err := cipher.NewGCM(c)
+		if err != nil {
+			return nil, err
+		}
+	
+		nonce := make([]byte, gcm.NonceSize())
+		if _, err = io.ReadFull(rand.Reader, nonce); err != nil {
+			return nil, err
+		}
+	
+		return gcm.Seal(nonce, nonce, []byte(text), nil), nil
+	}	
 		

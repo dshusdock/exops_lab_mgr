@@ -143,6 +143,8 @@ body {
     padding: 10px;
     border-radius: 0.7rem;
     background-color: #aaa; }
+  .create-account input:invalid {
+    border: 1px solid red; }
 
 .acct-create-response {
   position: absolute;
