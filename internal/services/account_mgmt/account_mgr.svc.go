@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"time"
 )
 
 type AccountMgrSvc struct {
@@ -30,9 +31,11 @@ func CreateAccount(ac con.AccountInfo) error {
 			return errors.New("Username already exists")
 		}
 	}
+
+	ti := time.Now().Format("2006-01-02 15:04:05")
 	
-	str := fmt.Sprintf(`INSERT into User (firstname, lastname, email, username, password) values("%s","%s","%s","%s","%s")`, 
-	ac.FirstName, ac.LastName, ac.Email, ac.Username, ac.Password)
+	str := fmt.Sprintf(`INSERT into User (create_time, firstname, lastname, email, username, password) values("%s","%s","%s","%s","%s","%s")`, 
+	ti, ac.FirstName, ac.LastName, ac.Email, ac.Username, ac.Password)
 
 	d.WriteLocalDB(str)
 	return nil

@@ -5,13 +5,14 @@ import (
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/handlers/upload"
 	"dshusdock/tw_prac1/internal/render"
-	"dshusdock/tw_prac1/internal/services/messagebus"
-	"dshusdock/tw_prac1/internal/services/token"
 	am "dshusdock/tw_prac1/internal/services/account_mgmt"
+	"dshusdock/tw_prac1/internal/services/messagebus"
+	"dshusdock/tw_prac1/internal/services/jwtauthsvc"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 )
 
 // Repo the repository used by the handlers
@@ -35,7 +36,7 @@ func NewHandlers(r *Repository) {
 }
 
 func init() {
-	// fmt.Println("Initializing handlers")
+	fmt.Println("Initializing handlers")
 }	
 
 /**
@@ -110,6 +111,21 @@ func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
 	if am.ValidateUser(d.Get("username"), d.Get("password")) {
 		fmt.Println("User is valid")
 		m.App.LoggedIn = true
+
+		token, _ := jwtauthsvc.CreateToken(d.Get("username"))
+
+		fmt.Println("Token - ", token)
+
+		http.SetCookie(w, &http.Cookie{
+			HttpOnly: true,
+			Expires: time.Now().Add(7 * 24 * time.Hour),
+			SameSite: http.SameSiteLaxMode,
+			// Uncomment below for HTTPS:
+			// Secure: true,
+			Name:  "jwt", // Must be named "jwt" or else the token cannot be searched for by jwtauth.Verifier.
+			Value: token,
+		})
+
 		render.RenderTemplate_new(w, r, m.App, con.RM_HOME)	
 		return
 	}
@@ -119,7 +135,14 @@ func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
 
 func (m *Repository) Test(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println("This is a test")
+	fmt.Println("\n" + time.Now().String() + " - This is a test" )
+	// http.Redirect(w, r, "/test2", http.StatusSeeOther)
+}
+
+func (m *Repository) Test2(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println("This is a test2")
+	
 }
 
 func (m *Repository) Logoff(w http.ResponseWriter, r *http.Request) {
@@ -196,7 +219,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("The user request value %v", u)
 	
 	if u.Username == "Chek" && u.Password == "123456" {
-	  tokenString, err := token.CreateToken(u.Username)
+	  tokenString, err := jwtauthsvc.CreateToken(u.Username)
 	  if err != nil {
 		 w.WriteHeader(http.StatusInternalServerError)
 		 fmt.Errorf("No username found")
