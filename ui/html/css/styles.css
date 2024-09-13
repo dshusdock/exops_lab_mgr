@@ -12,7 +12,8 @@ body {
   box-sizing: border-box;
   background-color: #376ba0;
   height: 100%;
-  width: 100%; }
+  width: 100%;
+  overflow: hidden; }
 
 .test1 {
   font-size: 10rem; }
@@ -299,8 +300,7 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  width: 100%;
-  overflow-x: auto; }
+  width: 100%; }
 
 .sidenav {
   display: block;
@@ -420,7 +420,7 @@ body {
     min-width: 40rem;
     margin: 0.5rem 0.5rem 2rem 0.5rem;
     background-color: #23324e;
-    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+    box-shadow: 5px 5px 10px #131212;
     border-radius: 1rem; }
     .cardsvw-card__icon {
       position: absolute;
@@ -734,7 +734,7 @@ input[type="file"] {
       display: flex;
       flex-direction: row;
       justify-content: space-evenly;
-      margin: .5rem 0 1rem 4rem;
+      margin: 0.5rem 0 1rem 4rem;
       padding: 1rem;
       border: none; }
     .table-row-summary .r-side__btns button {
@@ -743,7 +743,7 @@ input[type="file"] {
       background-color: #0964b0;
       color: white;
       outline: 1px solid #ccc;
-      border-radius: .5rem; }
+      border-radius: 0.5rem; }
   .table-row-summary .r-side div {
     border-bottom: 1px solid darkgray; }
   .table-row-summary span {
@@ -755,17 +755,16 @@ input[type="file"] {
     height: 15rem;
     padding: 2rem; } }
 
-.testclass {
-  transition: background-color 5.5s; }
-
 .labsys-table {
+  overflow-y: auto;
+  max-height: 70rem;
   margin: 2rem 6rem 0 2rem;
   border-radius: 5px;
   opacity: 1;
   animation-name: animatetop;
   animation-duration: 0.3s;
   overflow: auto;
-  height: 95%; }
+  box-shadow: 5px 5px 10px #131212; }
 
 table.blueTable {
   border: 1px solid #1c6ea4;
@@ -776,14 +775,52 @@ table.blueTable {
   table-layout: fixed;
   width: 100%; }
 
+table.blueTable thead {
+  position: sticky;
+  top: 0;
+  background: #23324e;
+  background: -moz-linear-gradient(top, #5a657a 0%, #39465f 66%, #23324e 100%);
+  background: -webkit-linear-gradient(top, #5a657a 0%, #39465f 66%, #23324e 100%);
+  background: linear-gradient(to bottom, #5a657a 0%, #39465f 66%, #23324e 100%);
+  border-bottom: 2px solid #444444;
+  border-radius: 0.5rem; }
+
+table.blueTable thead th {
+  position: sticky;
+  top: 0;
+  font-size: 15px;
+  font-weight: bold;
+  color: #ffffff;
+  border-left: 2px solid #d0e4f5;
+  cursor: pointer;
+  text-align: center; }
+
 table.blueTable td,
 table.blueTable th {
-  border: 1px solid #aaaaaa;
+  border: 1px 2px 1px 2px solid #aaaaaa;
   padding: 3px 2px;
   word-wrap: break-word; }
 
+table.blueTable thead::before {
+  position: absolute;
+  top: -1px;
+  content: "";
+  display: block;
+  height: 4.3rem;
+  width: 100%;
+  background-color: transparent;
+  border-radius: 5px;
+  border: 2px solid #23324e; }
+
+table.blueTable tbody {
+  overflow: auto;
+  height: 95%; }
+
 table.blueTable tbody td {
   font-size: 13px; }
+
+table.blueTable thead th:first-child {
+  border-left: none; }
 
 th:first-child {
   border-left: none;
@@ -795,24 +832,6 @@ th:last-child {
 
 table.blueTable tr:nth-child(even) {
   background: #d0e4f5; }
-
-table.blueTable thead {
-  background: #23324e;
-  background: -moz-linear-gradient(top, #5a657a 0%, #39465f 66%, #23324e 100%);
-  background: -webkit-linear-gradient(top, #5a657a 0%, #39465f 66%, #23324e 100%);
-  background: linear-gradient(to bottom, #5a657a 0%, #39465f 66%, #23324e 100%);
-  border-bottom: 2px solid #444444;
-  border-radius: 0.5rem; }
-
-table.blueTable thead th {
-  font-size: 15px;
-  font-weight: bold;
-  color: #ffffff;
-  border-left: 2px solid #d0e4f5;
-  cursor: pointer; }
-
-table.blueTable thead th:first-child {
-  border-left: none; }
 
 table.blueTable tfoot {
   font-size: 14px;
@@ -836,10 +855,6 @@ table.blueTable tfoot .links a {
   color: #ffffff;
   padding: 2px 8px;
   border-radius: 5px; }
-
-table.blueTable thead th {
-  text-align: center;
-  position: relative; }
 
 table.blueTable .data-row:hover {
   cursor: pointer;
@@ -875,8 +890,23 @@ table.blueTable .data-row:hover {
     cursor: pointer;
     align-self: flex-end; }
 
-.data-row td:nth-child(4):hover {
-  color: yellow; }
+/* width */
+::-webkit-scrollbar {
+  width: 10px; }
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px; }
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px; }
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; }
 
 .activity-sidenav {
   width: 15%;

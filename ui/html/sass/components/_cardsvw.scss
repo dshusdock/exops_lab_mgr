@@ -14,7 +14,8 @@
     margin: 0.5rem 0.5rem 2rem 0.5rem;
     // background-color: #0b4975;
     background-color: $color-primary-dark;
-    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+    // box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+    box-shadow: 5px 5px 10px #131212;
     border-radius: 1rem;
 
     &__icon {
