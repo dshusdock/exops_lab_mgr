@@ -16,6 +16,7 @@ import (
 // AppConfig holds the application config
 
 const portNumber = ":8084"
+const secPortNumber = ":8443"
 
 var app config.AppConfig
 
@@ -36,13 +37,16 @@ func main() {
 	initRouteHandlers()
 	initApp()
 
-	slog.Info("Starting application -", "Port", portNumber)
+	// slog.Info("Starting application -", "Port", portNumber)
+	slog.Info("Starting application -", "Port", secPortNumber)
 	srv := &http.Server{
-		Addr:    portNumber,
+		// Addr:    portNumber,
+		Addr:    secPortNumber,
 		Handler: routes(&app),
 	}
 
-	err := srv.ListenAndServe()
+	// err := srv.ListenAndServe()
+	err := srv.ListenAndServeTLS("dev_cert.crt", "dev_key.key")
 	if err != nil {
 		log.Fatal(err)
 	}

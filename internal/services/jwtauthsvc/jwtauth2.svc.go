@@ -7,7 +7,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
    
-var secretKey = []byte("secret-key")
+var secretKey = []byte("somethingotherthansecrett")
 
 func init() {
 	fmt.Println("Init Token2 service")
