@@ -1,5 +1,26 @@
 {{define "cardsvw" }}
-<div class="cardsvw">
+<div class="cards-ctnr">
+  <div class="select-ctnr">
+    <div 
+      class="select-ctnr__cntrl"
+      hx-post="/element/event/click"
+      hx-swap="innerHTML"
+      hx-target=".cardsvw"
+      hx-trigger="click"
+      hx-vals='js:{
+      "type": "caret",
+      "label": event.target.innerText,
+      "view_id": "cardsvw",
+      "view_str": "test" }'
+    >
+      <button type="button" @click="">Unigy</button>
+      <button type="button" @click="">ComitFS</button>
+      <button type="button" @click="">IntraComm</button>
+      <button type="button" @click="">NTR</button>
+      <button type="button" @click="">VFC</button>
+    </div>
+  </div>
+  <div class="cardsvw">
     
     {{ with.ViewCache.cardsvw }}
     {{ range.Cards }}
@@ -55,5 +76,6 @@
 {{end}}
 {{end}}
 </div>
-<div style="color: white" class="">{{ print "This is a test"}}</div>
+</div>
+
 {{end}}
