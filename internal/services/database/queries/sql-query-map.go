@@ -27,7 +27,7 @@ func init() {
 				{Header: "U", Width: "width: 60px"}, 
 				{Header: "ISO", Width: "width: 60px"}, 
 				{Header: "Name", Width: "width: 200px"}, 
-				{Header: "Seial#/ Service Tag", Width: "width: 100px"}, 
+				{Header: "Serial#/Service Tag", Width: "width: 100px"}, 
 				
 				{Header: "IP", Width: "width: 100px"}, 
 				{Header: "VIP", Width: "width: 100px"}, 
