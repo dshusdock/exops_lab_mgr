@@ -1,29 +1,8 @@
-{{define "cardsvw" }}
-<div class="cards-ctnr">
-  <div class="select-ctnr">
-    <div 
-      class="select-ctnr__cntrl"
-      hx-post="/element/event/click"
-      hx-swap="innerHTML"
-      hx-target=".cardsvw"
-      hx-trigger="click"
-      hx-vals='js:{
-      "type": "caret",
-      "label": event.target.innerText,
-      "view_id": "cardsvw",
-      "view_str": "test" }'
-    >
-      <button type="button" @click="">Unigy</button>
-      <button type="button" @click="">ComitFS</button>
-      <button type="button" @click="">IntraComm</button>
-      <button type="button" @click="">NTR</button>
-      <button type="button" @click="">VFC</button>
-    </div>
-  </div>
-  <div class="cardsvw">
-    
-    {{ with.ViewCache.cardsvw }}
-    {{ range.Cards }}
+{{define "unigy_cardsvw" }}
+<div class="unigy_cards">
+
+  {{ with.ViewCache.cardsvw }}
+  {{ range.Cards }}
     <div class="cardsvw-card">
         {{if .VM}}
         <i class="fa-solid fa-cloud cardsvw-card__icon" ></i>
@@ -35,7 +14,7 @@
         <div class="zonetbl-container">
         
           {{ $zones := .Zones }}
-         
+        
           <table class="zone-table">
             <thead>
               <tr>
@@ -47,7 +26,7 @@
             <tbody>
               <tr>
                 {{range $zone := $zones}}
-                 
+                
                 {{if eq $zone.Ccm1.State "online"}}
                 <td><i style="color: green" class="fa-solid fa-square"></i></td>
                 {{else}}                                 
@@ -58,7 +37,7 @@
               </tr>
               <tr>
                 {{range $zone := $zones}}
-                                               
+                                              
                 {{if eq $zone.Ccm2.State "online"}}
                   <td><i style="color: green" class="fa-solid fa-square"></i></td>
                 {{else}}                                 
@@ -69,13 +48,13 @@
               </tr>
             </tbody>
           </table>
-         
+        
         </div>
         
     </div>
-{{end}}
-{{end}}
-</div>
-</div>
+  {{end}} <!-- range -->
+  {{end}} <!-- with -->
 
-{{end}}
+  </div>
+
+{{end}} <!-- def -->

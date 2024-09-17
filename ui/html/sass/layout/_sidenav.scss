@@ -78,6 +78,10 @@
         background-color: #222;
         color: white;
      }
+
+     & ::-webkit-input-placeholder {
+        font-size: small;
+     }  
   }
 }
 

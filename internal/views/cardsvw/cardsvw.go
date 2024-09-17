@@ -58,7 +58,7 @@ func (m *CardsVW) RegisterView(app config.AppConfig) *CardsVW {
 }
 
 func (m *CardsVW) ProcessRequest(w http.ResponseWriter, d url.Values) {
-	fmt.Println("[LSTableVW] - Processing request")
+	fmt.Println("[AppCardsVW] - Processing request")
 	s := d.Get("label")
 	fmt.Println("Label: ", s)
 

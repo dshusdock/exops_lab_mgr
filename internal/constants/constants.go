@@ -112,7 +112,8 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 			"./ui/html/pages/activity.tmpl.html",	
 			"./ui/html/pages/lstable.tmpl.html",
 			"./ui/html/pages/partial1.tmpl.html",
-			"./ui/html/pages/cards.tmpl.html",
+			"./ui/html/pages/cards/cards.tmpl.html",
+			"./ui/html/pages/cards/unigy-cards.tmpl.html",
 		},
 		TABLE_REFRESH: []string{
 			"./ui/html/pages/lstable.tmpl.html",
@@ -140,7 +141,8 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 			"./ui/html/pages/partial1.tmpl.html",
 		},
 		CARDS: []string{
-			"./ui/html/pages/cards.tmpl.html",
+			"./ui/html/pages/cards/cards.tmpl.html",
+			"./ui/html/pages/cards/unigy-cards.tmpl.html",
 		},
 		LOGIN: []string{
 			"./ui/html/pages/login.tmpl.html",

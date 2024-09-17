@@ -1,0 +1,33 @@
+{{define "cardsvw" }}
+<div class="cards-ctnr">
+  <div class="select-ctnr">
+    <div 
+      class="select-ctnr__cntrl"
+      hx-post="/element/event/click"
+      hx-swap="innerHTML"
+      hx-target=".cardsvw"
+      hx-trigger="click"
+      hx-vals='js:{
+      "type": "button",
+      "label": event.target.innerText,
+      "view_id": "cardsvw",
+      "view_str": "test" }'
+    >
+      <button type="button" @click="">Unigy</button>
+      <button type="button" @click="">Max</button>
+      <button type="button" @click="">Touch</button>
+      <button type="button" @click="">OneView</button>
+      <button type="button" @click="">ComitFS</button>
+      <button type="button" @click="">IntraComm</button>
+      <button type="button" @click="">NTR</button>
+      <button type="button" @click="">VFC</button>
+    </div>
+  </div>
+  <div class="cardsvw">
+
+   {{template "unigy_cardsvw" .}}
+  
+  </div>
+</div>
+
+{{end}} <!-- def -->
