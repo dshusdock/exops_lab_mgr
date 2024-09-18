@@ -21,3 +21,7 @@ CREATE TABLE `LabSystem` (
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjN9.PZLMJBT9OIVG2qgp9hQr685oVYFgRgWpcSPmNcw6y7M
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjN9.PZLMJBT9OIVG2qgp9hQr685oVYFgRgWpcSPmNcw6y7M
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjM0fQ.4xWVw-VZwCXa_KBy95teBislSgy_gg1ppVp9zDuXvVY
+
+openssl req -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -out dev_cert.crt -keyout dev_key.key
+
+
