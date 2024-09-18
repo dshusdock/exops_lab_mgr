@@ -46,33 +46,56 @@ func RenderModal(w http.ResponseWriter, r *http.Request, d any) {
 func RenderTemplate_new(w http.ResponseWriter, r *http.Request, data any, _type int16) {
 	ptr := constants.RENDERED_FILE_MAP()
 	fmt.Println("Type: ", _type)
+
+	var tmplFiles []string
+	var tmplName string
+
 	switch _type {
 	case constants.RM_HOME:
-		template.Must(template.ParseFiles(ptr.HOME...)).ExecuteTemplate(w, "base", data)
+		tmplFiles = ptr.HOME
+		tmplName = "base"
 	case constants.RM_LOGIN:
-		template.Must(template.ParseFiles(ptr.HOME...)).ExecuteTemplate(w, "base", data)
+		tmplFiles = ptr.HOME
+		tmplName = "base"
 	case constants.RM_ADD_FORM:
-		template.Must(template.ParseFiles(ptr.ADD_FORM...)).ExecuteTemplate(w, "base", data)
+		tmplFiles = ptr.ADD_FORM
+		tmplName = "base"
 	case constants.RM_UPLOAD_MODAL:
-		template.Must(template.ParseFiles(ptr.UPLOAD_MODAL...)).ExecuteTemplate(w, "test-modal", data)
+		tmplFiles = ptr.UPLOAD_MODAL
+		tmplName = "test-modal"
 	case constants.RM_SETTINGS_MODAL:
-		template.Must(template.ParseFiles(ptr.SETTINGS_MODAL...)).ExecuteTemplate(w, "settings-modal", data)
+		tmplFiles = ptr.SETTINGS_MODAL
+		tmplName = "settings-modal"
 	case constants.RM_TABLE:
-		template.Must(template.ParseFiles(ptr.TABLE...)).ExecuteTemplate(w, "activity", data)
+		tmplFiles = ptr.TABLE
+		tmplName = "activity"
 	case constants.RM_TABLE_REFRESH:
-		template.Must(template.ParseFiles(ptr.TABLE...)).ExecuteTemplate(w, "lstable", data)
+		tmplFiles = ptr.TABLE
+		tmplName = "lstable"
 	case constants.RM_SNIPPET1:
-		template.Must(template.ParseFiles(ptr.SNIPPET1...)).ExecuteTemplate(w, "side-nav-categories", data)
+		tmplFiles = ptr.SNIPPET1
+		tmplName = "side-nav-categories"
 	case constants.RM_SNIPPET3:
-		template.Must(template.ParseFiles(ptr.SNIPPET3...)).ExecuteTemplate(w, "snippets3", data)
+		tmplFiles = ptr.SNIPPET3
+		tmplName = "snippets3"
 	case constants.RM_PARTIAL1:
-		template.Must(template.ParseFiles(ptr.PARTIAL1...)).ExecuteTemplate(w, "partial1", data)
+		tmplFiles = ptr.PARTIAL1
+		tmplName = "partial1"
 	case constants.RM_CARDS:
-		template.Must(template.ParseFiles(ptr.CARDS...)).ExecuteTemplate(w, "cardsvw", data)
+		tmplFiles = ptr.CARDS
+		tmplName = "cardsvw"
+	case constants.RM_CARDS_MAX:
+		tmplFiles = ptr.CARDS
+		tmplName = "max_cardsvw"
+	case constants.RM_CARDS_UNIGY:
+		tmplFiles = ptr.CARDS
+		tmplName = "tmplt_unigy-cards-view"
 	case constants.RM_ACCOUNT_CREATE:
-		template.Must(template.ParseFiles(ptr.ACCOUNT_CREATE...)).ExecuteTemplate(w, "acct-create-response", data)
-	
+		tmplFiles = ptr.ACCOUNT_CREATE
+		tmplName = "acct-create-response"
 	default:
-		template.Must(template.ParseFiles(ptr.HOME...)).ExecuteTemplate(w, "base", data)
+		tmplFiles = ptr.HOME
+		tmplName = "base"
 	}
+	template.Must(template.ParseFiles(tmplFiles...)).ExecuteTemplate(w, tmplName, data)
 }
