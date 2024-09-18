@@ -58,14 +58,20 @@ func (m *CardsVW) RegisterView(app config.AppConfig) *CardsVW {
 }
 
 func (m *CardsVW) ProcessRequest(w http.ResponseWriter, d url.Values) {
+	var fileMap int16
 	fmt.Println("[AppCardsVW] - Processing request")
 	s := d.Get("label")
 	fmt.Println("Label: ", s)
 
 	switch s {
 	case "upload":
-		render.RenderTemplate_new(w, nil, m.App, con.RM_UPLOAD_MODAL)
+		
+	case "Max":
+		fileMap = con.RM_CARDS_MAX
+	case "Unigy":
+		fileMap = con.RM_CARDS_UNIGY		
 	}
+	render.RenderTemplate_new(w, nil, m.App, fileMap)
 }
 
 func (m *CardsVW) ProcessViewChangeRequest(w http.ResponseWriter, d url.Values) {

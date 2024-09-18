@@ -72,6 +72,8 @@ const (
 	RM_SNIPPET3
 	RM_PARTIAL1
 	RM_CARDS
+	RM_CARDS_MAX
+	RM_CARDS_UNIGY
 )
 
 type RenderedFileMap struct {
@@ -88,6 +90,8 @@ type RenderedFileMap struct {
 	SNIPPET3       []string
 	PARTIAL1       []string
 	CARDS          []string
+	CARDS_MAX      []string
+	CARDS_UNIGY    []string
 }
 
 func RENDERED_FILE_MAP() *RenderedFileMap {
@@ -142,6 +146,14 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 		},
 		CARDS: []string{
 			"./ui/html/pages/cards/cards.tmpl.html",
+			"./ui/html/pages/cards/unigy-cards.tmpl.html",
+			"./ui/html/pages/cards/max-cards.tmpl.html",
+		},
+		CARDS_MAX: []string{
+			"./ui/html/pages/cards/cards.tmpl.html",
+			"./ui/html/pages/cards/max-cards.tmpl.html",		
+		},
+		CARDS_UNIGY: []string{
 			"./ui/html/pages/cards/unigy-cards.tmpl.html",
 		},
 		LOGIN: []string{

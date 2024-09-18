@@ -1,4 +1,4 @@
-.cards-ctnr {
+.main-cards {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -36,14 +36,7 @@
   }
 }
 
-.unigy_cards {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.cardsvw {
+.cards-container {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -52,7 +45,7 @@
   height: 100%;
   margin: 2rem 0 2rem 0;
 
-  &-card {
+  &--card {
     position: relative;
     height: 30rem;
     min-width: 40rem;

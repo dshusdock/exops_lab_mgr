@@ -1,11 +1,11 @@
 {{define "cardsvw" }}
-<div class="cards-ctnr">
+<div class="main-cards">
   <div class="select-ctnr">
-    <div 
+    <div
       class="select-ctnr__cntrl"
       hx-post="/element/event/click"
       hx-swap="innerHTML"
-      hx-target=".cardsvw"
+      hx-target=".cards-container"
       hx-trigger="click"
       hx-vals='js:{
       "type": "button",
@@ -23,11 +23,10 @@
       <button type="button" @click="">VFC</button>
     </div>
   </div>
-  <div class="cardsvw">
-
-   {{template "unigy_cardsvw" .}}
-  
+  <div class="cards-container">
+    {{template "tmplt_unigy-cards-view" .}}
   </div>
 </div>
 
-{{end}} <!-- def -->
+{{end}}
+<!-- def -->

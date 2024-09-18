@@ -1,60 +1,47 @@
-{{define "unigy_cardsvw" }}
-<div class="unigy_cards">
+{{define "tmplt_unigy-cards-view" }}
 
-  {{ with.ViewCache.cardsvw }}
-  {{ range.Cards }}
-    <div class="cardsvw-card">
-        {{if .VM}}
-        <i class="fa-solid fa-cloud cardsvw-card__icon" ></i>
-        {{end}}
-        {{if .Hardware}}
-        <i style="left: 4.5rem" class="fa-solid fa-server cardsvw-card__icon" ></i>
-        {{end}}
-        <p>{{.Enterprise}}</p>
-        <div class="zonetbl-container">
-        
-          {{ $zones := .Zones }}
-        
-          <table class="zone-table">
-            <thead>
-              <tr>
-                {{range $zone := $zones}}
-                <th>{{$zone.Zid}}</th>
-                {{end}}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                {{range $zone := $zones}}
-                
-                {{if eq $zone.Ccm1.State "online"}}
-                <td><i style="color: green" class="fa-solid fa-square"></i></td>
-                {{else}}                                 
-                <td><i style="color: red" class="fa-solid fa-square"></i></td>
-                {{end}}
-
-                {{end}}
-              </tr>
-              <tr>
-                {{range $zone := $zones}}
-                                              
-                {{if eq $zone.Ccm2.State "online"}}
-                  <td><i style="color: green" class="fa-solid fa-square"></i></td>
-                {{else}}                                 
-                  <td><i style="color: red" class="fa-solid fa-square"></i></td>
-                {{end}}
-                {{end}}
-                
-              </tr>
-            </tbody>
-          </table>
-        
-        </div>
-        
-    </div>
-  {{end}} <!-- range -->
-  {{end}} <!-- with -->
-
+{{ with.ViewCache.cardsvw }} 
+{{ range.Cards }} 
+<div class="cards-container--card">
+  {{if .VM}}
+  <i class="fa-solid fa-cloud cards-container--card__icon"></i>
+  {{end}} {{if .Hardware}}
+  <i
+    style="left: 4.5rem"
+    class="fa-solid fa-server cards-container--card__icon"
+  ></i>
+  {{end}}
+  <p>{{.Enterprise}}</p>
+  <div class="zonetbl-container">
+    {{ $zones := .Zones }}
+    <table class="zone-table">
+      <thead>
+        <tr>
+          {{range $zone := $zones}}
+          <th>{{$zone.Zid}}</th>
+          {{end}}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          {{range $zone := $zones}} {{if eq $zone.Ccm1.State "online"}}
+          <td><i style="color: green" class="fa-solid fa-square"></i></td>
+          {{else}}
+          <td><i style="color: red" class="fa-solid fa-square"></i></td>
+          {{end}} {{end}}
+        </tr>
+        <tr>
+          {{range $zone := $zones}} {{if eq $zone.Ccm2.State "online"}}
+          <td><i style="color: green" class="fa-solid fa-square"></i></td>
+          {{else}}
+          <td><i style="color: red" class="fa-solid fa-square"></i></td>
+          {{end}} {{end}}
+        </tr>
+      </tbody>
+    </table>
   </div>
+</div> 
+{{end}}<!-- range -->
+{{end}}<!-- with -->
 
-{{end}} <!-- def -->
+{{end}}<!-- def -->
