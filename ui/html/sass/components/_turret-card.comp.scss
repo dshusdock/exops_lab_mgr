@@ -1,0 +1,12 @@
+
+.turret-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 15rem;
+    height: 10rem;
+    outline: 1px solid black;
+    border-radius: 0.5rem;
+    background-color: $color-primary-dark;
+}

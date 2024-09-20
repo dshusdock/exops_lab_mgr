@@ -147,11 +147,13 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 		CARDS: []string{
 			"./ui/html/pages/cards/cards.tmpl.html",
 			"./ui/html/pages/cards/unigy-cards.tmpl.html",
+			"./ui/html/pages/components/turret-card-comp.tmpl.html",
 			"./ui/html/pages/cards/max-cards.tmpl.html",
 		},
 		CARDS_MAX: []string{
 			"./ui/html/pages/cards/cards.tmpl.html",
-			"./ui/html/pages/cards/max-cards.tmpl.html",		
+			"./ui/html/pages/components/turret-card-comp.tmpl.html",
+			"./ui/html/pages/cards/max-cards.tmpl.html",					
 		},
 		CARDS_UNIGY: []string{
 			"./ui/html/pages/cards/unigy-cards.tmpl.html",
