@@ -59,13 +59,13 @@ func Read(db *sql.DB, sql string) *sql.Rows {
 	return rows
 }
 
-func ReadDB[T any](db *sql.DB, s string) []con.RowData {
+func ReadDB[T any](db *sql.DB, s string) ([]con.RowData, error) {
 	var tableDef []T
 
 	rows, err := db.Query(s)
 	if err != nil {
 		log.Println(err)
-		return nil
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -84,7 +84,7 @@ func ReadDB[T any](db *sql.DB, s string) []con.RowData {
 
 		if err := rows.Scan(columns...); err != nil {
 			log.Println(err)
-			return nil
+			return nil, err
 		}
 		tableDef = append(tableDef, e)
 	}
@@ -104,7 +104,7 @@ func ReadDB[T any](db *sql.DB, s string) []con.RowData {
 		rd = append(rd, r)
 	}
 
-	return rd
+	return rd, nil
 }
 
 // Check to see if this is a sql "null" type

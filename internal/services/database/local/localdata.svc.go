@@ -48,19 +48,19 @@ func (m *LocalDataSvc) ProcessRequest(w http.ResponseWriter, d url.Values) {
 
 
 
-func GetEnterpriseList() []con.RowData{
-	return  d.ReadLocalDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)	
+func GetEnterpriseList() ([]con.RowData, error){
+	return d.ReadDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)	
 }
 
-func GetUserNames() []con.RowData{
-	return  d.ReadLocalDBwithType[q.TBL_UserNames](q.SQL_QUERIES_LOCAL["QUERY_10"].Qry)	
+func GetUserNames() ([]con.RowData, error){
+	return  d.ReadDBwithType[q.TBL_UserNames](q.SQL_QUERIES_LOCAL["QUERY_10"].Qry)	
 }
 
-func GetUserInfo(name string) []con.RowData{
+func GetUserInfo(name string) ([]con.RowData, error){
 	
 	s :=fmt.Sprintf(q.SQL_QUERIES_LOCAL["QUERY_11"].Qry + "\"%s\"", name)
 	fmt.Println("SQL: ", s)
-	return d.ReadLocalDBwithType[q.TBL_UserInfo](s)
+	return d.ReadDBwithType[q.TBL_UserInfo](s)
 }
 
 func WriteZoneInfoData(z con.ZoneInfo) {
@@ -69,28 +69,6 @@ func WriteZoneInfoData(z con.ZoneInfo) {
 		z.Enterprise, z.Zid, z.Vip, z.Ccm1.IP, z.Ccm2.IP, z.Ccm1.State, z.Ccm2.State, z.Online, z.Status)
 
 		d.WriteLocalDB(str)
-}
-
-func WriteZoneDeploymentType() {
-
-	
-	// // Range over list of CardDefs and load the data for each
-	// for x:=0; x<len(m.Cards); x++ {
-	// 	fmt.Printf("----------------------Enterprise: %s ----------------------\n", m.Cards[x].Enterprise)
-
-	// 	// Check for VM, Hardware, or Mixed server types
-	// 	r := checkServerType(m.Cards[x].Enterprise)
-	// 	if r == "mixed" {
-	// 		m.Cards[x].VM = true
-	// 		m.Cards[x].Hardware = true
-	// 	} else if r == "vm" {
-	// 		m.Cards[x].VM = true
-	// 	} else {
-	// 		m.Cards[x].Hardware = true
-	// 	}
-		
-	// 	LoadZoneData(&m.Cards[x])	
-	// }
 }
 
 

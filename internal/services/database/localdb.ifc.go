@@ -6,8 +6,6 @@ import (
 	con "dshusdock/tw_prac1/internal/constants"
 	q "dshusdock/tw_prac1/internal/services/database/queries"
 	"fmt"
-	"log"
-
 	"github.com/go-sql-driver/mysql"
 )
 
@@ -24,11 +22,6 @@ func init() {
 		Name: "LocalDB",
 		DBHandle: nil,
 		active:   false,
-	}
-	
-	var err error
-	if err != nil {
-		log.Println(err)
 	}
 }
 
@@ -59,35 +52,54 @@ func WriteLocalDB(sql string) {
 }
 
 func ReadLocalDB(sql string) (*sql.Rows) {
+	// defer apis.Close(LocalDB.DBHandle)
 	return apis.Read(LocalDB.DBHandle, sql)
 }
 
-func ReadLocalDBwithType[T any](sql string) []con.RowData {	
-	return apis.ReadDB[T](LocalDB.DBHandle, sql)
+func ReadDBwithType[T any](sql string) ([]con.RowData, error) {	
+	rslt, err := apis.ReadDB[T](LocalDB.DBHandle, sql)
+	if err != nil {
+		fmt.Println("Error in ReadDBwithType: ", err)	
+		return nil, err
+	}
+	return rslt, nil 
 }
 
 func CloseLocalDB() {
 	apis.Close(LocalDB.DBHandle)
 }
 
+
+
+
+
+
 // Utilies
-func ReadTableData(t string) []con.RowData {
+func ReadTableData(t string) ([]con.RowData, error) {
 	ptr := q.DB_VIEW_TYPE_MAP[t]
 	pb := con.HDR_BTN_LBL()
-	rd := []con.RowData{}
 
 	fmt.Println("\nReadTableData: ", t)
 	switch t {
 	case pb.HDR_BTN_TABLE:
-		rd = apis.ReadDB[q.MdcData](LocalDB.DBHandle, ptr.SQL_STR)
+		rd, err := apis.ReadDB[q.MdcData](LocalDB.DBHandle, ptr.SQL_STR)
+		if err != nil {
+			fmt.Println("Error in ReadTableData: ", err)
+			return nil, err
+		}
 		// m.Data.Table = pb.HDR_BTN_TABLE
+		return rd, nil
 	}
-
-	return rd
+	return nil, nil	
 }
 
-func ReadTblWithQry(sql string) []con.RowData {	
-	return apis.ReadDB[q.MdcData](LocalDB.DBHandle, sql)
+func ReadTblWithQry(sql string) ([]con.RowData, error) {	
+	rslt, err := apis.ReadDB[q.MdcData](LocalDB.DBHandle, sql)
+	if err != nil {
+		fmt.Println("Error in ReadTblWithQry: ", err)
+		return nil, err
+	}
+	return rslt, nil
 }
 
 

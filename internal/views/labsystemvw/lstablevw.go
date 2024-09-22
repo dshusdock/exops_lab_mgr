@@ -4,8 +4,10 @@ import (
 	"dshusdock/tw_prac1/config"
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
-	"dshusdock/tw_prac1/internal/services/database"
+	db "dshusdock/tw_prac1/internal/services/database"
+	// "dshusdock/tw_prac1/internal/services/database/dbdata"
 	q "dshusdock/tw_prac1/internal/services/database/queries"
+	"dshusdock/tw_prac1/internal/services/messagebus"
 	"fmt"
 	"log"
 	"net/http"
@@ -64,6 +66,8 @@ func init() {
 			Width:       nil,
 		},
 	}
+
+	messagebus.GetBus().Subscribe("Event:Click", AppLSTableVW.ProcessInternalRequest)
 }
 
 func (m *LSTableVW) RegisterView(app config.AppConfig) *LSTableVW {
@@ -83,13 +87,33 @@ func (m *LSTableVW) ProcessRequest(w http.ResponseWriter, d url.Values) {
 	}
 }
 
-func (m *LSTableVW) LoadTableData(t string) {
+func (m *LSTableVW) ProcessInternalRequest(w http.ResponseWriter, d url.Values) {
+
+	fmt.Printf("[%s] - Processing Internal request\n", m.Id)	
+	lbl := d.Get("label")
+	
+	switch lbl {
+	case "Table":
+		m.App.MainTable = true
+		m.App.Cards = false
+		m.LoadTableData(lbl)
+	}
+	render.RenderTemplate_new(w, nil, m.App, con.RM_TABLE)
+}
+
+func (m *LSTableVW) LoadTableData(t string) error{
+	var err error
 	fmt.Println("\nDisplaying SQL Table: ", t)
 	m.ViewFlags[0] = true
 	ptr := q.DB_VIEW_TYPE_MAP[t]
 
 	m.Data.Start = 0
-	m.Data.Tbl = database.ReadTableData(t)
+	m.Data.Tbl, err = db.ReadTableData(t)
+	if err != nil {
+		fmt.Println("Error in LoadTableData: ", err)
+		return err
+	}
+	//m.Data.Tbl = db.ReadDBwithType[dbdata.LabSystem](dbdata.LAB_SYSTEM_VIEWS["VIEW_ALL"].View)
 	m.Data.Table = t
 
 	var end int
@@ -103,17 +127,21 @@ func (m *LSTableVW) LoadTableData(t string) {
 
 	m.Data.TblSlice = m.Data.Tbl[m.Data.Start:end]
 	m.Data.HdrDef = ptr.HdrDef
-	
+	return nil
 }
 
-func (m *LSTableVW) LoadTblDataByQuery(qry string) {
-	
+func (m *LSTableVW) LoadTblDataByQuery(qry string) error{
+	var err error
 	fmt.Println("\nLoadDataByQuery - ", qry)
 	m.ViewFlags[0] = true
 	ptr := q.DB_VIEW_TYPE_MAP["Table"]
 
 	m.Data.Start = 0
-	m.Data.Tbl = database.ReadTblWithQry(qry)
+	m.Data.Tbl, err = db.ReadTblWithQry(qry)
+	if err != nil {
+		fmt.Println("Error in LoadTblDataByQuery: ", err)
+		return err
+	}
 	m.Data.Table = "QUERY"
 
 	var end int
@@ -127,5 +155,5 @@ func (m *LSTableVW) LoadTblDataByQuery(qry string) {
 
 	m.Data.TblSlice = m.Data.Tbl[m.Data.Start:end]
 	m.Data.HdrDef = ptr.HdrDef
-	
+	return nil
 }

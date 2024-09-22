@@ -24,7 +24,7 @@ func init() {
 
 func CreateAccount(ac con.AccountInfo) error {
 
-	un := local.GetUserNames() 
+	un, _ := local.GetUserNames() 
 	for _, u := range un {
 		if u.Data[0] == ac.Username {
 			fmt.Println("Username already exists")
@@ -42,7 +42,7 @@ func CreateAccount(ac con.AccountInfo) error {
 }
 
 func ValidateUser(un, pw string) bool {
-	ui := local.GetUserInfo(un)
+	ui, _ := local.GetUserInfo(un)
 	
 	for _, u := range ui {
 		if u.Data[0] == un {

@@ -5,6 +5,9 @@ import (
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	d "dshusdock/tw_prac1/internal/services/database"
+
+	// "dshusdock/tw_prac1/internal/services/database/data"
+	"dshusdock/tw_prac1/internal/services/database/dbdata"
 	q "dshusdock/tw_prac1/internal/services/database/queries"
 	"dshusdock/tw_prac1/internal/services/messagebus"
 	"fmt"
@@ -78,16 +81,28 @@ func (m *CardsVW) ProcessViewChangeRequest(w http.ResponseWriter, d url.Values) 
 	slog.Info("[ProcessViewChangeRequest", "ID", m.Id)
 	s := d.Get("label")
 	slog.Info("Target - ", "Label", s)
-
+	
+	m.App.MainTable = false
+	m.App.Cards = true
 
 	AppCardsVW.LoadCardData()
 	render.RenderTemplate_new(w, nil, m.App, con.RM_CARDS)
 }
 
-func (m *CardsVW) LoadCardData() {
+func (m *CardsVW) LoadCardData() error{
 	m.Cards = []CardDef{}
 	
-	rslt := d.ReadLocalDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
+	rslt, err := d.ReadDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
+	if err != nil {
+		fmt.Println("Error in LoadCardData: ", err)
+		return err
+	}
+
+	// rslt2 := d.ReadDBwithType[data.VIEW_OBJ1](data.LAB_SYSTEM_VIEWS["VIEW_1"].View)
+	
+	myDataIfc := dbdata.LabSystemIfc{}	
+	myDataIfc.RunQuery("select * from data", "ralph", "kramden")
+	// ll := dbsvc.GetHandler("LabSystem").RunQuery("select * from data", "ralph", "kramden")
 
 	// Range over list of enterprise names and create a CardDef for each
 	for _, result := range rslt {				
@@ -99,7 +114,11 @@ func (m *CardsVW) LoadCardData() {
 	// Range over list of CardDefs and load the data for each
 	for x:=0; x<len(m.Cards); x++ {
 		// Check for VM, Hardware, or Mixed server types
-		r := checkServerType(m.Cards[x].Enterprise)
+		r, err := checkServerType(m.Cards[x].Enterprise)
+		if err != nil {
+			fmt.Println("Error in LoadCardData: ", err)
+			return err
+		}
 		if r == "mixed" {
 			m.Cards[x].VM = true
 			m.Cards[x].Hardware = true
@@ -110,11 +129,16 @@ func (m *CardsVW) LoadCardData() {
 		}
 		LoadZoneData(&m.Cards[x])	
 	}
+	return nil
 }
 
-func LoadZoneData(ptr *CardDef) {
+func LoadZoneData(ptr *CardDef) error{
 	s :=fmt.Sprintf(q.SQL_QUERIES_LOCAL["QUERY_9"].Qry + "\"%s\"", ptr.Enterprise)
-	rslt := d.ReadLocalDBwithType[con.LocalZoneData](s)
+	rslt, err := d.ReadDBwithType[con.LocalZoneData](s)
+	if err != nil {
+		fmt.Println("Error in LoadZoneData: ", err)
+		return err
+	}
 
 	for _, result := range rslt {
 		z := con.ZoneInfo{}
@@ -140,14 +164,20 @@ func LoadZoneData(ptr *CardDef) {
 		z.Status = result.Data[9]
 		ptr.Zones = append(ptr.Zones, z)
 	}
+	return nil
 }
 
-func checkServerType(ent string) string {
+func checkServerType(ent string) (string, error){
 	vm := false
 	hw := false
 
 	s :=fmt.Sprintf(q.SQL_QUERIES_LOCAL["QUERY_6"].Qry + "\"%s\"\n", ent)
-	rslt := d.ReadLocalDBwithType[q.TBL_ServerTypeList](s)
+	rslt, err := d.ReadDBwithType[q.TBL_ServerTypeList](s)
+	if err != nil {
+		fmt.Println("Error in checkServerType: ", err)
+		return "", err
+	}
+
 	for _, result := range rslt {
 		if result.Data[0] == "VM" {
 			vm = true
@@ -156,11 +186,11 @@ func checkServerType(ent string) string {
 		}
 	}
 	if vm && hw {
-		return "mixed"
+		return "mixed", nil
 	} else if vm {
-		return "vm"
+		return "vm", nil
 	} else {
-		return "hw"
+		return "hw", nil
 	}
 }
 

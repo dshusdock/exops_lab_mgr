@@ -51,8 +51,13 @@ func WriteUnigyDB(sql string) {
 	apis.Write(UnigyDB.DBHandle, sql)
 }
 
-func ReadUnigyDBwithType[T any](sql string) []con.RowData {	
-	return apis.ReadDB[T](UnigyDB.DBHandle, sql)
+func ReadUnigyDBwithType[T any](sql string) ([]con.RowData, error) {	
+	rslt, err := apis.ReadDB[T](UnigyDB.DBHandle, sql)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	return rslt, nil
 }
 
 func ReadUnigyDB(sql string) *sql.Rows {
@@ -65,7 +70,7 @@ func CloseUnigyDB() {
 func UpdateLocalZoneInfo() {
 	s := fmt.Sprintf(q.SQL_QUERIES_UNIGY["QUERY_1"].Qry )
 		// fmt.Println(s)
-		da := ReadUnigyDBwithType[q.TBL_NZData](s)
+		da, _ := ReadUnigyDBwithType[q.TBL_NZData](s)
 		
 		fmt.Println("NZData: ", da)
 		for _, el := range da {

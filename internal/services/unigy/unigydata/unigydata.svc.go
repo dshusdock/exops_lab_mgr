@@ -49,11 +49,11 @@ func (m *UnigyDataSvc) ProcessRequest(w http.ResponseWriter, d url.Values) {
 
 func RecordValidDbEndpoints() {
 	//  Get the list of enterprise names
-	entList := db.ReadLocalDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
+	entList, _ := db.ReadDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
 	for _, ent := range entList {	
 		// Get a list of IP's based on the enterprise name	
 		str := fmt.Sprintf(q.SQL_QUERIES_LOCAL["QUERY_7"].Qry + "\"%s\"\n", ent.Data[0])
-		ipList := db.ReadLocalDBwithType[q.TBL_ServerTypeList](str)
+		ipList, _ := db.ReadDBwithType[q.TBL_ServerTypeList](str)
 
 		for _, ip := range ipList {
 			slog.Info("LoadUnigyTargets2Db() - Checking IP", "IP", ip.Data[0])
@@ -76,7 +76,7 @@ func RecordValidDbEndpoints() {
 
 func PopulateZoneInfo() {
 
-	entList := local.GetEnterpriseList()
+	entList, _ := local.GetEnterpriseList()
 
 	for _, ent := range entList {
 		// Array of all the nodes in the enterprise
@@ -108,7 +108,7 @@ func getZoneInfo(ent string) []con.ZoneInfo {
 
 	// Read the newZoneData table for the enterprise
 	s := fmt.Sprintf(q.SQL_QUERIES_UNIGY["QUERY_1"].Qry )
-	da := db.ReadUnigyDBwithType[q.TBL_NZData](s)
+	da, _ := db.ReadUnigyDBwithType[q.TBL_NZData](s)
 
 	for _, el := range da {
 		
@@ -161,7 +161,7 @@ func getDBEndpoint(ent string) string {
 	xx := `select targetIP from UnigyDatabaseTargets where enterprise="%s" and status="available" limit 1`
 	s := fmt.Sprintf(xx, ent) 
 	
-	rslt := db.ReadLocalDBwithType[q.StringVal](s)
+	rslt, _ := db.ReadDBwithType[q.StringVal](s)
 	if len(rslt) == 0 {
 		return "no endpoint"
 	}
