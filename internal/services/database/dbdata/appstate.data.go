@@ -25,7 +25,7 @@ func init() {
 	
 }
 
-func (m *AppStateIfc) RunQuery(qry string, parms ...string) ([]con.RowData, error){
+func (m *AppStateIfc) GetView(qry string, parms ...string) ([]con.RowData, error){
 	rslt, err := d.ReadDBwithType[LabSystem](qry)
 	if err != nil {
 		return nil, err

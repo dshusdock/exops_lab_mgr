@@ -5,8 +5,6 @@ import (
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	d "dshusdock/tw_prac1/internal/services/database"
-
-	// "dshusdock/tw_prac1/internal/services/database/data"
 	"dshusdock/tw_prac1/internal/services/database/dbdata"
 	q "dshusdock/tw_prac1/internal/services/database/queries"
 	"dshusdock/tw_prac1/internal/services/messagebus"
@@ -17,7 +15,6 @@ import (
 	"net/url"
 	"strconv"
 )
-
 
 type CardDef struct {
 	Enterprise  string
@@ -90,21 +87,12 @@ func (m *CardsVW) ProcessViewChangeRequest(w http.ResponseWriter, d url.Values) 
 }
 
 func (m *CardsVW) LoadCardData() error{
+	slog.Info("In LoadCardData...")
 	m.Cards = []CardDef{}
 	
-	rslt, err := d.ReadDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
-	if err != nil {
-		fmt.Println("Error in LoadCardData: ", err)
-		return err
-	}
+	// rslt, err := d.ReadDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
+	rslt, _ := dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetFieldList("enterprise_unigy")
 
-	// rslt2 := d.ReadDBwithType[data.VIEW_OBJ1](data.LAB_SYSTEM_VIEWS["VIEW_1"].View)
-	
-	myDataIfc := dbdata.LabSystemIfc{}	
-	myDataIfc.RunQuery("select * from data", "ralph", "kramden")
-	// ll := dbsvc.GetHandler("LabSystem").RunQuery("select * from data", "ralph", "kramden")
-
-	// Range over list of enterprise names and create a CardDef for each
 	for _, result := range rslt {				
 		p := CardDef{}
 		p.Enterprise = result.Data[0]
@@ -133,12 +121,11 @@ func (m *CardsVW) LoadCardData() error{
 }
 
 func LoadZoneData(ptr *CardDef) error{
-	s :=fmt.Sprintf(q.SQL_QUERIES_LOCAL["QUERY_9"].Qry + "\"%s\"", ptr.Enterprise)
-	rslt, err := d.ReadDBwithType[con.LocalZoneData](s)
-	if err != nil {
-		fmt.Println("Error in LoadZoneData: ", err)
-		return err
-	}
+
+	// s :=fmt.Sprintf(q.SQL_QUERIES_LOCAL["QUERY_9"].Qry + "\"%s\"", ptr.Enterprise)
+	// rslt, err := d.ReadDBwithType[con.LocalZoneData](s)
+
+	rslt, _ := dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetView(dbdata.VIEW_6, ptr.Enterprise)
 
 	for _, result := range rslt {
 		z := con.ZoneInfo{}

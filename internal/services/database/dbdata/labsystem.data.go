@@ -1,9 +1,22 @@
 package dbdata
 
 import (
-	"reflect"
-	d "dshusdock/tw_prac1/internal/services/database"
 	con "dshusdock/tw_prac1/internal/constants"
+	d "dshusdock/tw_prac1/internal/services/database"
+	"fmt"
+
+	// "log/slog"
+	"reflect"
+)
+
+const (
+	VIEW_ALL = "VIEW_ALL"
+	VIEW_1 = "VIEW_1"
+	VIEW_2 = "VIEW_2"
+	VIEW_3 = "VIEW_3"
+	VIEW_4 = "VIEW_4"
+	VIEW_5 = "VIEW_5"
+	VIEW_6 = "VIEW_6"
 )
 
 type viewMap struct {
@@ -32,6 +45,19 @@ type LabSystem struct {
 	VmLabServerHostIp string
 }
 
+type LocalZoneData struct {
+	Id 			int
+	Enterprise 	string
+	Zid 		string
+	Vip  		string
+	Ccm1 		string
+	Ccm2 		string
+	Ccm1_state 	string
+	Ccm2_state 	string
+	Online 		bool
+	Status 		string
+}
+
 type VIEW_OBJ1 struct {
 	Enterprise string	
 }
@@ -48,12 +74,15 @@ var LAB_SYSTEM_VIEWS = make (map[string]viewMap)
 var HdrDef []con.HeaderDef
 
 func init() {
-	LAB_SYSTEM_VIEWS["VIEW_ALL"] = viewMap{"select * from LabSystem", reflect.TypeOf(LabSystem{})}
-	LAB_SYSTEM_VIEWS["VIEW_1"] = viewMap{"select unique enterprise from LabSystem", reflect.TypeOf(VIEW_OBJ1{})}
-	LAB_SYSTEM_VIEWS["VIEW_2"] = viewMap{"select * from LabSystem where enterprise = ?", reflect.TypeOf(LabSystem{})}
-	LAB_SYSTEM_VIEWS["VIEW_3"] = viewMap{`select unique serverType from LabSystem where enterprise = `, reflect.TypeOf(VIEW_OBJ2{})}
-	LAB_SYSTEM_VIEWS["VIEW_4"] = viewMap{`select unique enterprise from LabSystem where role="Unigy"`, reflect.TypeOf(VIEW_OBJ1{})}
-	LAB_SYSTEM_VIEWS["VIEW_5"] = viewMap{`select unique swVer from LabSystem`, reflect.TypeOf(VIEW_OBJ3{})}
+	LAB_SYSTEM_VIEWS[VIEW_ALL] = viewMap{"select * from LabSystem", reflect.TypeOf(LabSystem{})}
+	LAB_SYSTEM_VIEWS[VIEW_1] = viewMap{"select unique enterprise from LabSystem", reflect.TypeOf(VIEW_OBJ1{})}
+	LAB_SYSTEM_VIEWS[VIEW_2] = viewMap{"select * from LabSystem where enterprise = ?", reflect.TypeOf(LabSystem{})}
+	LAB_SYSTEM_VIEWS[VIEW_3] = viewMap{`select unique serverType from LabSystem where enterprise = `, reflect.TypeOf(VIEW_OBJ2{})}
+	LAB_SYSTEM_VIEWS[VIEW_4] = viewMap{`select unique enterprise from LabSystem where role="Unigy"`, reflect.TypeOf(VIEW_OBJ1{})}
+	LAB_SYSTEM_VIEWS[VIEW_5] = viewMap{`select unique swVer from LabSystem`, reflect.TypeOf(VIEW_OBJ3{})}
+	LAB_SYSTEM_VIEWS[VIEW_6] = viewMap{`select * from ZoneInfo where enterprise= `, reflect.TypeOf(VIEW_OBJ2{})}
+
+	
 
 	HdrDef = []con.HeaderDef{
 		{Header: "CAB", Width: "width: 60px"}, 
@@ -101,13 +130,20 @@ func (m *LabSystemIfc) GetFieldList(fld string) ([]con.RowData, error){
 	return rslt, nil
 }
 
-func (m *LabSystemIfc) RunQuery(qry string, parms ...string) ([]con.RowData, error){
-	rslt, err := d.ReadDBwithType[LabSystem](qry)
+func (m *LabSystemIfc) GetView(qry string, parms ...string) ([]con.RowData, error){
+	var str string
+	fmt.Println("In GetView: ", qry, len(parms))
+	switch qry {
+	case VIEW_6:
+		str = fmt.Sprintf(LAB_SYSTEM_VIEWS[VIEW_6].View + "\"%s\"", parms[0])
+	}
+	rslt, err := d.ReadDBwithType[LocalZoneData](str)
 	if err != nil {
 		return nil, err
 	}
+	
 	return rslt, nil
-}	
+}
 
 func (m* LabSystemIfc) GetAllData() ([]LabSystem, error) {
 	var rsltAry []LabSystem

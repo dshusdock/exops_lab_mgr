@@ -16,7 +16,7 @@ const (
 )
 
 type DBDataAccess interface {
-	RunQuery(qry string, parms ...string) ([]constants.RowData, error)
+	GetView(qry string, parms ...string) ([]constants.RowData, error)
 	GetAll() ([]con.RowData, error)
 	GetFieldList(fld string) ([]con.RowData, error)
 }
