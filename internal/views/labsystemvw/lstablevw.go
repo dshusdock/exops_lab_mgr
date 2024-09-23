@@ -5,7 +5,9 @@ import (
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	db "dshusdock/tw_prac1/internal/services/database"
+
 	// "dshusdock/tw_prac1/internal/services/database/dbdata"
+	"dshusdock/tw_prac1/internal/services/database/dbdata"
 	q "dshusdock/tw_prac1/internal/services/database/queries"
 	"dshusdock/tw_prac1/internal/services/messagebus"
 	"fmt"
@@ -108,12 +110,12 @@ func (m *LSTableVW) LoadTableData(t string) error{
 	ptr := q.DB_VIEW_TYPE_MAP[t]
 
 	m.Data.Start = 0
-	m.Data.Tbl, err = db.ReadTableData(t)
+	// m.Data.Tbl, err = db.ReadTableData(t)
+	m.Data.Tbl, err = dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetAll()
 	if err != nil {
 		fmt.Println("Error in LoadTableData: ", err)
 		return err
 	}
-	//m.Data.Tbl = db.ReadDBwithType[dbdata.LabSystem](dbdata.LAB_SYSTEM_VIEWS["VIEW_ALL"].View)
 	m.Data.Table = t
 
 	var end int

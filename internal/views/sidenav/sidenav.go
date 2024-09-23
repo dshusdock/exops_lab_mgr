@@ -5,8 +5,9 @@ import (
 	"dshusdock/tw_prac1/internal/constants"
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
-	db "dshusdock/tw_prac1/internal/services/database"
-	q "dshusdock/tw_prac1/internal/services/database/queries"
+	// db "dshusdock/tw_prac1/internal/services/database"
+	"dshusdock/tw_prac1/internal/services/database/dbdata"
+	// q "dshusdock/tw_prac1/internal/services/database/queries"
 	"dshusdock/tw_prac1/internal/views/labsystemvw"
 	"fmt"
 	"log"
@@ -246,13 +247,16 @@ func (m *SideNav) LoadDropdownData(x int) {
 	switch x {
 	case 0:
 		// rslt = db.ReadDatabase[db.TBL_EnterpriseList](db.TBL_LAB_SYSTEM_QRY().QUERY_1.Qry)
-		rslt, _ = db.ReadDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_1"].Qry)
+		// rslt, _ = db.ReadDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_1"].Qry)
+		rslt, _ = dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetFieldList("enterprise")
 	case 1:
 		// rslt = db.ReadDatabase[db.TBL_SWVerList](db.TBL_LAB_SYSTEM_QRY().QUERY_4.Qry)
-		rslt, _ = db.ReadDBwithType[q.TBL_SWVerList](q.SQL_QUERIES_LOCAL["QUERY_4"].Qry)
+		// rslt, _ = db.ReadDBwithType[q.TBL_SWVerList](q.SQL_QUERIES_LOCAL["QUERY_4"].Qry)
+		rslt, _ = dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetFieldList("swversion")
 	case 2:
 		// rslt = db.ReadDatabase[db.TBL_EnterpriseList](db.TBL_LAB_SYSTEM_QRY().QUERY_5.Qry)
-		rslt, _ = db.ReadDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
+		// rslt, _ = db.ReadDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
+		rslt, _ = dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetFieldList("enterprise_unigy")
 	}
 
 	m.Data[x].EntList = nil

@@ -35,7 +35,7 @@ func main() {
 	programLevel.Set(slog.LevelDebug)
 
 	initRouteHandlers()
-	initApp()
+	// initApp()
 
 	// slog.Info("Starting application -", "Port", portNumber)
 	slog.Info("Starting application -", "Port", secPortNumber)

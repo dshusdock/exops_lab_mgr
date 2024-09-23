@@ -40,6 +40,10 @@ type VIEW_OBJ2 struct {
 	ServerType string	
 }
 
+type VIEW_OBJ3 struct {
+	SWVer string	
+}
+
 var LAB_SYSTEM_VIEWS = make (map[string]viewMap)
 var HdrDef []con.HeaderDef
 
@@ -49,6 +53,7 @@ func init() {
 	LAB_SYSTEM_VIEWS["VIEW_2"] = viewMap{"select * from LabSystem where enterprise = ?", reflect.TypeOf(LabSystem{})}
 	LAB_SYSTEM_VIEWS["VIEW_3"] = viewMap{`select unique serverType from LabSystem where enterprise = `, reflect.TypeOf(VIEW_OBJ2{})}
 	LAB_SYSTEM_VIEWS["VIEW_4"] = viewMap{`select unique enterprise from LabSystem where role="Unigy"`, reflect.TypeOf(VIEW_OBJ1{})}
+	LAB_SYSTEM_VIEWS["VIEW_5"] = viewMap{`select unique swVer from LabSystem`, reflect.TypeOf(VIEW_OBJ3{})}
 
 	HdrDef = []con.HeaderDef{
 		{Header: "CAB", Width: "width: 60px"}, 
@@ -71,20 +76,29 @@ func init() {
 }
 
 func (m *LabSystemIfc) GetAll() ([]con.RowData, error) {
-	rslt, err := d.ReadDBwithType[VIEW_OBJ1](LAB_SYSTEM_VIEWS["VIEW_4"].View)
+	rslt, err := d.ReadDBwithType[LabSystem](LAB_SYSTEM_VIEWS["VIEW_ALL"].View)
 	if err != nil {
 		return nil, err
 	}
 	return rslt, nil  	
 }
 
-func (m *LabSystemIfc) GetEnterpriseList() ([]con.RowData, error){
-	rslt, err := d.ReadDBwithType[VIEW_OBJ1](LAB_SYSTEM_VIEWS["VIEW_ALL"].View)
+func (m *LabSystemIfc) GetFieldList(fld string) ([]con.RowData, error){
+	var rslt []con.RowData
+	var err error
+
+	switch fld {
+	case "enterprise":
+		rslt, err = d.ReadDBwithType[VIEW_OBJ1](LAB_SYSTEM_VIEWS["VIEW_1"].View)		
+	case "swversion":
+		rslt, err = d.ReadDBwithType[VIEW_OBJ3](LAB_SYSTEM_VIEWS["VIEW_5"].View)
+	case "enterprise_unigy":
+		rslt, err = d.ReadDBwithType[VIEW_OBJ1](LAB_SYSTEM_VIEWS["VIEW_4"].View)
+	}
 	if err != nil {
 		return nil, err
 	}
 	return rslt, nil
-
 }
 
 func (m *LabSystemIfc) RunQuery(qry string, parms ...string) ([]con.RowData, error){

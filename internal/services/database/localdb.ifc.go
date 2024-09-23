@@ -16,12 +16,22 @@ type LocalDBAccess struct {
 }
 
 var LocalDB *LocalDBAccess
+var DB_CONFIG mysql.Config
 
 func init() {
 	LocalDB = &LocalDBAccess{
 		Name: "LocalDB",
 		DBHandle: nil,
 		active:   false,
+	}
+
+	DB_CONFIG = mysql.Config{
+		User:                 "root",         //os.Getenv("DBUSER"),
+		Passwd:               "my-secret-pw", //os.Getenv("DBPASS"),
+		Net:                  "tcp",
+		Addr:                 "127.0.0.1:3306",
+		DBName:               "testdb",
+		AllowNativePasswords: true,
 	}
 }
 
@@ -47,17 +57,39 @@ func ConnectLocalDB(ip string) error{
 	return nil
 }
 
-func WriteLocalDB(sql string) {
+func WriteLocalDB(sql string) error{
+	dbh, err := apis.Connect(DB_CONFIG)
+	if err != nil {
+		fmt.Println("Error in WriteLocalDB: ", err)
+		return err
+	}
+	defer apis.Close(dbh)
+	// apis.Write(LocalDB.DBHandle, sql)
 	apis.Write(LocalDB.DBHandle, sql)
+	return nil
 }
 
-func ReadLocalDB(sql string) (*sql.Rows) {
+func ReadLocalDB(sql string) (*sql.Rows, error) {
+	dbh, err := apis.Connect(DB_CONFIG)
+	if err != nil {
+		fmt.Println("Error in WriteLocalDB: ", err)
+		return nil, err
+	}
+	defer apis.Close(dbh)
 	// defer apis.Close(LocalDB.DBHandle)
-	return apis.Read(LocalDB.DBHandle, sql)
+	// return apis.Read(LocalDB.DBHandle, sql)
+	return apis.Read(dbh, sql), nil
 }
 
 func ReadDBwithType[T any](sql string) ([]con.RowData, error) {	
-	rslt, err := apis.ReadDB[T](LocalDB.DBHandle, sql)
+	dbh, err := apis.Connect(DB_CONFIG)
+	if err != nil {
+		fmt.Println("Error in WriteLocalDB: ", err)
+		return nil, err
+	}
+	defer apis.Close(dbh)
+	// rslt, err := apis.ReadDB[T](LocalDB.DBHandle, sql)
+	rslt, err := apis.ReadDB[T](dbh, sql)
 	if err != nil {
 		fmt.Println("Error in ReadDBwithType: ", err)	
 		return nil, err
@@ -76,13 +108,21 @@ func CloseLocalDB() {
 
 // Utilies
 func ReadTableData(t string) ([]con.RowData, error) {
+	dbh, err := apis.Connect(DB_CONFIG)
+	if err != nil {
+		fmt.Println("Error in WriteLocalDB: ", err)
+		return nil, err
+	}
+	defer apis.Close(dbh)
+
 	ptr := q.DB_VIEW_TYPE_MAP[t]
 	pb := con.HDR_BTN_LBL()
 
 	fmt.Println("\nReadTableData: ", t)
 	switch t {
 	case pb.HDR_BTN_TABLE:
-		rd, err := apis.ReadDB[q.MdcData](LocalDB.DBHandle, ptr.SQL_STR)
+		// rd, err := apis.ReadDB[q.MdcData](LocalDB.DBHandle, ptr.SQL_STR)
+		rd, err := apis.ReadDB[q.MdcData](dbh, ptr.SQL_STR)
 		if err != nil {
 			fmt.Println("Error in ReadTableData: ", err)
 			return nil, err
@@ -94,7 +134,15 @@ func ReadTableData(t string) ([]con.RowData, error) {
 }
 
 func ReadTblWithQry(sql string) ([]con.RowData, error) {	
-	rslt, err := apis.ReadDB[q.MdcData](LocalDB.DBHandle, sql)
+	dbh, err := apis.Connect(DB_CONFIG)
+	if err != nil {
+		fmt.Println("Error in WriteLocalDB: ", err)
+		return nil, err
+	}
+	defer apis.Close(dbh)
+
+	// rslt, err := apis.ReadDB[q.MdcData](LocalDB.DBHandle, sql)
+	rslt, err := apis.ReadDB[q.MdcData](dbh, sql)
 	if err != nil {
 		fmt.Println("Error in ReadTblWithQry: ", err)
 		return nil, err

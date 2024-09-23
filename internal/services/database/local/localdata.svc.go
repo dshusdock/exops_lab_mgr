@@ -48,7 +48,7 @@ func (m *LocalDataSvc) ProcessRequest(w http.ResponseWriter, d url.Values) {
 
 
 
-1func GetEnterpriseList() ([]con.RowData, error){
+func GetEnterpriseList() ([]con.RowData, error){
 	return d.ReadDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)	
 }
 

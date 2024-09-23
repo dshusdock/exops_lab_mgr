@@ -15,8 +15,8 @@ func SetAppState() {
 }
 
 func GetAppState() string {
-	rows := database.ReadLocalDB("SELECT state FROM AppState")
-	var state string
+	rows, _ := database.ReadLocalDB("SELECT state FROM AppState")
+	var state = "ERROR"
 	for rows.Next() {
 		rows.Scan(&state)
 	}
