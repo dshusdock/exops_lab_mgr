@@ -47,7 +47,10 @@ func (m *UnigyDataSvc) ProcessRequest(w http.ResponseWriter, d url.Values) {
 	slog.Info("Processing request", "ID", m.Id)
 }
 
-func RecordValidDbEndpoints() {
+// LoadUnigyTargets2Db - This function will load the Unigy targets into the local database
+// It will check if the target is reachable i.e. SQL connection to Unigy DB and mark it as 
+// available or unavailable in the UniigyDatabaseTargets table
+func IdentifyValidDbEndpoints() {
 	//  Get the list of enterprise names
 	entList, _ := db.ReadDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
 	for _, ent := range entList {	
@@ -74,14 +77,15 @@ func RecordValidDbEndpoints() {
 	slog.Info("LoadUnigyTargets2Db() - Done")		
 }
 
-func PopulateZoneInfo() {
+// PopulateZoneInfoTable - This function will populate the local database "ZoneInfo" table with the zone information
+// received from the apppropiate Unigy Enterprise database
+func PopulateZoneInfoTable() {
 
 	entList, _ := local.GetEnterpriseList()
 
 	for _, ent := range entList {
 		// Array of all the nodes in the enterprise
-		fmt.Println("Enterprise: ", ent)
-		zoneInfoAry := getZoneInfo(ent.Data[0])
+		zoneInfoAry := getEnterpriseZoneInfo(ent.Data[0])
 		if len(zoneInfoAry) == 0 {
 			continue
 		}
@@ -93,11 +97,14 @@ func PopulateZoneInfo() {
 	}
 }
 
-func getZoneInfo(ent string) []con.ZoneInfo {
+// Helper functions
+
+// getEnterpriseZoneInfo - This function will get the zone information for the enterprise
+func getEnterpriseZoneInfo(ent string) []con.ZoneInfo {
 	zi := []con.ZoneInfo{}
 
 	// Get the target IP for the enterprise
-	target := getDBEndpoint(ent)
+	target := getAvailableDBEndpoint(ent)
 	if target == "no endpoint" {
 		return []con.ZoneInfo{}
 	}
@@ -117,20 +124,6 @@ func getZoneInfo(ent string) []con.ZoneInfo {
 
 		fmt.Println("Server state for ccm1: ", r1, el.Data[0])
 		fmt.Println("Server state for ccm2: ", r2, el.Data[1])
-
-		// ccm1_ip := ""
-		// ccm2_ip := ""
-		// if el.Data[0] == "" {
-		// 	ccm1_ip = "no ip"
-		// } else {
-		// 	ccm1_ip = el.Data[0]
-		// }
-
-		// if el.Data[1] == "" {
-		// 	ccm2_ip = "no ip"
-		// } else {
-		// 	ccm2_ip = el.Data[1]
-		// }
 
 		zi = append(zi, con.ZoneInfo{
 			Enterprise: ent,
@@ -157,7 +150,8 @@ func getZoneInfo(ent string) []con.ZoneInfo {
 	return zi
 }
 
-func getDBEndpoint(ent string) string {
+// getAvailableDBEndpoint - This function will get the SQL DB endpoint for the specified Unigy enterprise
+func getAvailableDBEndpoint(ent string) string {
 	xx := `select targetIP from UnigyDatabaseTargets where enterprise="%s" and status="available" limit 1`
 	s := fmt.Sprintf(xx, ent) 
 	
@@ -168,10 +162,45 @@ func getDBEndpoint(ent string) string {
 	return rslt[0].Data[0]
 }
 
+func PopulateDeviceTableByEnterprise(ent string) {
+	// Get the target IP for the enterprise
+	target := getAvailableDBEndpoint(ent)
+	if target == "no endpoint" {
+		return
+	}
 
-//select targetIP from UnigyDatabaseTargets where enterprise="Sleepy" and status="available" limit 1;
+	// Connect to the Unigy enterprise database
+	err := db.ConnectUnigyDB(target)
+	if err != nil {
+		return
+	}
 
-//me.txt - server IP
-//mycluster.txt Both server IP's
-//haservices/checkBasicStatus - gives IP, role, state (active or stamdby), and change role state
-//ums/about.xml - some info about the system like version, build, etc
+	// Read the LabSystem table for the enterprise
+	da, _ := db.ReadUnigyDBwithType[q.UNIGY_TBL_DEVICE](q.SQL_QUERIES_UNIGY["QUERY_2"].Qry)
+
+	for _, el := range da {
+
+		p := q.UNIGY_TBL_DEVICE{}
+		
+		switch el.Data[1] {
+		case "3":
+			el.Data[1] = "max"
+		case "4":
+			el.Data[1] = "UDA"
+		case "6":
+			el.Data[1] = "pulse"
+		case "7":
+			el.Data[1] = "mercury"
+		}
+		p.DeviceState = el.Data[0]
+		p.DeviceTypeId = el.Data[1]
+		p.Equipped = el.Data[2]
+		p.DunkinLocationId = el.Data[3]
+		p.IPAddress = el.Data[4]
+		p.MacAddress = el.Data[5]
+		p.ParentZoneId = el.Data[6]
+
+		fmt.Println("After Writing MdcData: ", el, ent)
+		local.WriteDeviceData(p, ent)
+	}
+}	

@@ -9,20 +9,6 @@ import (
 	"reflect"
 )
 
-const (
-	VIEW_ALL = "VIEW_ALL"
-	VIEW_1 = "VIEW_1"
-	VIEW_2 = "VIEW_2"
-	VIEW_3 = "VIEW_3"
-	VIEW_4 = "VIEW_4"
-	VIEW_5 = "VIEW_5"
-	VIEW_6 = "VIEW_6"
-)
-
-type viewMap struct {
-	View string
-	Model interface{}
-}
 
 type LabSystemIfc struct {
 	Ready bool
@@ -112,6 +98,22 @@ func (m *LabSystemIfc) GetAll() ([]con.RowData, error) {
 	return rslt, nil  	
 }
 
+func (m *LabSystemIfc) GetView(qry string, parms ...string) ([]con.RowData, error){
+	var str string
+	fmt.Println("In GetView: ", qry, len(parms))
+	switch qry {
+	case VIEW_6:
+		str = fmt.Sprintf(LAB_SYSTEM_VIEWS[VIEW_6].View + "\"%s\"", parms[0])
+	}
+	rslt, err := d.ReadDBwithType[LocalZoneData](str)
+	if err != nil {
+		return nil, err
+	}
+	
+	return rslt, nil
+}
+
+
 func (m *LabSystemIfc) GetFieldList(fld string) ([]con.RowData, error){
 	var rslt []con.RowData
 	var err error
@@ -130,22 +132,8 @@ func (m *LabSystemIfc) GetFieldList(fld string) ([]con.RowData, error){
 	return rslt, nil
 }
 
-func (m *LabSystemIfc) GetView(qry string, parms ...string) ([]con.RowData, error){
-	var str string
-	fmt.Println("In GetView: ", qry, len(parms))
-	switch qry {
-	case VIEW_6:
-		str = fmt.Sprintf(LAB_SYSTEM_VIEWS[VIEW_6].View + "\"%s\"", parms[0])
-	}
-	rslt, err := d.ReadDBwithType[LocalZoneData](str)
-	if err != nil {
-		return nil, err
-	}
-	
-	return rslt, nil
-}
-
-func (m* LabSystemIfc) GetAllData() ([]LabSystem, error) {
+// Helper functions
+func GetAllData() ([]LabSystem, error) {
 	var rsltAry []LabSystem
 	da, err := d.ReadDBwithType[LabSystem](LAB_SYSTEM_VIEWS["VIEW_ALL"].View)		
 	if err != nil {

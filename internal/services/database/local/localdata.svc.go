@@ -71,5 +71,12 @@ func WriteZoneInfoData(z con.ZoneInfo) {
 		d.WriteLocalDB(str)
 }
 
+func WriteDeviceData(da q.UNIGY_TBL_DEVICE, ent string) {
+	str := fmt.Sprintf(`INSERT into Device (enterprise, device_type, equipped, location, ip_address, mac, parent_zone) values("%s","%s","%s","%s","%s","%s","%s")`, 
+		ent, da.DeviceTypeId, da.Equipped, da.DunkinLocationId, da.IPAddress, da.MacAddress, da.ParentZoneId)
+
+	d.WriteLocalDB(str)
+}
+
 
 

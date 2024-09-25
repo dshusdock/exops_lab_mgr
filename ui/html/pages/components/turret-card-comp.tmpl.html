@@ -1,7 +1,14 @@
 {{ define "turret-card-comp" }}
 
 <div class="turret-card">
-
+    <div class="icon">
+        <i class="fa-solid fa-blender-phone">&nbsp;&nbsp;{{.Label}}</i>
+    </div>
+    <div class="info">
+        <span class="">Enterprise: {{.Enterprise}}</span>
+        <span class="">Zone: {{.ParentZone}}</span>
+        <span class="">IP: {{.IP}}</span>
+    </div>
 </div>
 
 {{end}} <!-- def -->

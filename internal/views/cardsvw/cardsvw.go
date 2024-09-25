@@ -25,13 +25,20 @@ type CardDef struct {
 	Hardware	bool      
 }
 
+type TurretDef struct {
+	Enterprise  string
+	IP		 	string
+	ParentZone	string
+	Label		string
+}
+
 type CardsVW struct {
 	App        	*config.AppConfig
 	Id         	string
 	RenderFile 	string
 	ViewFlags  	[]bool
 	Cards       []CardDef
-	Data		[]q.DataVw1
+	Turret		[]TurretDef
 	Htmx       	any
 }
 
@@ -45,6 +52,7 @@ func init() {
 		RenderFile: "",
 		ViewFlags:  []bool{true},
 		Cards:      []CardDef{},
+		Turret:		 []TurretDef{},
 		Htmx:       nil,
 	}
 
@@ -67,9 +75,13 @@ func (m *CardsVW) ProcessRequest(w http.ResponseWriter, d url.Values) {
 	case "upload":
 		
 	case "Max":
+		m.LoadTurretData("max")
 		fileMap = con.RM_CARDS_MAX
 	case "Unigy":
-		fileMap = con.RM_CARDS_UNIGY		
+		fileMap = con.RM_CARDS_UNIGY	
+	case "Touch":
+		fileMap = con.RM_CARDS_MAX
+		m.LoadTurretData("mercury")		
 	}
 	render.RenderTemplate_new(w, nil, m.App, fileMap)
 }
@@ -154,6 +166,27 @@ func LoadZoneData(ptr *CardDef) error{
 	return nil
 }
 
+func (m *CardsVW) LoadTurretData(t string) error{ 
+	slog.Info("In LoadTurretData...")
+	m.Turret = []TurretDef{}
+	
+	rslt, _ := dbdata.GetDBAccess(dbdata.DEVICE).GetAll()
+
+	for _, result := range rslt {	
+		if result.Data[2] == t {			
+			p := TurretDef{}
+			p.Enterprise = result.Data[1]
+			p.IP = result.Data[5]
+			p.ParentZone = result.Data[7]
+			p.Label = t
+			m.Turret = append(m.Turret, p)
+		}
+		
+	}	
+	
+	return nil
+}
+
 func checkServerType(ent string) (string, error){
 	vm := false
 	hw := false
@@ -181,3 +214,37 @@ func checkServerType(ent string) (string, error){
 	}
 }
 
+
+// func (m *CardsVW) LoadTurretData() error{
+// 	slog.Info("In LoadTurretData...")
+// 	m.Cards = []CardDef{}
+	
+// 	// rslt, err := d.ReadDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
+// 	rslt, _ := dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetFieldList("enterprise_unigy")
+
+// 	for _, result := range rslt {				
+// 		p := CardDef{}
+// 		p.Enterprise = result.Data[0]
+// 		m.Cards = append(m.Cards, p)
+// 	}	
+	
+// 	// Range over list of CardDefs and load the data for each
+// 	for x:=0; x<len(m.Cards); x++ {
+// 		// Check for VM, Hardware, or Mixed server types
+// 		r, err := checkServerType(m.Cards[x].Enterprise)
+// 		if err != nil {
+// 			fmt.Println("Error in LoadCardData: ", err)
+// 			return err
+// 		}
+// 		if r == "mixed" {
+// 			m.Cards[x].VM = true
+// 			m.Cards[x].Hardware = true
+// 		} else if r == "vm" {
+// 			m.Cards[x].VM = true
+// 		} else {
+// 			m.Cards[x].Hardware = true
+// 		}
+// 		LoadZoneData(&m.Cards[x])	
+// 	}
+// 	return nil
+// }

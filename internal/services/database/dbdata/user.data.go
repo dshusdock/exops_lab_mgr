@@ -35,6 +35,19 @@ func init() {
 	USER_VIEWS["VIEW_2"] = viewMap{`select username, password from User where username= `, reflect.TypeOf(userview2{})}
 }
 
+func (m *User) GetAll() ([]con.RowData, error) {
+	rslt, err := d.ReadDBwithType[User](USER_VIEWS[VIEW_ALL].View)
+	if err != nil {
+		return nil, err
+	}
+	return rslt, nil  	
+}
+
+func (m *User) GetView(qry string, parms ...string) ([]con.RowData, error){ return nil, nil }
+
+func (m *User) GetFieldList(fld string) ([]con.RowData, error){ return nil, nil }
+
+// Helper functions
 func GetUserNames() ([]con.RowData, error){
 	rslt, err := d.ReadDBwithType[userView1](USER_VIEWS["VIEW_1"].View)	
 	if err != nil {

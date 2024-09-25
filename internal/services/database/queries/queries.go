@@ -31,6 +31,15 @@ func init() {
 
 	// UNIGY DATABASE
 	SQL_QUERIES_UNIGY["QUERY_1"] = lsquery{`select server1,server2,vip,zid from NewZoneData`, reflect.TypeOf(TBL_NZData{})}
+	SQL_QUERIES_UNIGY["QUERY_2"] = lsquery{`SELECT deviceState,
+       deviceTypeId,
+       equipped,
+       dunkinLocationId,
+       iPAddress,
+       macAddress,
+       parentZoneId
+  FROM dunkin.Device Device
+ WHERE (deviceTypeId = 3 or deviceTypeId = 4 or deviceTypeId = 6 or deviceTypeId = 7)`, reflect.TypeOf(UNIGY_TBL_DEVICE{})}
 }
 
 // LOCAL DATABASE
@@ -62,6 +71,16 @@ type TBL_SWVerList struct {
 
 type TBL_ZoneInfo struct {
 	
+}
+
+type UNIGY_TBL_DEVICE struct {
+	DeviceState 		string
+	DeviceTypeId 		string
+	Equipped			string
+	DunkinLocationId 	string
+	IPAddress 			string
+	MacAddress 			string
+	ParentZoneId 		string
 }
 
 type DataVw1 struct {

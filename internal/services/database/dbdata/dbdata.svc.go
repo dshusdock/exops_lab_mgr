@@ -28,6 +28,8 @@ func GetDBAccess(tbl int) DBDataAccess {
 		return &LabSystemIfc{ Ready: true }
 	case APP_STATE:
 		return &AppStateIfc{ Ready: true }
+	case DEVICE:
+		return &DeviceIfc{ Ready: true }
 	}
 
 	return nil

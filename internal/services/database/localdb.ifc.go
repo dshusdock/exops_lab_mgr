@@ -65,7 +65,7 @@ func WriteLocalDB(sql string) error{
 	}
 	defer apis.Close(dbh)
 	// apis.Write(LocalDB.DBHandle, sql)
-	apis.Write(LocalDB.DBHandle, sql)
+	apis.Write(dbh, sql)
 	return nil
 }
 
@@ -100,11 +100,6 @@ func ReadDBwithType[T any](sql string) ([]con.RowData, error) {
 func CloseLocalDB() {
 	apis.Close(LocalDB.DBHandle)
 }
-
-
-
-
-
 
 // Utilies
 func ReadTableData(t string) ([]con.RowData, error) {

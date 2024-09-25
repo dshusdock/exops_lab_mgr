@@ -25,16 +25,16 @@ func init() {
 	
 }
 
-func (m *AppStateIfc) GetView(qry string, parms ...string) ([]con.RowData, error){
-	rslt, err := d.ReadDBwithType[LabSystem](qry)
+func (m *AppStateIfc) GetAll() ([]con.RowData, error){
+	rslt, err := d.ReadDBwithType[AppState]("select * from AppState")
 	if err != nil {
 		return nil, err
 	}
 	return rslt, nil
 }
 
-func (m *AppStateIfc) GetAll() ([]con.RowData, error){
-	rslt, err := d.ReadDBwithType[AppState]("select * from AppState")
+func (m *AppStateIfc) GetView(qry string, parms ...string) ([]con.RowData, error){
+	rslt, err := d.ReadDBwithType[LabSystem](qry)
 	if err != nil {
 		return nil, err
 	}
@@ -45,6 +45,8 @@ func (m *AppStateIfc) GetFieldList(fld string) ([]con.RowData, error){
 	return nil, nil
 }
 
+
+// Helper functions
 func SetAppState() {
 	dt := time.Now()
 	nt := dt.Format("2006-01-02 15:04:05")

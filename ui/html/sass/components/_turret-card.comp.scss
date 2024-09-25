@@ -1,12 +1,53 @@
-
 .turret-card {
+  width: 20rem;
+  height: 20%;
+  margin: 1rem;
+
+  outline: 1px solid black;
+  border-radius: 0.5rem;
+  background-color: $color-primary-dark;
+  font-family: Metropolis, Avenir Next, Helvetica Neue, Arial, sans-serif;
+  line-height: 2.2rem;
+  font-size: medium;
+//   color: whitesmoke;
+  color: #acbac3;
+
+  & span {
+    // margin: 0.5rem;
+    // padding: 0.1rem;
+  }
+
+  & .info {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    width: 15rem;
-    height: 10rem;
-    outline: 1px solid black;
-    border-radius: 0.5rem;
-    background-color: $color-primary-dark;
+    justify-content: start;
+    align-items: start;
+    margin: 0.5rem;
+    padding: 0.1rem;
+  }
+
+  & .icon {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    color: white;
+    margin: 0.5rem;
+    padding: 0.1rem;
+  }
+
+  &:hover{
+    background-color: lightblue;
+  }
+
+  
+}
+
+.max_cards {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 80%;
+  height: 100%;
+  margin: 2rem 0 2rem 0;
 }

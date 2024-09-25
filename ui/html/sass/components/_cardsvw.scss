@@ -14,8 +14,8 @@
   background: $color-secondary-dark;
   height: 60rem;
   margin: 2rem 1rem 0 1rem;
-  border-radius: .7rem;
-  box-shadow: 0 1rem 2rem rgba(black, .2);
+  border-radius: 0.7rem;
+  box-shadow: 0 1rem 2rem rgba(black, 0.2);
   font-size: 1.7rem;
   font-family: sans-serif;
   transition: display 1s ease-in;
@@ -28,7 +28,7 @@
     // height: 30rem;
     width: 100%;
     border-radius: 1rem;
-    background-color:transparent;
+    background-color: transparent;
     margin-top: 2rem;
 
     & button {
@@ -52,7 +52,7 @@
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
-  width: 80%;
+  width: 70%;
   height: 100%;
   margin: 2rem 0 2rem 0;
 

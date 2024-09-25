@@ -69,17 +69,18 @@ func (m *SettingsVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
 		// datetime.Prac3()
 
 		// htmlParser()
-		unigydata.RecordValidDbEndpoints()
+		unigydata. IdentifyValidDbEndpoints()
 	
 	case "Test Button2":
 		fmt.Println("Test Button2 Clicked")
 		// database.PrintTableData()	
 		// cardsvw.AppCardsVW.LoadCardData()
-		unigydata.PopulateZoneInfo()
+		unigydata.PopulateZoneInfoTable()
 		// unigystatus.GetServerState("10.205.176.115")
 	case "Test Button3":
 		fmt.Println("Test Button3 Clicked")
 		// token.TestEncrypt2()
+		unigydata.PopulateDeviceTableByEnterprise("Dopey")
 	case "Test Button4":
 		fmt.Println("Test Button3 Clicked")
 		// token.TestDecrypt2()
