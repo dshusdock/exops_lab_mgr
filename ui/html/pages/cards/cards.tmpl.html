@@ -11,7 +11,7 @@
       "type": "button",
       "label": event.target.innerText,
       "view_id": "cardsvw",
-      "view_str": "test" }'
+      "view_str": "device-selector" }'
     >
       <button type="button" @click="">Unigy</button>
       <button type="button" @click="">Max</button>
@@ -26,6 +26,7 @@
   <div class="cards-container">
     {{template "tmplt_unigy-cards-view" .}}
   </div>
+  {{template "cards-rightnav-snip" .}}
 </div>
 
 {{end}}

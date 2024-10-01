@@ -7,6 +7,7 @@ import (
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/database"
 	"dshusdock/tw_prac1/internal/services/unigy/unigydata"
+	"time"
 
 	// "dshusdock/tw_prac1/internal/services/unigy/unigystatus"
 
@@ -33,6 +34,7 @@ type SettingsVw struct {
 	ViewFlags  []bool
 	Data       any
 	Htmx       any
+	LastSynchTIme string
 }
 
 var AppSettingsVw *SettingsVw
@@ -44,7 +46,9 @@ func init() {
 		ViewFlags:  []bool{true},
 		Data: "",
 		Htmx: nil,
+		LastSynchTIme: time.Now().Format("2006-01-02 15:04:05"),
 	}
+
 }
 
 func (m *SettingsVw) RegisterView(app config.AppConfig) *SettingsVw{
@@ -69,7 +73,7 @@ func (m *SettingsVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
 		// datetime.Prac3()
 
 		// htmlParser()
-		unigydata. IdentifyValidDbEndpoints()
+		unigydata.IdentifyValidDbEndpoints()
 	
 	case "Test Button2":
 		fmt.Println("Test Button2 Clicked")
@@ -97,6 +101,13 @@ func (m *SettingsVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
 		fmt.Println("IP: ", s)
 
 		database.CloseUnigyDB()
+	case "Zone Data Synch":
+		fmt.Println("Zone Data Synch Clicked")		
+		unigydata.PopulateZoneInfoTable()
+	case "Target Synch":
+		fmt.Println("Zone Data Synch Clicked")		
+		unigydata.IdentifyValidDbEndpoints()
+		
 		
 	}
 }

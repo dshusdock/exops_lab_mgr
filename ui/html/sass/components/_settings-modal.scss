@@ -103,7 +103,7 @@
         display: flex;
       }
 
-      &__test {
+      &__dev {
         display: none;
         flex-direction: column;
 
@@ -128,8 +128,9 @@
         }
       }
 
-      &__unigydb {
+      &__unigy-data-synch {
         display: none;
+        flex-direction: column;
         margin: 1rem;
 
         & input {

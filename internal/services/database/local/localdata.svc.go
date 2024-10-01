@@ -4,6 +4,9 @@ import (
 	"dshusdock/tw_prac1/config"
 	con "dshusdock/tw_prac1/internal/constants"
 	d "dshusdock/tw_prac1/internal/services/database"
+
+	// "dshusdock/tw_prac1/internal/services/database/dbdata"
+	"dshusdock/tw_prac1/internal/services/database/dbdata"
 	q "dshusdock/tw_prac1/internal/services/database/queries"
 	"dshusdock/tw_prac1/internal/services/messagebus"
 	"fmt"
@@ -45,11 +48,10 @@ func (m *LocalDataSvc) ProcessRequest(w http.ResponseWriter, d url.Values) {
 	slog.Info("Processing request", "ID", m.Id)
 }
 
-
-
-
 func GetEnterpriseList() ([]con.RowData, error){
-	return d.ReadDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)	
+	rslt, _ := dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetFieldList("enterprise_unigy")
+
+	return rslt, nil	
 }
 
 func GetUserNames() ([]con.RowData, error){

@@ -90,6 +90,9 @@ func RenderTemplate_new(w http.ResponseWriter, r *http.Request, data any, _type 
 	case constants.RM_CARDS_UNIGY:
 		tmplFiles = ptr.CARDS
 		tmplName = "tmplt_unigy-cards-view"
+	case constants.RM_CARDS_SIDENAV:
+		tmplFiles = ptr.CARDS
+		tmplName = "cards-rightnav-snip"
 	case constants.RM_ACCOUNT_CREATE:
 		tmplFiles = ptr.ACCOUNT_CREATE
 		tmplName = "acct-create-response"

@@ -1,5 +1,7 @@
-{{define "tmplt_unigy-cards-view" }} {{ with.ViewCache.cardsvw }} {{ range.Cards
-}}
+{{define "tmplt_unigy-cards-view" }} 
+{{ with.ViewCache.cardsvw }} 
+{{ range.Cards}}
+{{ if .Display}}
 <div class="cards-container--card">
   {{if .VM}}
   <i class="fa-solid fa-cloud cards-container--card__icon"></i>
@@ -39,6 +41,7 @@
     </table>
   </div>
 </div>
+{{end}}<!-- if -->
 {{end}}<!-- range -->
 {{end}}<!-- with -->
 

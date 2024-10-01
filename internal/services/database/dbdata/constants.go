@@ -10,6 +10,8 @@ const (
 	VIEW_4 = "VIEW_4"
 	VIEW_5 = "VIEW_5"
 	VIEW_6 = "VIEW_6"
+	VIEW_7 = "VIEW_7"
+	VIEW_8 = "VIEW_8"
 )
 
 type viewMap struct {

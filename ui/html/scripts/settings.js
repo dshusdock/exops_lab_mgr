@@ -8,23 +8,23 @@ export default () => ({
       if (text === "General") {
         console.log("General clicked");
         document.getElementsByClassName("page__general")[0].style.display = "flex";
-        document.getElementsByClassName("page__test")[0].style.display = "none";
-        document.getElementsByClassName("page__unigydb")[0].style.display = "none";
+        document.getElementsByClassName("page__dev")[0].style.display = "none";
+        document.getElementsByClassName("page__unigy-data-synch")[0].style.display = "none";
       }
 
-      if (text === "Test") {
-        console.log("Test clicked");      
-        document.getElementsByClassName("page__test")[0].style.display = "flex";
+      if (text === "Dev") {
+        console.log("Dev clicked");      
         document.getElementsByClassName("page__general")[0].style.display = "none";
-        document.getElementsByClassName("page__unigydb")[0].style.display = "none";
+        document.getElementsByClassName("page__dev")[0].style.display = "flex";
+        document.getElementsByClassName("page__unigy-data-synch")[0].style.display = "none";
         
       }
 
-      if (text === "Unigy Database") {
-        console.log("Unigy Database clicked");
-        document.getElementsByClassName("page__unigydb")[0].style.display = "flex";
+      if (text === "Unigy Data Synch") {
+        console.log("Unigy Data Synch clicked");
+        document.getElementsByClassName("page__unigy-data-synch")[0].style.display = "flex";
         document.getElementsByClassName("page__general")[0].style.display = "none";
-        document.getElementsByClassName("page__test")[0].style.display = "none";
+        document.getElementsByClassName("page__dev")[0].style.display = "none";
       }
     },
     onCloseClick(event) {

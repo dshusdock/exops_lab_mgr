@@ -6,6 +6,7 @@ import settings from './settings'
 import sidenav from './sidenav'
 import lstable from './lstable'
 import login from './login'
+import cards from './cards'
 
 Alpine.data('myData', myData)
 Alpine.data('modalData', modalData)
@@ -14,6 +15,7 @@ Alpine.data('settings', settings)
 Alpine.data('sidenav', sidenav)
 Alpine.data('lstable', lstable)
 Alpine.data('login', login)
+Alpine.data('cards', cards)
 
 Alpine.start()
 

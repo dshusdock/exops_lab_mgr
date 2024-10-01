@@ -74,6 +74,7 @@ const (
 	RM_CARDS
 	RM_CARDS_MAX
 	RM_CARDS_UNIGY
+	RM_CARDS_SIDENAV
 )
 
 type RenderedFileMap struct {
@@ -92,6 +93,7 @@ type RenderedFileMap struct {
 	CARDS          []string
 	CARDS_MAX      []string
 	CARDS_UNIGY    []string
+	CARDS_SIDENAV  []string
 }
 
 func RENDERED_FILE_MAP() *RenderedFileMap {
@@ -118,6 +120,7 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 			"./ui/html/pages/partial1.tmpl.html",
 			"./ui/html/pages/cards/cards.tmpl.html",
 			"./ui/html/pages/cards/unigy-cards.tmpl.html",
+			"./ui/html/pages/cards/cards-snippets.tmpl.html",
 		},
 		TABLE_REFRESH: []string{
 			"./ui/html/pages/lstable.tmpl.html",
@@ -149,6 +152,7 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 			"./ui/html/pages/cards/unigy-cards.tmpl.html",
 			"./ui/html/pages/components/turret-card-comp.tmpl.html",
 			"./ui/html/pages/cards/max-cards.tmpl.html",
+			"./ui/html/pages/cards/cards-snippets.tmpl.html",
 		},
 		CARDS_MAX: []string{
 			"./ui/html/pages/cards/cards.tmpl.html",
@@ -157,6 +161,9 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 		},
 		CARDS_UNIGY: []string{
 			"./ui/html/pages/cards/unigy-cards.tmpl.html",
+		},
+		CARDS_SIDENAV: []string{
+			"./ui/html/pages/cards/cards-snippets.tmpl.html",
 		},
 		LOGIN: []string{
 			"./ui/html/pages/login.tmpl.html",

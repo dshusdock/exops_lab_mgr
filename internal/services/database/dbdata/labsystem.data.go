@@ -67,6 +67,8 @@ func init() {
 	LAB_SYSTEM_VIEWS[VIEW_4] = viewMap{`select unique enterprise from LabSystem where role="Unigy"`, reflect.TypeOf(VIEW_OBJ1{})}
 	LAB_SYSTEM_VIEWS[VIEW_5] = viewMap{`select unique swVer from LabSystem`, reflect.TypeOf(VIEW_OBJ3{})}
 	LAB_SYSTEM_VIEWS[VIEW_6] = viewMap{`select * from ZoneInfo where enterprise= `, reflect.TypeOf(VIEW_OBJ2{})}
+	LAB_SYSTEM_VIEWS[VIEW_7] = viewMap{`select unique swVer from LabSystem where role='Unigy'`, reflect.TypeOf(VIEW_OBJ3{})}
+	LAB_SYSTEM_VIEWS[VIEW_8] = viewMap{`select unique swVer from LabSystem where enterprise = `, reflect.TypeOf(VIEW_OBJ3{})}
 
 	
 
@@ -100,12 +102,18 @@ func (m *LabSystemIfc) GetAll() ([]con.RowData, error) {
 
 func (m *LabSystemIfc) GetView(qry string, parms ...string) ([]con.RowData, error){
 	var str string
+	var rslt []con.RowData
+	var err error
+
 	fmt.Println("In GetView: ", qry, len(parms))
 	switch qry {
 	case VIEW_6:
 		str = fmt.Sprintf(LAB_SYSTEM_VIEWS[VIEW_6].View + "\"%s\"", parms[0])
+		rslt, err = d.ReadDBwithType[LocalZoneData](str)
+	case VIEW_8:
+		str = fmt.Sprintf(LAB_SYSTEM_VIEWS[VIEW_8].View + "\"%s\"", parms[0])
+		rslt, err = d.ReadDBwithType[VIEW_OBJ3](str)
 	}
-	rslt, err := d.ReadDBwithType[LocalZoneData](str)
 	if err != nil {
 		return nil, err
 	}
@@ -123,6 +131,8 @@ func (m *LabSystemIfc) GetFieldList(fld string) ([]con.RowData, error){
 		rslt, err = d.ReadDBwithType[VIEW_OBJ1](LAB_SYSTEM_VIEWS["VIEW_1"].View)		
 	case "swversion":
 		rslt, err = d.ReadDBwithType[VIEW_OBJ3](LAB_SYSTEM_VIEWS["VIEW_5"].View)
+	case "swversion_unigy":
+		rslt, err = d.ReadDBwithType[VIEW_OBJ3](LAB_SYSTEM_VIEWS["VIEW_7"].View)
 	case "enterprise_unigy":
 		rslt, err = d.ReadDBwithType[VIEW_OBJ1](LAB_SYSTEM_VIEWS["VIEW_4"].View)
 	}

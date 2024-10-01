@@ -1,0 +1,55 @@
+{{ define "cards-rightnav-snip" }}
+{{ with.ViewCache.cardsvw }}
+<div class="main-cards__right-nav">
+    <div class="main-cards__right-nav-select"
+      hx-post="/element/event/click"
+        hx-swap=innerHTML
+        hx-target=".main-cards__right-nav"  
+        hx-trigger="change"
+        hx-vals='js:{
+          "type": "radio",
+          "label": event.target.id,
+          "view_id": "cardsvw",
+          "view_str": "filter-selector" }'>
+
+      <label class="cr-wrapper">
+        {{ if .Radio1 }}
+        <input id="radio1" name="radio" type="radio" checked="checked"/>
+        {{ else }}
+        <input id="radio1" name="radio" type="radio" />
+        {{ end }}
+
+        <div class="cr-input"></div>
+        <span>Enterprise</span>
+      </label>
+      
+      <label class="cr-wrapper" >
+        {{ if .Radio1 }}
+        <input id="radio2" name="radio" type="radio" />
+        {{ else }}
+        <input id="radio2" name="radio" type="radio" checked="checked"/>
+        {{ end }}
+        <div class="cr-input"></div>
+        <span>Software Version</span>
+      </label>
+
+    </div>
+    <div 
+      class="main-cards__right-nav__cntrl"
+      hx-post="/element/event/click"
+      hx-swap="innerHTML"
+      hx-target=".cards-container"
+      hx-trigger="click"
+      hx-vals='js:{
+      "type": "button",
+      "label": event.target.innerText,
+      "view_id": "cardsvw",
+      "view_str": "filter-selector" }'>
+      {{ range .SidePanelDef}}
+        <button type="button" @click="">{{.Label}}</button>
+      {{end}}
+     
+    </div>
+  </div>
+{{ end }}
+{{ end }}

@@ -75,7 +75,7 @@ func (m *HeaderVw) ProcessClickEvent(w http.ResponseWriter, d  url.Values) {
 	case "upload":
 		render.RenderTemplate_new(w, nil, nil, constants.RM_UPLOAD_MODAL)
 	case "settings":
-		render.RenderTemplate_new(w, nil, nil, constants.RM_SETTINGS_MODAL)
+		render.RenderTemplate_new(w, nil, m.App, constants.RM_SETTINGS_MODAL)
 	case "Table":
 		messagebus.GetBus().Publish("Event:Click", w, d)
 	case "Cards":

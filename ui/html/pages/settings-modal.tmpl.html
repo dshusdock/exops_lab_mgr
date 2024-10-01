@@ -1,117 +1,115 @@
 {{define "settings-modal"}}
 
 <!-- The Modal -->
-<div id="myModal" class="settings-modal"  x-data="settings">
-    <!-- Modal content -->
-    <div class="settings-modal__header">
-      <h2>Settings</h2>   
-      <span class="close" @click="onCloseClick($event)">&times;</span>   
-    </div>
-    <hr>
-    <div class="settings-modal__container">
-      <div class="menu">
-       <ul class="" @click="onMenuClick($event)">
+<div id="myModal" class="settings-modal" x-data="settings">
+  <!-- Modal content -->
+  <div class="settings-modal__header">
+    <h2>Settings</h2>
+    <span class="close" @click="onCloseClick($event)">&times;</span>
+  </div>
+  <hr />
+  <div class="settings-modal__container">
+    <div class="menu">
+      <ul class="" @click="onMenuClick($event)">
         <li>General</li>
-        <li>Test</li>
-        <li>Unigy Database</li>
-        <li>Item 3</li>
-        <li>Item 4</li>
-       </ul>
+        <li>Unigy Data Synch</li>
+        <li>Dev</li>
+      </ul>
+    </div>
+    <div class="page">
+      <div class="page__general">
+        <span>This is the General Page</span>
       </div>
-      <div class="page">
-        <div class="page__test">
-          <div class="container">
-            <button 
-              type="button"
-              hx-get="/test" 
-              hx-swap="none" 
-              hx-trigger="click"
-              hx-target=""
-              hx-vals='{
+      <div style="display: none" class="page__unigy-data-synch"
+        hx-post="/element/event/click"
+        hx-swap="none"
+        hx-target=""
+        hx-trigger="click"
+        hx-vals='js:{
+        "type": "button",
+        "label": event.target.innerText,
+        "view_id": "settingsvw",
+        "view_str": "" }'
+      >
+      {{ with.ViewCache.settingsvw }}
+        <p>Last Synch: {{.LastSynchTIme}}</p>
+      {{end}}
+        <button>Zone Data Synch</button>
+        <button>Target Synch</button>
+      </div>
+      <div class="page__dev">
+        <div class="container">
+          <button
+            type="button"
+            hx-get="/test"
+            hx-swap="none"
+            hx-trigger="click"
+            hx-target=""
+            hx-vals='{
                 "type": "button",
                 "label": "Test Button",
                 "view_id": "settingsvw",
                 "view_str": ""
-              }'>Test Button</button>
-          </div> 
-          <div class="container">
-            <button 
-              type="button"
-              hx-post="/element/event/click" 
-              hx-swap="none" 
-              hx-trigger="click"
-              hx-target=""
-              hx-vals='{
+              }'
+          >
+            Test Button
+          </button>
+        </div>
+        <div class="container">
+          <button
+            type="button"
+            hx-post="/element/event/click"
+            hx-swap="none"
+            hx-trigger="click"
+            hx-target=""
+            hx-vals='{
                 "type": "button",
                 "label": "Test Button2",
                 "view_id": "settingsvw",
                 "view_str": ""
-              }'>Test Button2</button>
-          </div> 
-          <div class="container">
-            <button 
-              type="button"
-              hx-post="/element/event/click" 
-              hx-swap="none" 
-              hx-trigger="click"
-              hx-target=""
-              hx-vals='{
+              }'
+          >
+            Test Button2
+          </button>
+        </div>
+        <div class="container">
+          <button
+            type="button"
+            hx-post="/element/event/click"
+            hx-swap="none"
+            hx-trigger="click"
+            hx-target=""
+            hx-vals='{
                 "type": "button",
                 "label": "Test Button3",
                 "view_id": "settingsvw",
                 "view_str": ""
-              }'>Test Button3</button>
-          </div>     
-          <div class="container">
-            <button 
-              type="button"
-              hx-post="/element/event/click" 
-              hx-swap="none" 
-              hx-trigger="click"
-              hx-target=""
-              hx-vals='{
+              }'
+          >
+            Test Button3
+          </button>
+        </div>
+        <div class="container">
+          <button
+            type="button"
+            hx-post="/element/event/click"
+            hx-swap="none"
+            hx-trigger="click"
+            hx-target="none"
+            hx-vals='{
                 "type": "button",
                 "label": "Test Button4",
                 "view_id": "settingsvw",
                 "view_str": ""
-              }'>Test Button4</button>
-          </div>              
-        </div>
-        <div class="page__unigydb">
-          <form action="/url" method="GET">
-            <p>Enter IP Address of Unigy System:</p>
-            <input type="text" name="ip" placeholder="xxx.xxx.xxx.xxx">
-            <button 
-              type="button"
-              hx-post="/element/event/click" 
-              hx-swap="none" 
-              hx-trigger="click"
-              hx-target=""
-              hx-vals='{
-                "type": "button",
-                "label": "Enter Button",
-                "view_id": "settingsvw",
-                "view_str": ""
-              }'>Enter</button>
-
-              <button 
-              type="button"
-              hx-post="/element/event/click" 
-              hx-swap="none" 
-              hx-trigger="click"
-              hx-target=""
-              hx-vals='{
-                "type": "button",
-                "label": "Close Button",
-                "view_id": "settingsvw",
-                "view_str": ""
-              }'>Close</button>
-          </form>
+              }'
+          >
+            Test Button4
+          </button>
         </div>
       </div>
       
     </div>
-  
+  </div>
 </div>
 
 {{end}}

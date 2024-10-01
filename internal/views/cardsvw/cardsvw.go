@@ -20,9 +20,11 @@ type CardDef struct {
 	Enterprise  string
 	Vip		 	string
 	Name		string
+	SwVer 		[]con.RowData
 	Zones		[]con.ZoneInfo
 	VM     		bool
-	Hardware	bool      
+	Hardware	bool   
+	Display		bool   
 }
 
 type TurretDef struct {
@@ -32,14 +34,25 @@ type TurretDef struct {
 	Label		string
 }
 
+type SidePanelBtn struct {
+	Label string
+}
+
+const ( 
+	ENTERPRISE = iota
+	SWVERSION
+)
+
 type CardsVW struct {
-	App        	*config.AppConfig
-	Id         	string
-	RenderFile 	string
-	ViewFlags  	[]bool
-	Cards       []CardDef
-	Turret		[]TurretDef
-	Htmx       	any
+	App        		*config.AppConfig
+	Id         		string
+	RenderFile 		string
+	ViewFlags  		[]bool
+	Cards       	[]CardDef
+	Turret			[]TurretDef
+	Htmx       		any
+	SidePanelDef 	[]SidePanelBtn
+	Radio1			bool
 }
 
 var AppCardsVW *CardsVW
@@ -54,9 +67,11 @@ func init() {
 		Cards:      []CardDef{},
 		Turret:		 []TurretDef{},
 		Htmx:       nil,
+		SidePanelDef: []SidePanelBtn{},
+		Radio1:     true,
 	}
 
-	messagebus.GetBus().Subscribe("Event:ViewChange", AppCardsVW.ProcessViewChangeRequest)
+	messagebus.GetBus().Subscribe("Event:ViewChange", AppCardsVW.ProcessMBusRequest)
 }
 
 func (m *CardsVW) RegisterView(app config.AppConfig) *CardsVW {
@@ -68,25 +83,49 @@ func (m *CardsVW) RegisterView(app config.AppConfig) *CardsVW {
 func (m *CardsVW) ProcessRequest(w http.ResponseWriter, d url.Values) {
 	var fileMap int16
 	fmt.Println("[AppCardsVW] - Processing request")
-	s := d.Get("label")
-	fmt.Println("Label: ", s)
+	lbl := d.Get("label")
+	_type := d.Get("type")
+	selector := d.Get("view_str")
+	fmt.Println("selector: ", selector)
 
-	switch s {
-	case "upload":
-		
-	case "Max":
-		m.LoadTurretData("max")
-		fileMap = con.RM_CARDS_MAX
-	case "Unigy":
-		fileMap = con.RM_CARDS_UNIGY	
-	case "Touch":
-		fileMap = con.RM_CARDS_MAX
-		m.LoadTurretData("mercury")		
+	if selector == "device-selector" {
+		switch _type {
+		case "button":
+			switch lbl {
+			case "upload":
+			case "Max":
+				m.LoadTurretData("max")
+				fileMap = con.RM_CARDS_MAX
+			case "Unigy":
+				AppCardsVW.LoadCardData()
+				fileMap = con.RM_CARDS_UNIGY	
+			case "Touch":
+				fileMap = con.RM_CARDS_MAX
+				m.LoadTurretData("mercury")		
+			}
+			render.RenderTemplate_new(w, nil, m.App, fileMap)
+		}
+	} else {
+		switch _type {
+		case "button":
+			m.FilterView(lbl)
+			render.RenderTemplate_new(w, nil, m.App, con.RM_CARDS_UNIGY)
+		case "radio":
+			fmt.Println("Radio button selected")
+			fileMap = con.RM_CARDS_SIDENAV
+			if lbl == "radio1" {
+				AppCardsVW.UpdateSidePanel(ENTERPRISE)
+				m.Radio1 = true
+			} else {
+				AppCardsVW.UpdateSidePanel(SWVERSION)		
+				m.Radio1 = false	
+			}
+			render.RenderTemplate_new(w, nil, m.App, fileMap)
+		}
 	}
-	render.RenderTemplate_new(w, nil, m.App, fileMap)
 }
 
-func (m *CardsVW) ProcessViewChangeRequest(w http.ResponseWriter, d url.Values) {
+func (m *CardsVW) ProcessMBusRequest(w http.ResponseWriter, d url.Values) {
 	slog.Info("[ProcessViewChangeRequest", "ID", m.Id)
 	s := d.Get("label")
 	slog.Info("Target - ", "Label", s)
@@ -95,6 +134,7 @@ func (m *CardsVW) ProcessViewChangeRequest(w http.ResponseWriter, d url.Values) 
 	m.App.Cards = true
 
 	AppCardsVW.LoadCardData()
+	AppCardsVW.UpdateSidePanel(ENTERPRISE)
 	render.RenderTemplate_new(w, nil, m.App, con.RM_CARDS)
 }
 
@@ -108,6 +148,7 @@ func (m *CardsVW) LoadCardData() error{
 	for _, result := range rslt {				
 		p := CardDef{}
 		p.Enterprise = result.Data[0]
+		p.Display = true
 		m.Cards = append(m.Cards, p)
 	}	
 	
@@ -127,6 +168,9 @@ func (m *CardsVW) LoadCardData() error{
 		} else {
 			m.Cards[x].Hardware = true
 		}
+
+		m.Cards[x].SwVer, _ = dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetView(dbdata.VIEW_8, m.Cards[x].Enterprise)
+
 		LoadZoneData(&m.Cards[x])	
 	}
 	return nil
@@ -181,10 +225,28 @@ func (m *CardsVW) LoadTurretData(t string) error{
 			p.Label = t
 			m.Turret = append(m.Turret, p)
 		}
-		
 	}	
-	
 	return nil
+}
+
+func (m *CardsVW) UpdateSidePanel(viewType int) {
+	m.SidePanelDef = []SidePanelBtn{}
+	if viewType == ENTERPRISE {
+		rsltb, _ := dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetFieldList("enterprise_unigy")
+		for _, result := range rsltb {
+			p := SidePanelBtn{}
+			p.Label = result.Data[0]
+			m.SidePanelDef = append(m.SidePanelDef, p)
+		}
+	} else {
+		rslta, _ := dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetFieldList("swversion_unigy")
+		for _, result := range rslta {
+			p := SidePanelBtn{}
+			p.Label = result.Data[0]
+			m.SidePanelDef = append(m.SidePanelDef, p)
+		}
+	}
+
 }
 
 func checkServerType(ent string) (string, error){
@@ -214,37 +276,24 @@ func checkServerType(ent string) (string, error){
 	}
 }
 
+func (m *CardsVW) FilterView(lbl string) {
+	fmt.Println("FilterView: ", lbl)
 
-// func (m *CardsVW) LoadTurretData() error{
-// 	slog.Info("In LoadTurretData...")
-// 	m.Cards = []CardDef{}
-	
-// 	// rslt, err := d.ReadDBwithType[q.TBL_EnterpriseList](q.SQL_QUERIES_LOCAL["QUERY_5"].Qry)
-// 	rslt, _ := dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetFieldList("enterprise_unigy")
-
-// 	for _, result := range rslt {				
-// 		p := CardDef{}
-// 		p.Enterprise = result.Data[0]
-// 		m.Cards = append(m.Cards, p)
-// 	}	
-	
-// 	// Range over list of CardDefs and load the data for each
-// 	for x:=0; x<len(m.Cards); x++ {
-// 		// Check for VM, Hardware, or Mixed server types
-// 		r, err := checkServerType(m.Cards[x].Enterprise)
-// 		if err != nil {
-// 			fmt.Println("Error in LoadCardData: ", err)
-// 			return err
-// 		}
-// 		if r == "mixed" {
-// 			m.Cards[x].VM = true
-// 			m.Cards[x].Hardware = true
-// 		} else if r == "vm" {
-// 			m.Cards[x].VM = true
-// 		} else {
-// 			m.Cards[x].Hardware = true
-// 		}
-// 		LoadZoneData(&m.Cards[x])	
-// 	}
-// 	return nil
-// }
+	if m.Radio1 {
+		for i:=0; i<len(m.Cards); i++ {
+			if m.Cards[i].Enterprise == lbl {				
+				m.Cards[i].Display = true
+			} else {
+				m.Cards[i].Display = false
+			}
+		}
+	} else {
+		for i:=0; i<len(m.Cards); i++ {
+			if m.Cards[i].SwVer[0].Data[0] == lbl {				
+				m.Cards[i].Display = true
+			} else {
+				m.Cards[i].Display = false
+			}
+		}
+	}
+}

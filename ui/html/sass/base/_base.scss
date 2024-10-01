@@ -10,14 +10,16 @@
 html {
   // This defines what 1 rem is.
   font-size: 62.5%;
+  min-height: 100%;
 }
 
 body {
   box-sizing: border-box;
   background-color: #376ba0;
-  // overflow: hidden;
-  height: 100%;
-  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  // height: 100%;
+  // width: 100%;
   // background-image: url('/html/dist/datacenter_img.jpg');
   // background-image: url("/html/dist/dc3_opac1.png");
   // //background-image: none;
@@ -27,7 +29,6 @@ body {
 
   // // opacity: 0.9;
   // background-size: cover;
-    overflow: hidden;
   
   }
 
