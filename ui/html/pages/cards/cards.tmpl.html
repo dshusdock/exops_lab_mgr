@@ -1,6 +1,6 @@
 {{define "cardsvw" }}
-<div class="main-cards">
-  <div class="select-ctnr">
+<div class="main-cards" x-data="cards">
+  <div class="select-ctnr" @click="onClick($event)">
     <div
       class="select-ctnr__cntrl"
       hx-post="/element/event/click"

@@ -6,6 +6,7 @@ import (
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/database"
+	"dshusdock/tw_prac1/internal/services/database/dbdata"
 	"dshusdock/tw_prac1/internal/services/unigy/unigydata"
 	"time"
 
@@ -107,8 +108,12 @@ func (m *SettingsVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
 	case "Target Synch":
 		fmt.Println("Zone Data Synch Clicked")		
 		unigydata.IdentifyValidDbEndpoints()
-		
-		
+	case "Device Synch":
+		fmt.Println("Device Synch Clicked")
+		ent, _ := dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetFieldList("enterprise")
+		for _, el := range ent {
+			unigydata.PopulateDeviceTableByEnterprise(el.Data[0])
+		}				
 	}
 }
 

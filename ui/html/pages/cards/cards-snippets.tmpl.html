@@ -13,7 +13,7 @@
           "view_str": "filter-selector" }'>
 
       <label class="cr-wrapper">
-        {{ if .Radio1 }}
+        {{ if .EnterpriseVw }}
         <input id="radio1" name="radio" type="radio" checked="checked"/>
         {{ else }}
         <input id="radio1" name="radio" type="radio" />
@@ -24,7 +24,7 @@
       </label>
       
       <label class="cr-wrapper" >
-        {{ if .Radio1 }}
+        {{ if .EnterpriseVw }}
         <input id="radio2" name="radio" type="radio" />
         {{ else }}
         <input id="radio2" name="radio" type="radio" checked="checked"/>
@@ -46,7 +46,7 @@
       "view_id": "cardsvw",
       "view_str": "filter-selector" }'>
       {{ range .SidePanelDef}}
-        <button type="button" @click="">{{.Label}}</button>
+        <button type="button" @click="onClick2($event)">{{.Label}}</button>
       {{end}}
      
     </div>

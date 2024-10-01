@@ -69,8 +69,7 @@ func init() {
 	LAB_SYSTEM_VIEWS[VIEW_6] = viewMap{`select * from ZoneInfo where enterprise= `, reflect.TypeOf(VIEW_OBJ2{})}
 	LAB_SYSTEM_VIEWS[VIEW_7] = viewMap{`select unique swVer from LabSystem where role='Unigy'`, reflect.TypeOf(VIEW_OBJ3{})}
 	LAB_SYSTEM_VIEWS[VIEW_8] = viewMap{`select unique swVer from LabSystem where enterprise = `, reflect.TypeOf(VIEW_OBJ3{})}
-
-	
+	LAB_SYSTEM_VIEWS[VIEW_9] = viewMap{`select enterprise from LabSystem where swVer = `, reflect.TypeOf(VIEW_OBJ1{})}
 
 	HdrDef = []con.HeaderDef{
 		{Header: "CAB", Width: "width: 60px"}, 
@@ -112,8 +111,11 @@ func (m *LabSystemIfc) GetView(qry string, parms ...string) ([]con.RowData, erro
 		rslt, err = d.ReadDBwithType[LocalZoneData](str)
 	case VIEW_8:
 		str = fmt.Sprintf(LAB_SYSTEM_VIEWS[VIEW_8].View + "\"%s\"", parms[0])
-		rslt, err = d.ReadDBwithType[VIEW_OBJ3](str)
-	}
+		rslt, err = d.ReadDBwithType[VIEW_OBJ3](str)	
+	case VIEW_9:
+		str = fmt.Sprintf(LAB_SYSTEM_VIEWS[VIEW_9].View + "\"%s\"", parms[0])
+		rslt, err = d.ReadDBwithType[VIEW_OBJ1](str)
+	}	
 	if err != nil {
 		return nil, err
 	}

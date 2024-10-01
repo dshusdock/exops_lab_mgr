@@ -43,7 +43,7 @@ func RenderModal(w http.ResponseWriter, r *http.Request, d any) {
 }
 
 // RenderTemplate renders a template
-func RenderTemplate_new(w http.ResponseWriter, r *http.Request, data any, _type int16) {
+func RenderTemplate_new(w http.ResponseWriter, r *http.Request, data any, _type int) {
 	ptr := constants.RENDERED_FILE_MAP()
 	fmt.Println("Type: ", _type)
 

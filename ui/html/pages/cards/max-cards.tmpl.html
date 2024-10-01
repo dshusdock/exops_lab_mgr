@@ -2,26 +2,13 @@
 <div class="max_cards">
   {{ with.ViewCache.cardsvw }}
   {{ range .Turret}}
-    {{ template "turret-card-comp" .}}
+    {{ if .Display}}
+      {{ template "turret-card-comp" .}}
+    {{end}}
   {{end}}
-
   {{end}}
 </div>
 {{end}} <!-- def -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

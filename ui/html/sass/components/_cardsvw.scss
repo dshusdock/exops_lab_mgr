@@ -96,6 +96,10 @@
     & button:hover {
       outline: 1px solid black;
     }
+
+    & button:focus {
+      background-color: #40A9BF;
+    }
   }
 }
 
@@ -174,6 +178,9 @@
     color: white;
   }
 }
+
+
+
 
 ///////////////////////////////////
 /// 
