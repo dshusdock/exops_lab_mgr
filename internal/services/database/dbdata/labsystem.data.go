@@ -69,7 +69,7 @@ func init() {
 	LAB_SYSTEM_VIEWS[VIEW_6] = viewMap{`select * from ZoneInfo where enterprise= `, reflect.TypeOf(VIEW_OBJ2{})}
 	LAB_SYSTEM_VIEWS[VIEW_7] = viewMap{`select unique swVer from LabSystem where role='Unigy'`, reflect.TypeOf(VIEW_OBJ3{})}
 	LAB_SYSTEM_VIEWS[VIEW_8] = viewMap{`select unique swVer from LabSystem where enterprise = `, reflect.TypeOf(VIEW_OBJ3{})}
-	LAB_SYSTEM_VIEWS[VIEW_9] = viewMap{`select enterprise from LabSystem where swVer = `, reflect.TypeOf(VIEW_OBJ1{})}
+	LAB_SYSTEM_VIEWS[VIEW_9] = viewMap{`select unique enterprise from LabSystem where swVer = `, reflect.TypeOf(VIEW_OBJ1{})}
 
 	HdrDef = []con.HeaderDef{
 		{Header: "CAB", Width: "width: 60px"}, 

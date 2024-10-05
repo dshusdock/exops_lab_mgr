@@ -19,7 +19,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"net/url"
+
+	// "net/url"
 
 	"golang.org/x/net/html"
 )
@@ -58,8 +59,19 @@ func (m *SettingsVw) RegisterView(app config.AppConfig) *SettingsVw{
 	return AppSettingsVw
 }
 
-func (m *SettingsVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
+func (m *SettingsVw) ProcessRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("[settingsvw] - Processing request")
+
+	val := m.App.SessionManager.Get(r.Context(), "LoggedIn")
+	if val != true {
+		// m.App.LoggedIn = false
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	} else {
+		// m.App.LoggedIn = true
+	}
+
+	d := r.PostForm
 	s := d.Get("label")
 	fmt.Println("Label: ", s)
 
@@ -74,7 +86,8 @@ func (m *SettingsVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
 		// datetime.Prac3()
 
 		// htmlParser()
-		unigydata.IdentifyValidDbEndpoints()
+		// unigydata.IdentifyValidDbEndpoints()
+		m.App.SessionManager.Put(r.Context(), "btnpressed", "truedat")
 	
 	case "Test Button2":
 		fmt.Println("Test Button2 Clicked")
@@ -87,9 +100,10 @@ func (m *SettingsVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
 		// token.TestEncrypt2()
 		unigydata.PopulateDeviceTableByEnterprise("Dopey")
 	case "Test Button4":
-		fmt.Println("Test Button3 Clicked")
+		fmt.Println("Test Button4 Clicked")
 		// token.TestDecrypt2()
-	
+		x := m.App.SessionManager.Get(r.Context(), "btnpressed")
+		fmt.Println("Button Pressed: ", x)
 	case "Enter Button":
 		fmt.Println("Enter Button Clicked")
 		s := d.Get("ip")

@@ -4,16 +4,13 @@ import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/handlers"
-	d "dshusdock/tw_prac1/internal/services/database"
-
-	// "dshusdock/tw_prac1/internal/views/cardsvw"
-
 	"log"
 	"log/slog"
 	"net/http"
-)
+	"time"
 
-// AppConfig holds the application config
+	"github.com/alexedwards/scs/v2"
+)
 
 const portNumber = ":8084"
 const secPortNumber = ":8443"
@@ -21,28 +18,39 @@ const secPortNumber = ":8443"
 var app config.AppConfig
 
 func main() {
+	app = config.AppConfig{}
+
 	app.InProduction = false
 	app.SideNav = false
 	app.MainTable = false
 	app.ViewCache = make(map[string]constants.ViewInteface)
-	app.LoggedIn = false
-	app.DisplayLogin = true
-
 	repo := handlers.NewRepo(&app)
 	handlers.NewHandlers(repo)
 
-	var programLevel = new(slog.LevelVar) // Info by default
+	// Session Manager
+	app.SessionManager = scs.New()
+	app.SessionManager.Lifetime = 3 * time.Hour
+	app.SessionManager.IdleTimeout = 20 * time.Minute
+	app.SessionManager.Cookie.Name = "session_id"
+	app.SessionManager.Cookie.Domain = "10.205.185.154"
+	app.SessionManager.Cookie.HttpOnly = true
+	// app.SessionManager.Cookie.Path = "/exops/"
+	app.SessionManager.Cookie.Persist = true
+	// app.SessionManager.Cookie.SameSite = http.SameSiteStrictMode
+	app.SessionManager.Cookie.Secure = true
+
+	// Logging - Info by default
+	var programLevel = new(slog.LevelVar)
 	programLevel.Set(slog.LevelDebug)
 
 	initRouteHandlers()
-	// initApp()
 
 	// slog.Info("Starting application -", "Port", portNumber)
 	slog.Info("Starting application -", "Port", secPortNumber)
 	srv := &http.Server{
 		// Addr:    portNumber,
 		Addr:    secPortNumber,
-		Handler: routes(&app),
+		Handler: app.SessionManager.LoadAndSave(routes(&app)),
 	}
 
 	// err := srv.ListenAndServe()
@@ -50,12 +58,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func initApp() {
-	// init the app
-	d.ConnectLocalDB("127.0.0.1")
-
-	// sidenav.AppSideNav.LoadDropdownData()
-	//cardsvw.AppCardsVW.LoadCardDefData()
 }

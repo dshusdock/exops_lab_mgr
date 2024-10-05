@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
-	"net/url"
+	// "net/url"
 )
 
 type UnigyDataSvc struct {
@@ -43,7 +43,7 @@ func (m *UnigyDataSvc) ProcessMBusRequest() {
 	slog.Info("Processing MBus Request")
 }
 
-func (m *UnigyDataSvc) ProcessRequest(w http.ResponseWriter, d url.Values) {
+func (m *UnigyDataSvc) ProcessRequest(w http.ResponseWriter, r *http.Request) {
 	slog.Info("Processing request", "ID", m.Id)
 }
 

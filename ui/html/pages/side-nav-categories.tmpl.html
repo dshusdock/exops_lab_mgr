@@ -23,7 +23,9 @@
       "type": "caret",
       "label": "{{.Lbl}}",
       "view_id": "sidenav",
-      "view_str": "{{.ID}}" }'
+      "view_str": "{{.ID}}",
+      test: Alpine.store("data_store")()
+      }'
     >
       <p>{{.Lbl}}</p>
       <i id="" class="{{.Class}}"></i>

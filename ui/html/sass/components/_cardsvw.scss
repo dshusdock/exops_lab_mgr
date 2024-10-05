@@ -14,7 +14,7 @@
     top: 20px;
    
     margin-top: 2rem;
-    width: 25rem;
+    width: 27rem;
     background: $color-secondary-dark;
     height: 60rem;
     
@@ -22,7 +22,9 @@
     box-shadow: 0 1rem 2rem rgba(black, 0.2);
     font-size: 1.7rem;
     font-family: sans-serif;
-    transition: display 1s ease-in;
+    // transition: display 1s ease-in;
+    overflow-y: auto;
+
   }
 
   &__right-nav-select {

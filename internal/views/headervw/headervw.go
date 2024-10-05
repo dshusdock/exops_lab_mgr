@@ -50,9 +50,9 @@ func (m *HeaderVw) RegisterView(app config.AppConfig) *HeaderVw {
 	return AppHeaderVw
 }
 
-func (m *HeaderVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
-
+func (m *HeaderVw) ProcessRequest(w http.ResponseWriter, r *http.Request) {
 	slog.Info("Processing request", "ID", m.Id)
+	d := r.PostForm
 	s := d.Get("label")
 	slog.Info("Incoming: ", "Label", s)
 

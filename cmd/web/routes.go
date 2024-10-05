@@ -4,8 +4,6 @@ import (
 	"context"
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/handlers"
-
-	// "dshusdock/tw_prac1/internal/services/token"
 	"dshusdock/tw_prac1/internal/services/jwtauthsvc"
 	"dshusdock/tw_prac1/internal/services/unigy/unigydata"
 	"dshusdock/tw_prac1/internal/services/unigy/unigystatus"
@@ -16,17 +14,12 @@ import (
 	"dshusdock/tw_prac1/internal/views/login"
 	"dshusdock/tw_prac1/internal/views/settingsvw"
 	"dshusdock/tw_prac1/internal/views/sidenav"
-
-	// "time"
-
 	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
-	// "github.com/go-chi/jwtauth"
 	"github.com/go-chi/jwtauth/v5"
-	// "github.com/lestrrat-go/jwx/v2/jwt"
 )
 
 func initRouteHandlers() {
@@ -42,7 +35,6 @@ func initRouteHandlers() {
 	// Register the services
 	app.ViewCache["unigystatus"] = unigystatus.AppStatusSvc.RegisterService(app)
 	app.ViewCache["unigydata"] = unigydata.AppUnigyDataSvc.RegisterService(app)
-
 }
 
 func routes(app *config.AppConfig) http.Handler {
@@ -52,31 +44,24 @@ func routes(app *config.AppConfig) http.Handler {
 	
 	// Protecting the routes
 	mux.Group(func(r chi.Router) {
-		// r.Use(MyMiddleware)
-		
+		// r.Use(MyMiddleware)		
 		r.Use(jwtauth.Verifier(jwtauthsvc.GetToken()))
 		r.Use(jwtauth.Authenticator(jwtauthsvc.GetToken()))
-		r.Get("/test", handlers.Repo.Test)
-
+		
 		r.Post("/logoff", handlers.Repo.Logoff)
+		r.Post("/create-account-request", handlers.Repo.CreateAccount)
+		r.Post("/create-account", handlers.Repo.CreateAccount)
 		r.Post("/request/status", handlers.Repo.StatusInfo)
 		r.Post("/upload", handlers.Repo.Upload)
 		r.Post("/element/event/click", handlers.Repo.HandleClickEvents)
 		r.Post("/element/event/search", handlers.Repo.HandleSearchEvents)
+
+		r.Get("/test", handlers.Repo.Test)
 	})
-	
-	// mux.Mount("/debug", middleware.Profiler())
-
-	mux.Get("/test2", handlers.Repo.Test2)	
-
+	// Unprotected routes
 	mux.Get("/", handlers.Repo.Login)
 	mux.Post("/login", handlers.Repo.Login)
-	
-	// mux.Post("/logoff", handlers.Repo.Logoff)
-	// mux.Post("/request/status", handlers.Repo.StatusInfo)
-	// mux.Post("/upload", handlers.Repo.Upload)
-	// mux.Post("/element/event/click", handlers.Repo.HandleClickEvents)
-	// mux.Post("/element/event/search", handlers.Repo.HandleSearchEvents)
+	mux.Get("/test2", handlers.Repo.Test2)	
 
 	fileServer := http.FileServer(http.Dir("./ui/html/"))
 	mux.Handle("/html/*", http.StripPrefix("/html", fileServer))
@@ -85,25 +70,6 @@ func routes(app *config.AppConfig) http.Handler {
 }
 
 ////////////////////////////////////////////////////////////////////////////
-
-func ProtectedHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	tokenString := r.Header.Get("Authorization")
-	if tokenString == "" {
-	  w.WriteHeader(http.StatusUnauthorized)
-	  fmt.Fprint(w, "Missing authorization header")
-	  return
-	}
-	tokenString = tokenString[len("Bearer "):]
-	
-	err := jwtauthsvc.VerifyToken(tokenString)
-	if err != nil {
-	  w.WriteHeader(http.StatusUnauthorized)
-	  fmt.Fprint(w, "Invalid token")
-	  return
-	}	
-	fmt.Fprint(w, "Welcome to the the protected area")	
-}
 
 // Trying some of chi's middlewares
 // HTTP middleware setting a value on the request context

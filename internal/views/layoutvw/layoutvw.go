@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"net/url"
+	// "net/url"
 )
 
 type AppLytVwData struct {
@@ -42,7 +42,7 @@ func (m *LayoutVw) RegisterView(app config.AppConfig) *LayoutVw{
 	return AppLayoutVw
 }
 
-func (m *LayoutVw) ProcessRequest(w http.ResponseWriter, d url.Values) {
+func (m *LayoutVw) ProcessRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("[lyoutvw] - Processing request")
 	render.RenderModal(w, nil, nil)
 }

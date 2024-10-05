@@ -2,7 +2,7 @@ package constants
 
 import (
 	"net/http"
-	"net/url"
+	// "net/url"
 )
 
 const TESTTHIS = "testthis"
@@ -42,8 +42,11 @@ type SubElement struct {
 }
 
 type ViewInteface interface {
-	ProcessRequest(w http.ResponseWriter, d url.Values /*ViewInfo*/)
+	// ProcessRequest(w http.ResponseWriter, d url.Values /*ViewInfo*/)
+	ProcessRequest(w http.ResponseWriter, r *http.Request)
 }
+
+
 
 type ViewInfo struct {
 	Event   int

@@ -95,22 +95,24 @@ func (m *CardsVW) ProcessMBusRequest(w http.ResponseWriter, d url.Values) {
 	
 	m.App.MainTable = false
 	m.App.Cards = true
+	m.EnterpriseVw = true
 
 	AppCardsVW.LoadCardData()
 	AppCardsVW.UpdateSidePanel(ENTERPRISE)
 	render.RenderTemplate_new(w, nil, m.App, con.RM_CARDS)
 }
 
-
-func (m *CardsVW) ProcessRequest(w http.ResponseWriter, d url.Values) {
-	var fileIdx int
+func (m *CardsVW) ProcessRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("[AppCardsVW] - Processing request")
+	var fileIdx int
+	d := r.PostForm
 	lbl := d.Get("label")
 	_type := d.Get("type")
 	selector := d.Get("view_str")
 	fmt.Println("selector: ", selector)
 
 	if selector == "device-selector" {
+		// m.EnterpriseVw = true
 		switch _type {
 		case "button":			
 			ret := m.handleSelectedDevice(lbl)
@@ -126,11 +128,13 @@ func (m *CardsVW) ProcessRequest(w http.ResponseWriter, d url.Values) {
 
 			fileIdx = con.RM_CARDS_SIDENAV
 			if lbl == "EnterpriseVw" {
-				AppCardsVW.UpdateSidePanel(ENTERPRISE)
 				m.EnterpriseVw = true
+				AppCardsVW.UpdateSidePanel(ENTERPRISE)
+				
 			} else {
-				AppCardsVW.UpdateSidePanel(SWVERSION)		
 				m.EnterpriseVw = false	
+				AppCardsVW.UpdateSidePanel(SWVERSION)		
+				
 			}
 			render.RenderTemplate_new(w, nil, m.App, fileIdx)
 		}
@@ -186,14 +190,17 @@ func (m *CardsVW) handleSelectedFilter(lbl string) int {
 		if m.SelectedDevice == "Max" || m.SelectedDevice == "Touch" {
 			fileIdx = con.RM_CARDS_MAX
 
+			// Get the enterprise for the selected SW version
 			ent, _ := dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetView(dbdata.VIEW_9, lbl)
-			for i := range m.Turret {
-				if m.Turret[i].Enterprise == ent[0].Data[0] {
-					m.Turret[i].Display = true
-				} else {
-					m.Turret[i].Display = false
+			for _, result := range ent {
+				for i := range m.Turret {
+					if m.Turret[i].Enterprise == result.Data[0] {
+						m.Turret[i].Display = true
+					} else {
+						m.Turret[i].Display = false
+					}
 				}
-			}
+			}	
 		} else {
 			fileIdx = con.RM_CARDS_UNIGY
 			for i, _ := range m.Cards {

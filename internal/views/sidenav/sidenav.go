@@ -1,10 +1,14 @@
 package sidenav
 
 import (
+	"math/rand"
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/constants"
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
+
+	// "encoding/gob"
+
 	// db "dshusdock/tw_prac1/internal/services/database"
 	"dshusdock/tw_prac1/internal/services/database/dbdata"
 	// q "dshusdock/tw_prac1/internal/services/database/queries"
@@ -14,6 +18,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	// "github.com/google/uuid"
 )
 
 type SideNavVwData struct {
@@ -41,23 +46,34 @@ type SideNav struct {
 	RenderFile 	string
 	ViewFlags  	[]bool
 	SearchInput string
+	Counter     int
 	Data       	[]SideNavVwData
-	RepoDlg    	[]string
-	DBList     	[]string
-	Htmx       	[]con.HtmxInfo
+	// RepoDlg    	[]string
+	// DBList     	[]string
+	// Htmx       	[]con.HtmxInfo
 }
 
 var AppSideNav *SideNav
+var Count int
 
 func init() {
-	pa := SIDE_NAV_BTN_LBL()
-	// pb := SYS_SUB_BTN_LBL()
+	// gob.Register(SideNav{})
+	obj := NewAppSideNav()
+	AppSideNav = &obj
+	fmt.Println("AppSideNav initialized")
+}
 
-	AppSideNav = &SideNav{
+func NewAppSideNav() SideNav{
+	pa := SIDE_NAV_BTN_LBL()
+
+	newCount := rand.Intn(1000)
+
+	/*AppSideNav = */  return SideNav{
 		Id:         "sidenav",
 		RenderFile: "side-nav-categories",
 		ViewFlags:  []bool{true, true},
 		SearchInput: "",
+		Counter:   newCount,
 		Data: []SideNavVwData{
 			{
 				Type:    "caret",
@@ -108,15 +124,28 @@ func (m *SideNav) RegisterView(app config.AppConfig) *SideNav {
 	return AppSideNav
 }
 
-func (m *SideNav) ProcessRequest(w http.ResponseWriter, d url.Values) {
+var sideNavPtr *SideNav
+
+func (m *SideNav) ProcessRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("[SideNav] Process Request")
+
+	d := r.PostForm
 	s := d.Get("event")
+
+	rslt := m.App.SessionManager.Exists(r.Context(), "SessionId")
+	if !rslt {
+		fmt.Println("Session does not exist")
+		m.App.SessionManager.Put(r.Context(), "SessionId", "1234")
+		obj := NewAppSideNav()
+		sideNavPtr = &obj
+	}
+
 
 	switch s {
 	case con.EVENT_CLICK:
-		m.processClickEvent(w, d)
+		sideNavPtr.processClickEvent(w, d)
 	case con.EVENT_SEARCH:
-		m.processSearchEvent(w, d)	
+		sideNavPtr.processSearchEvent(w, d)	
 	}
 }
 
@@ -194,13 +223,11 @@ func getListFromId(id string, lbl string) string {
 func (m *SideNav) toggleCaret(x int) {
 
 	for count := 0; count < len(m.Data); count++ {
-		fmt.Printf("Count: %d  x: %d\n", count, x)
 		if count != x {			
-			fmt.Print("Setting to rotate_back\n")
+			// Setting to rotate_back
 			m.Data[count].Class = "fa fa-chevron-right rotate_back"
 			m.Data[count].Caret = false			
 		} else {
-
 			if !m.Data[count].Caret {
 				m.Data[count].Class = "fa fa-chevron-right rotate_fwd"
 				m.Data[count].Caret = true

@@ -5,7 +5,7 @@ import (
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/handlers/upload"
 	"dshusdock/tw_prac1/internal/render"
-	am "dshusdock/tw_prac1/internal/services/account_mgmt"
+	// am "dshusdock/tw_prac1/internal/services/account_mgmt"
 	"dshusdock/tw_prac1/internal/services/messagebus"
 	"dshusdock/tw_prac1/internal/services/jwtauthsvc"
 	"encoding/json"
@@ -25,25 +25,64 @@ type Repository struct {
 }
 
 // http.ResponseWriter, r *http.Request NewRepo creates a new repository
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(app *config.AppConfig) *Repository {
 	return &Repository{
-		App: a,
+		App: app,
 	}
 }
+
 // NewHandlers sets the repository for the handlers
 func NewHandlers(r *Repository) {
 	Repo = r
 }
 
-func init() {
-	fmt.Println("Initializing handlers")
-}	
+func GetAppTemplateParamsObj() config.AppTemplateparams{
+	return config.AppTemplateparams{
+		LoggedIn: false,
+		DisplayLogin: true,
+		DisplayCreateAccount: false,
+		DisplayCreatAcctResponse: false,
+		SideNav: false,
+		MainTable: false,
+		Cards: false,
+	}
+}
+
+func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Login Handler PATH-", r.URL.Path)
+	ptr := m.App.ViewCache["loginvw"]
+	ptr.ProcessRequest(w, r)	
+}
+
+func (m *Repository) Logoff(w http.ResponseWriter, r *http.Request) {
+	ptr := m.App.ViewCache["loginvw"]
+	ptr.ProcessRequest(w, r)	
+	// render.RenderTemplate_new(w, r, m.App, con.RM_HOME)
+}
+
+func (m *Repository) CreateAccount(w http.ResponseWriter, r *http.Request) {
+	ptr := m.App.ViewCache["loginvw"]
+	ptr.ProcessRequest(w, r)	
+	// render.RenderTemplate_new(w, r, m.App, con.RM_HOME)
+}
+
+
 
 /**
  * 	HandleClickEvents
  */
 func (m *Repository) HandleClickEvents(w http.ResponseWriter, r *http.Request) {
+	val := m.App.SessionManager.Get(r.Context(), "LoggedIn")
+	fmt.Println("Logged in - ", val)
 
+	if val != true {
+		// m.App.LoggedIn = false
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	} else {
+		// m.App.LoggedIn = true
+	}
+	
 	err := r.ParseForm()
 	if err != nil {
 		log.Fatal(err)
@@ -57,18 +96,22 @@ func (m *Repository) HandleClickEvents(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// messagebus.GetBus().Publish("Event:Click", w, data)
-	// messagebus.GetBus().Publish("Event:Change")
-
-	// route request to appropriate handler
 	ptr := m.App.ViewCache[v_id]
-	ptr.ProcessRequest(w, data)
-
-	
+	ptr.ProcessRequest(w, r)	
 }
 
 func (m *Repository) HandleSearchEvents(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Handling Search Events")
+	val := m.App.SessionManager.Get(r.Context(), "LoggedIn")
+	fmt.Println("Logged in - ", val)
+
+	if val != true {
+		// m.App.LoggedIn = false
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	} else {
+		// m.App.LoggedIn = true
+	}
 
 	err := r.ParseForm()
 	if err != nil {
@@ -83,55 +126,31 @@ func (m *Repository) HandleSearchEvents(w http.ResponseWriter, r *http.Request) 
 		return 
 	}
 
-	fmt.Println("View ID - ", v_id)
-
-	// messagebus.GetBus().Publish("Event:Search", w, data)
-
 	// route request to appropriate handler
 	ptr := m.App.ViewCache[v_id]
-	ptr.ProcessRequest(w, data)
+	ptr.ProcessRequest(w, r)
 	
 }
+
+
+///////////////////////////////////////////////////////////////////
 
 /**
  * 	Home is the handler for the home page
  */
-func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	m.App.LoggedIn = true
+ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
+	val := m.App.SessionManager.Get(r.Context(), "LoggedIn")
+	fmt.Println("Logged in - ", val)
+
+	if val != true {
+		// m.App.LoggedIn = false
+		return
+	} else {
+		// m.App.LoggedIn = true
+	}
 	render.RenderTemplate_new(w, r, m.App, con.RM_HOME)
 }
 
-func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		log.Fatal(err)
-	}
-	d := r.PostForm
-	// Check the username and password
-	if am.ValidateUser(d.Get("username"), d.Get("password")) {
-		fmt.Println("User is valid")
-		m.App.LoggedIn = true
-
-		token, _ := jwtauthsvc.CreateToken(d.Get("username"))
-
-		fmt.Println("Token - ", token)
-
-		http.SetCookie(w, &http.Cookie{
-			HttpOnly: true,
-			Expires: time.Now().Add(7 * 24 * time.Hour),
-			SameSite: http.SameSiteLaxMode,
-			// Uncomment below for HTTPS:
-			// Secure: true,
-			Name:  "jwt", // Must be named "jwt" or else the token cannot be searched for by jwtauth.Verifier.
-			Value: token,
-		})
-
-		render.RenderTemplate_new(w, r, m.App, con.RM_HOME)	
-		return
-	}
-	
-	render.RenderTemplate_new(w, r, m.App, con.RM_LOGIN)
-}
 
 func (m *Repository) Test(w http.ResponseWriter, r *http.Request) {
 
@@ -145,10 +164,10 @@ func (m *Repository) Test2(w http.ResponseWriter, r *http.Request) {
 	
 }
 
-func (m *Repository) Logoff(w http.ResponseWriter, r *http.Request) {
-	m.App.LoggedIn = false
-	render.RenderTemplate_new(w, r, m.App, con.RM_HOME)
-}
+// func (m *Repository) Logoff(w http.ResponseWriter, r *http.Request) {
+// 	// m.App.LoggedIn = false
+// 	render.RenderTemplate_new(w, r, m.App, con.RM_HOME)
+// }
 
 
 type Payload struct {
@@ -157,6 +176,15 @@ type Payload struct {
 
 func (m *Repository) StatusInfo(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("This is a StatusInfo")
+	val := m.App.SessionManager.Get(r.Context(), "LoggedIn")
+	fmt.Println("Logged in - ", val)
+
+	if val != true {
+		// m.App.LoggedIn = false
+		return
+	} else {
+		// m.App.LoggedIn = true
+	}
 	err := r.ParseForm()
 	if err != nil {
 		log.Fatal(err)
@@ -175,7 +203,7 @@ func (m *Repository) StatusInfo(w http.ResponseWriter, r *http.Request) {
 	
 	// route request to appropriate handler
 	ptr := m.App.ViewCache[v_id]
-	ptr.ProcessRequest(w, data)
+	ptr.ProcessRequest(w, r)
 }
 
 func testStatus(w http.ResponseWriter) {
@@ -187,8 +215,16 @@ func testStatus(w http.ResponseWriter) {
 }
 
 func (m *Repository) Upload(w http.ResponseWriter, r *http.Request) {
-
 	fmt.Println("This is an Upload test")
+	val := m.App.SessionManager.Get(r.Context(), "LoggedIn")
+	fmt.Println("Logged in - ", val)
+
+	if val != true {
+		// m.App.LoggedIn = false
+		return
+	} else {
+		// m.App.LoggedIn = true
+	}
 
 	r.ParseMultipartForm(10 << 20)
 

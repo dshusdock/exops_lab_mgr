@@ -3,6 +3,11 @@ export default () => ({
     chevronRotated: false,
     nodeListCopy: [],
     strLength: 0,
+    test: "testing",
+
+    tester() {
+      console.log("tester");
+    },
 
     onElementClick(el) {
       let children = el.childNodes;

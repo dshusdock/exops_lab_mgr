@@ -78,8 +78,9 @@ func (m *LSTableVW) RegisterView(app config.AppConfig) *LSTableVW {
 	return AppLSTableVW
 }
 
-func (m *LSTableVW) ProcessRequest(w http.ResponseWriter, d url.Values) {
+func (m *LSTableVW) ProcessRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("[LSTableVW] - Processing request")
+	d := r.PostForm
 	s := d.Get("label")
 	fmt.Println("Label: ", s)
 
