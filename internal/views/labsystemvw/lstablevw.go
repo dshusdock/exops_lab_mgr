@@ -3,24 +3,66 @@ package labsystemvw
 import (
 	"dshusdock/tw_prac1/config"
 	con "dshusdock/tw_prac1/internal/constants"
-	"dshusdock/tw_prac1/internal/render"
 	db "dshusdock/tw_prac1/internal/services/database"
-
-	// "dshusdock/tw_prac1/internal/services/database/dbdata"
 	"dshusdock/tw_prac1/internal/services/database/dbdata"
 	q "dshusdock/tw_prac1/internal/services/database/queries"
 	"dshusdock/tw_prac1/internal/services/messagebus"
+
+	// "dshusdock/tw_prac1/internal/services/messagebus"
+	renderview "dshusdock/tw_prac1/internal/services/renderView"
+	b "dshusdock/tw_prac1/internal/views/base"
 	"fmt"
 	"log"
 	"net/http"
-	"net/url"
 )
 
-type AppLSTableVWData struct {
-	Lbl string
+type LSTableVW struct {
+	App        *config.AppConfig
+	// Id         string
+	// RenderFile string
+	// ViewFlags  []bool
+	// Data       TableDef
+	// Htmx       any
 }
 
+var AppLSTableVW *LSTableVW
 
+func init() {
+	AppLSTableVW = &LSTableVW{
+		App: nil,
+	}
+	messagebus.GetBus().Subscribe("Event:Click", AppLSTableVW.HandleMBusRequest)
+}
+
+func (m *LSTableVW) RegisterView(app *config.AppConfig) *LSTableVW {
+	log.Println("Registering AppLSTableVW...")
+	AppLSTableVW.App = app
+	return AppLSTableVW
+}
+
+func (m *LSTableVW) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("[LSTableVW] - Processing request")
+	d := r.PostForm
+	s := d.Get("label")
+	fmt.Println("Label: ", s)
+
+	CreateLSTableVWData().ProcessHttpRequest(w, r)
+
+}
+
+func (m *LSTableVW) HandleMBusRequest(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("[LSTableVW] - Processing MBus request")
+
+	CreateLSTableVWData().ProcessMBusRequest(w, r)
+}
+
+///////////////////// LSTable View Data //////////////////////
+
+type LSTableVWData struct {
+	Base b.BaseTemplateparams
+	Data       TableDef
+	SNData    any
+}
 
 type TableDef struct {
 	Table       string
@@ -37,22 +79,13 @@ type TableDef struct {
 	Width       []int
 }
 
-type LSTableVW struct {
-	App        *config.AppConfig
-	Id         string
-	RenderFile string
-	ViewFlags  []bool
-	Data       TableDef
-	Htmx       any
+type AppLSTableVWData struct {
+	Lbl string
 }
 
-var AppLSTableVW *LSTableVW
-
-func init() {
-	AppLSTableVW = &LSTableVW{
-		Id:         "lstablevw",
-		RenderFile: "",
-		ViewFlags:  []bool{true},
+func CreateLSTableVWData() *LSTableVWData {
+	return &LSTableVWData{
+		Base: b.GetBaseTemplateObj(),
 		Data: TableDef{
 			Table:       "",
 			HdrDef:      nil,
@@ -67,47 +100,42 @@ func init() {
 			SearchInput: "",
 			Width:       nil,
 		},
+		SNData: nil,
 	}
-
-	messagebus.GetBus().Subscribe("Event:Click", AppLSTableVW.ProcessInternalRequest)
 }
 
-func (m *LSTableVW) RegisterView(app config.AppConfig) *LSTableVW {
-	log.Println("Registering AppLSTableVW...")
-	AppLSTableVW.App = &app
-	return AppLSTableVW
-}
-
-func (m *LSTableVW) ProcessRequest(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("[LSTableVW] - Processing request")
+func (m *LSTableVWData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request) {	
 	d := r.PostForm
 	s := d.Get("label")
-	fmt.Println("Label: ", s)
-
+	
 	switch s {
 	case "upload":
-		render.RenderTemplate_new(w, nil, nil, con.RM_UPLOAD_MODAL)
+		// render.RenderTemplate_new(w, nil, nil, con.RM_UPLOAD_MODAL)
+		renderview.RenderViewSvc.RenderTemplate(w, r, nil, con.RM_UPLOAD_MODAL)
 	}
 }
 
-func (m *LSTableVW) ProcessInternalRequest(w http.ResponseWriter, d url.Values) {
+func (m *LSTableVWData) ProcessMBusRequest(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Printf("[%s] - Processing Internal request\n", m.Id)	
+	fmt.Printf("[%s] - Processing Internal request\n", "LSTableVWData")
+	d := r.PostForm
 	lbl := d.Get("label")
 	
 	switch lbl {
 	case "Table":
-		m.App.MainTable = true
-		m.App.Cards = false
+		m.Base.MainTable = true		
+		m.Base.Cards = false
 		m.LoadTableData(lbl)
+		m.SNData = nil
 	}
-	render.RenderTemplate_new(w, nil, m.App, con.RM_TABLE)
+	// render.RenderTemplate_new(w, nil, m, con.RM_TABLE)
+	renderview.RenderViewSvc.RenderTemplate(w, r, m, con.RM_TABLE)
 }
 
-func (m *LSTableVW) LoadTableData(t string) error{
+func (m *LSTableVWData) LoadTableData(t string) error{
 	var err error
 	fmt.Println("\nDisplaying SQL Table: ", t)
-	m.ViewFlags[0] = true
+	// m.ViewFlags[0] = true
 	ptr := q.DB_VIEW_TYPE_MAP[t]
 
 	m.Data.Start = 0
@@ -133,10 +161,10 @@ func (m *LSTableVW) LoadTableData(t string) error{
 	return nil
 }
 
-func (m *LSTableVW) LoadTblDataByQuery(qry string) error{
+func (m *LSTableVWData) LoadTblDataByQuery(qry string) error{
 	var err error
 	fmt.Println("\nLoadDataByQuery - ", qry)
-	m.ViewFlags[0] = true
+	// m.ViewFlags[0] = true
 	ptr := q.DB_VIEW_TYPE_MAP["Table"]
 
 	m.Data.Start = 0

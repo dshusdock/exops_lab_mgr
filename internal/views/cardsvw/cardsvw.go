@@ -82,9 +82,9 @@ func init() {
 	messagebus.GetBus().Subscribe("Event:ViewChange", AppCardsVW.ProcessMBusRequest)
 }
 
-func (m *CardsVW) RegisterView(app config.AppConfig) *CardsVW {
+func (m *CardsVW) RegisterView(app *config.AppConfig) *CardsVW {
 	log.Println("Registering AppCardsVW...")
-	AppCardsVW.App = &app
+	AppCardsVW.App = app
 	return AppCardsVW
 }
 
@@ -102,7 +102,7 @@ func (m *CardsVW) ProcessMBusRequest(w http.ResponseWriter, d url.Values) {
 	render.RenderTemplate_new(w, nil, m.App, con.RM_CARDS)
 }
 
-func (m *CardsVW) ProcessRequest(w http.ResponseWriter, r *http.Request) {
+func (m *CardsVW) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("[AppCardsVW] - Processing request")
 	var fileIdx int
 	d := r.PostForm

@@ -1,27 +1,27 @@
 package sidenav
 
 import (
-	"math/rand"
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/constants"
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
-
-	// "encoding/gob"
-
-	// db "dshusdock/tw_prac1/internal/services/database"
 	"dshusdock/tw_prac1/internal/services/database/dbdata"
-	// q "dshusdock/tw_prac1/internal/services/database/queries"
+	"dshusdock/tw_prac1/internal/views/base"
 	"dshusdock/tw_prac1/internal/views/labsystemvw"
 	"fmt"
 	"log"
 	"net/http"
 	"net/url"
 	"strings"
-	// "github.com/google/uuid"
 )
 
-type SideNavVwData struct {
+type SideNavVw struct {
+	App  *config.AppConfig
+}
+
+var AppSideNavVw *SideNavVw
+
+type SideNavBElemDetail struct {
 	Type    string
 	ID 		string
 	Lbl     string
@@ -40,41 +40,39 @@ type DSListData struct {
 	Selected bool
 }
 
-type SideNav struct {
-	App        	*config.AppConfig
-	Id         	string
-	RenderFile 	string
-	ViewFlags  	[]bool
-	SearchInput string
-	Counter     int
-	Data       	[]SideNavVwData
-	// RepoDlg    	[]string
-	// DBList     	[]string
-	// Htmx       	[]con.HtmxInfo
-}
-
-var AppSideNav *SideNav
-var Count int
-
 func init() {
-	// gob.Register(SideNav{})
-	obj := NewAppSideNav()
-	AppSideNav = &obj
-	fmt.Println("AppSideNav initialized")
+	AppSideNavVw = &SideNavVw{
+		App: nil,
+	}
 }
 
-func NewAppSideNav() SideNav{
+func (m *SideNavVw) RegisterView(app *config.AppConfig) *SideNavVw {
+	log.Println("Registering AppSideNav...")
+	AppSideNavVw.App = app
+	return AppSideNavVw
+}
+
+func (m *SideNavVw) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("[SideNav] Process Request")
+	CreateSideNavVwData().ProcessHttpRequest(w, r)
+}
+
+
+///////////////////// SideNav View Data //////////////////////
+
+type SideNavVwData struct {
+	Base base.BaseTemplateparams
+	SearchInput string
+	Data []SideNavBElemDetail
+}
+
+func CreateSideNavVwData() *SideNavVwData {
 	pa := SIDE_NAV_BTN_LBL()
 
-	newCount := rand.Intn(1000)
-
-	/*AppSideNav = */  return SideNav{
-		Id:         "sidenav",
-		RenderFile: "side-nav-categories",
-		ViewFlags:  []bool{true, true},
+	return &SideNavVwData{
+		Base: base.GetBaseTemplateObj(),
 		SearchInput: "",
-		Counter:   newCount,
-		Data: []SideNavVwData{
+		Data: []SideNavBElemDetail{
 			{
 				Type:    "caret",
 				ID:	  	 "enterprise",
@@ -118,38 +116,23 @@ func NewAppSideNav() SideNav{
 	}
 }
 
-func (m *SideNav) RegisterView(app config.AppConfig) *SideNav {
-	log.Println("Registering AppSideNav...")
-	AppSideNav.App = &app
-	return AppSideNav
-}
-
-var sideNavPtr *SideNav
-
-func (m *SideNav) ProcessRequest(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("[SideNav] Process Request")
-
+func (m *SideNavVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request) {
 	d := r.PostForm
 	s := d.Get("event")
 
-	rslt := m.App.SessionManager.Exists(r.Context(), "SessionId")
-	if !rslt {
-		fmt.Println("Session does not exist")
-		m.App.SessionManager.Put(r.Context(), "SessionId", "1234")
-		obj := NewAppSideNav()
-		sideNavPtr = &obj
-	}
-
-
 	switch s {
 	case con.EVENT_CLICK:
-		sideNavPtr.processClickEvent(w, d)
+		m.processClickEvent(w, d)
 	case con.EVENT_SEARCH:
-		sideNavPtr.processSearchEvent(w, d)	
+		m.processSearchEvent(w, d)	
 	}
 }
 
-func (m *SideNav) processClickEvent(w http.ResponseWriter, d url.Values) {
+func (m *SideNavVwData) ProcessMBusRequest(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func (m *SideNavVwData) processClickEvent(w http.ResponseWriter, d url.Values) {
 
 	fmt.Println("[SideNav] ProcessClickEvent")
 	lbl := d.Get("label")
@@ -161,12 +144,14 @@ func (m *SideNav) processClickEvent(w http.ResponseWriter, d url.Values) {
 		m.toggleCaret(x)
 		m.LoadDropdownData(x)
 		
-		render.RenderTemplate_new(w, nil, m.App, constants.RM_SNIPPET1)
+		render.RenderTemplate_new(w, nil, m, constants.RM_SNIPPET1)
 	case "button":
 		fmt.Printf("In the button case - %s - lbl - %s\n", id, lbl)
 				
-		labsystemvw.AppLSTableVW.LoadTblDataByQuery(getListFromId(id, lbl))
-		render.RenderTemplate_new(w, nil, m.App, constants.RM_TABLE_REFRESH)
+		// labsystemvw.AppLSTableVW.LoadTblDataByQuery(getListFromId(id, lbl))
+		labsystemvw.CreateLSTableVWData().LoadTblDataByQuery(getListFromId(id, lbl))
+
+		render.RenderTemplate_new(w, nil, m, constants.RM_TABLE_REFRESH)
 		
 	case "select":
 		fmt.Println("In the select case")
@@ -175,7 +160,7 @@ func (m *SideNav) processClickEvent(w http.ResponseWriter, d url.Values) {
 	}
 }
 
-func (m *SideNav) processSearchEvent(w http.ResponseWriter, d url.Values) {
+func (m *SideNavVwData) processSearchEvent(w http.ResponseWriter, d url.Values) {
 	var rd []string
 	key := d.Get("search")
 	lbl := d.Get("label")
@@ -201,7 +186,7 @@ func (m *SideNav) processSearchEvent(w http.ResponseWriter, d url.Values) {
 	fmt.Printf("Result: %v\n", rd)
 	m.Data[idx].EntListPart = rd
 
-	render.RenderTemplate_new(w, nil, m.App, constants.RM_SNIPPET1)
+	render.RenderTemplate_new(w, nil, m, constants.RM_SNIPPET1)
 }
 
 func getListFromId(id string, lbl string) string {
@@ -220,7 +205,7 @@ func getListFromId(id string, lbl string) string {
 	return str
 }
 
-func (m *SideNav) toggleCaret(x int) {
+func (m *SideNavVwData) toggleCaret(x int) {
 
 	for count := 0; count < len(m.Data); count++ {
 		if count != x {			
@@ -239,7 +224,7 @@ func (m *SideNav) toggleCaret(x int) {
 	}
 }
 
-func (m *SideNav) toggleCaretXXX(x int) {
+func (m *SideNavVwData) toggleCaretXXX(x int) {
 
 	if !m.Data[x].Caret {
 		m.Data[x].Class = "fa fa-chevron-right rotate_fwd"
@@ -250,7 +235,7 @@ func (m *SideNav) toggleCaretXXX(x int) {
 	}
 }
 
-func indexOf(element string, data []SideNavVwData) int {
+func indexOf(element string, data []SideNavBElemDetail) int {
 	for k, v := range data {
 		if element == v.Lbl {
 			return k
@@ -259,7 +244,7 @@ func indexOf(element string, data []SideNavVwData) int {
 	return -1 //not found.
 }
 
-func (m *SideNav) getActiveListIdx() int {
+func (m *SideNavVwData) getActiveListIdx() int {
 	for k, v := range m.Data {
 		if v.Caret {
 			return k
@@ -268,7 +253,7 @@ func (m *SideNav) getActiveListIdx() int {
 	return -1 //not found.
 }
 
-func (m *SideNav) LoadDropdownData(x int) {
+func (m *SideNavVwData) LoadDropdownData(x int) {
 	var rslt []con.RowData
 
 	switch x {

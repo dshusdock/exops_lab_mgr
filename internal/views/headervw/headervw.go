@@ -5,6 +5,7 @@ import (
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/messagebus"
+	"dshusdock/tw_prac1/internal/views/base"
 	"log/slog"
 
 	// "dshusdock/tw_prac1/internal/views/cardsvw"
@@ -15,59 +16,73 @@ import (
 	// "dshusdock/tw_prac1/internal/views/tablevw"
 	"fmt"
 	"net/http"
-	"net/url"
 )
+
+type HeaderVw struct {
+	App  *config.AppConfig
+}
+
+var AppHeaderVw *HeaderVw
 
 type AppHdrVwData struct {
 	Lbl string
 }
 
-type HeaderVw struct {
-	App        *config.AppConfig
-	Id         string
-	RenderFile string
-	ViewFlags  []bool
-	Data       any
-	Htmx       any
-}
-
-var AppHeaderVw *HeaderVw
-
 func init() {
 	AppHeaderVw = &HeaderVw{
-		Id:         "headervw",
-		RenderFile: "",
-		ViewFlags:  []bool{true},
-		Data:       "",
-		Htmx:       nil,
+		App: nil,
 	}
-	messagebus.GetBus().Subscribe("Event:ViewChange", AppHeaderVw.ProcessInternalRequest)
+	messagebus.GetBus().Subscribe("Event:ViewChange", AppHeaderVw.HandleMBusRequest)
 }
 
-func (m *HeaderVw) RegisterView(app config.AppConfig) *HeaderVw {
+func (m *HeaderVw) RegisterView(app *config.AppConfig) *HeaderVw {
 	slog.Info("Registering AppHeaderVw...")
-	AppHeaderVw.App = &app
+	AppHeaderVw.App = app
 	return AppHeaderVw
 }
 
-func (m *HeaderVw) ProcessRequest(w http.ResponseWriter, r *http.Request) {
-	slog.Info("Processing request", "ID", m.Id)
-	d := r.PostForm
-	s := d.Get("label")
-	slog.Info("Incoming: ", "Label", s)
+func (m *HeaderVw) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
+	slog.Info("Processing request", "ID", "HeaderVw")
 
-	m.ProcessClickEvent(w, d)
+	CreateHeaderVwData().ProcessHttpRequest(w, r)
 }
 
-func (m *HeaderVw) ProcessInternalRequest(w http.ResponseWriter, d url.Values) {
+func (m *HeaderVw) HandleMBusRequest(w http.ResponseWriter, r *http.Request) {}
 
-	fmt.Printf("[%s] - Processing Internal request\n", m.Id)
+///////////////////// Header View Data //////////////////////
+
+type HeaderVwData struct {
+	Base base.BaseTemplateparams
+	Data any
+}
+
+func CreateHeaderVwData() *HeaderVwData {
+	return &HeaderVwData{
+		Base: base.GetBaseTemplateObj(),
+		Data: nil,
+	}
+}
+
+func (m *HeaderVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Printf("[%s] - Processing Http request\n", "HeaderVwData")
+	d := r.PostForm
+	s := d.Get("label")
+	fmt.Println("Label: ", s)	
+
+	m.ProcessClickEvent(w, r)
+}
+
+func (m *HeaderVwData) ProcessMbusRequest(w http.ResponseWriter, r *http.Request) {
+	fmt.Printf("[%s] - Processing MBus request\n", "HeaderVwData")
+	d := r.PostForm
 	s := d.Get("label")
 	fmt.Println("Label: ", s)	
 }
 
-func (m *HeaderVw) ProcessClickEvent(w http.ResponseWriter, d  url.Values) {
-	if d.Get("view_id") != m.Id {return}
+func (m *HeaderVwData) ProcessClickEvent(w http.ResponseWriter, r *http.Request) {
+	d := r.PostForm
+	
 	lbl := d.Get("label")
 	slog.Info("ProcessClickEvent - ", "ID", lbl)
 
@@ -75,18 +90,18 @@ func (m *HeaderVw) ProcessClickEvent(w http.ResponseWriter, d  url.Values) {
 	case "upload":
 		render.RenderTemplate_new(w, nil, nil, constants.RM_UPLOAD_MODAL)
 	case "settings":
-		render.RenderTemplate_new(w, nil, m.App, constants.RM_SETTINGS_MODAL)
+		render.RenderTemplate_new(w, nil, m.Base, constants.RM_SETTINGS_MODAL)
 	case "Table":
-		messagebus.GetBus().Publish("Event:Click", w, d)
+		messagebus.GetBus().Publish("Event:Click", w, r)
 	case "Cards":
-		messagebus.GetBus().Publish("Event:ViewChange", w, d)
+		messagebus.GetBus().Publish("Event:ViewChange", w, r)
 	}	
 }
 
-func (m *HeaderVw) ToggleView() {
-	if m.ViewFlags[0] {
-		m.ViewFlags[0] = false
-	} else {
-		m.ViewFlags[0] = true
-	}
+func (m *HeaderVwData) ToggleView() {
+	// if m.ViewFlags[0] {
+	// 	m.ViewFlags[0] = false
+	// } else {
+	// 	m.ViewFlags[0] = true
+	// }
 }

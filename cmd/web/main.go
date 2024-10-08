@@ -4,6 +4,8 @@ import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/handlers"
+	renderview "dshusdock/tw_prac1/internal/services/renderView"
+	"dshusdock/tw_prac1/internal/services/session"
 	"log"
 	"log/slog"
 	"net/http"
@@ -24,9 +26,13 @@ func main() {
 	app.SideNav = false
 	app.MainTable = false
 	app.ViewCache = make(map[string]constants.ViewInteface)
+
 	repo := handlers.NewRepo(&app)
 	handlers.NewHandlers(repo)
 
+	render := renderview.NewRenderViewSvc(&app)
+	renderview.MapRenderViewSvc(render)
+	
 	// Session Manager
 	app.SessionManager = scs.New()
 	app.SessionManager.Lifetime = 3 * time.Hour
@@ -39,11 +45,11 @@ func main() {
 	// app.SessionManager.Cookie.SameSite = http.SameSiteStrictMode
 	app.SessionManager.Cookie.Secure = true
 
+	session.SessionSvc.RegisterSessionManager(app.SessionManager)
+
 	// Logging - Info by default
 	var programLevel = new(slog.LevelVar)
 	programLevel.Set(slog.LevelDebug)
-
-	initRouteHandlers()
 
 	// slog.Info("Starting application -", "Port", portNumber)
 	slog.Info("Starting application -", "Port", secPortNumber)

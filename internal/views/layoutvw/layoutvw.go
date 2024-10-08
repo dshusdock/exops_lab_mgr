@@ -2,7 +2,10 @@ package layoutvw
 
 import (
 	"dshusdock/tw_prac1/config"
-	"dshusdock/tw_prac1/internal/render"
+	"dshusdock/tw_prac1/internal/services/messagebus"
+	renderview "dshusdock/tw_prac1/internal/services/renderView"
+	b "dshusdock/tw_prac1/internal/views/base"
+
 	// "dshusdock/tw_prac1/internal/services/messagebus"
 	"fmt"
 	"log"
@@ -10,52 +13,58 @@ import (
 	// "net/url"
 )
 
-type AppLytVwData struct {
-	Lbl string
-}
-
 type LayoutVw struct {
 	App *config.AppConfig
-	Id         string
-	RenderFile string
-	ViewFlags  []bool
-	Data       any
-	Htmx       any
 }
 
 var AppLayoutVw *LayoutVw
 
 func init() {
 	AppLayoutVw = &LayoutVw{
-		Id:         "lyoutvw",
-		RenderFile: "",
-		ViewFlags:  []bool{true},
-		Data: "",
-		Htmx: nil,
+		App: nil,
 	}
+	messagebus.GetBus().Subscribe("Event:ViewChange", AppLayoutVw.HandleMBusRequest)
 }
 
-func (m *LayoutVw) RegisterView(app config.AppConfig) *LayoutVw{
+func (m *LayoutVw) RegisterView(app *config.AppConfig) *LayoutVw{
 	log.Println("Registering AppLayoutVw...")
-	// messagebus.GetBus().Subscribe("Event:Change", AppLayoutVw.ProcessChangEvent)
-	AppLayoutVw.App = &app
+	AppLayoutVw.App = app
 	return AppLayoutVw
 }
 
-func (m *LayoutVw) ProcessRequest(w http.ResponseWriter, r *http.Request) {
+func (m *LayoutVw) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("[lyoutvw] - Processing request")
-	render.RenderModal(w, nil, nil)
+	CreateLayoutVwData().ProcessHttpRequest(w, r)
+
+	// render.RenderModal(w, nil, nil)
 }
 
-func (m *LayoutVw) ProcessChangEvent() {
-	fmt.Println("\n[lyoutvw] Process Change Event")
-
+func (m *LayoutVw) HandleMBusRequest(w http.ResponseWriter, r *http.Request) {
+	CreateLayoutVwData().ProcessMBusRequest(w, r)
 }
 
-func (m *LayoutVw) ToggleView() {
-	if m.ViewFlags[0] {
-		m.ViewFlags[0] = false
-	} else {
-		m.ViewFlags[0] = true
+///////////////////// Layout View Data //////////////////////
+
+type LayoutVwData struct {
+	Base b.BaseTemplateparams
+	Data any
+}
+
+type AppLytVwData struct {
+	Lbl string
+}
+
+func CreateLayoutVwData() *LayoutVwData {
+	return &LayoutVwData{
+		Base: b.GetBaseTemplateObj(),
+		Data: nil,
 	}
 }
+
+func (m *LayoutVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request) {
+
+	renderview.RenderViewSvc.RenderTemplate(w, r, m.Data, 0)
+	// render.RenderTemplate_new(w, nil, m.Data, 0)
+}
+
+func (m *LayoutVwData) ProcessMBusRequest(w http.ResponseWriter, r *http.Request) {}

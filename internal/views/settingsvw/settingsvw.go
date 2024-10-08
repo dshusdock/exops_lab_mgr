@@ -53,13 +53,13 @@ func init() {
 
 }
 
-func (m *SettingsVw) RegisterView(app config.AppConfig) *SettingsVw{
+func (m *SettingsVw) RegisterView(app *config.AppConfig) *SettingsVw{
 	log.Println("Registering AppSettingsVw...")
-	AppSettingsVw.App = &app
+	AppSettingsVw.App = app
 	return AppSettingsVw
 }
 
-func (m *SettingsVw) ProcessRequest(w http.ResponseWriter, r *http.Request) {
+func (m *SettingsVw) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("[settingsvw] - Processing request")
 
 	val := m.App.SessionManager.Get(r.Context(), "LoggedIn")

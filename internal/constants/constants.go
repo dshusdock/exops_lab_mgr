@@ -42,8 +42,8 @@ type SubElement struct {
 }
 
 type ViewInteface interface {
-	// ProcessRequest(w http.ResponseWriter, d url.Values /*ViewInfo*/)
-	ProcessRequest(w http.ResponseWriter, r *http.Request)
+	// HandleHttpRequest(w http.ResponseWriter, d url.Values /*ViewInfo*/)
+	HandleHttpRequest(w http.ResponseWriter, r *http.Request)
 }
 
 

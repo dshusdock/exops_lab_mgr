@@ -5,6 +5,7 @@ import (
 	"dshusdock/tw_prac1/internal/services/database"
 	"log"
 	"text/template"
+
 	"github.com/alexedwards/scs/v2"
 	"github.com/asaskevich/EventBus"
 )
@@ -21,6 +22,7 @@ type AppConfig struct {
 	MainTable	  			bool
 	Cards		  			bool
 	SessionManager 	 		*scs.SessionManager
+	
 }
 
 

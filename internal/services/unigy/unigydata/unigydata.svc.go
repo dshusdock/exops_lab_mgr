@@ -33,9 +33,9 @@ func init() {
 	messagebus.GetBus().Subscribe("UnigyDataSvc:Request", AppUnigyDataSvc.ProcessMBusRequest)
 }
 
-func (m *UnigyDataSvc) RegisterService(app config.AppConfig) *UnigyDataSvc{
+func (m *UnigyDataSvc) RegisterService(app *config.AppConfig) *UnigyDataSvc{
 	slog.Info("Registering AppStatusSvc...")
-	AppUnigyDataSvc.App = &app
+	AppUnigyDataSvc.App = app
 	return AppUnigyDataSvc
 }
 
@@ -43,7 +43,7 @@ func (m *UnigyDataSvc) ProcessMBusRequest() {
 	slog.Info("Processing MBus Request")
 }
 
-func (m *UnigyDataSvc) ProcessRequest(w http.ResponseWriter, r *http.Request) {
+func (m *UnigyDataSvc) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
 	slog.Info("Processing request", "ID", m.Id)
 }
 

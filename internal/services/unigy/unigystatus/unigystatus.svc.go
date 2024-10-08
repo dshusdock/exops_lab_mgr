@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
 	// "net/url"
 
 	"golang.org/x/net/html"
@@ -55,13 +56,13 @@ func init() {
 	}
 }
 
-func (m *StatusSvc) RegisterService(app config.AppConfig) *StatusSvc{
+func (m *StatusSvc) RegisterService(app *config.AppConfig) *StatusSvc{
 	log.Println("Registering AppStatusSvc...")
-	AppStatusSvc.App = &app
+	AppStatusSvc.App = app
 	return AppStatusSvc
 }
 
-func (m *StatusSvc) ProcessRequest(w http.ResponseWriter, r *http.Request) {
+func (m *StatusSvc) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("[statussvc] - Processing request")
 	d := r.PostForm
 	da := d.Get("data")

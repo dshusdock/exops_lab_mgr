@@ -5,15 +5,16 @@ import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/handlers"
 	"dshusdock/tw_prac1/internal/services/jwtauthsvc"
-	"dshusdock/tw_prac1/internal/services/unigy/unigydata"
-	"dshusdock/tw_prac1/internal/services/unigy/unigystatus"
-	"dshusdock/tw_prac1/internal/views/cardsvw"
-	"dshusdock/tw_prac1/internal/views/headervw"
-	"dshusdock/tw_prac1/internal/views/labsystemvw"
-	"dshusdock/tw_prac1/internal/views/layoutvw"
-	"dshusdock/tw_prac1/internal/views/login"
-	"dshusdock/tw_prac1/internal/views/settingsvw"
-	"dshusdock/tw_prac1/internal/views/sidenav"
+	// "dshusdock/tw_prac1/internal/services/unigy/unigydata"
+	// "dshusdock/tw_prac1/internal/services/unigy/unigystatus"
+	// "dshusdock/tw_prac1/internal/views/base"
+	// "dshusdock/tw_prac1/internal/views/cardsvw"
+	// "dshusdock/tw_prac1/internal/views/headervw"
+	// "dshusdock/tw_prac1/internal/views/labsystemvw"
+	// "dshusdock/tw_prac1/internal/views/layoutvw"
+	// "dshusdock/tw_prac1/internal/views/login"
+	// "dshusdock/tw_prac1/internal/views/settingsvw"
+	// "dshusdock/tw_prac1/internal/views/sidenav"
 	"fmt"
 	"net/http"
 
@@ -21,21 +22,6 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/jwtauth/v5"
 )
-
-func initRouteHandlers() {
-	// Register the views
-	app.ViewCache["lyoutvw"] = layoutvw.AppLayoutVw.RegisterView(app)
-	app.ViewCache["headervw"] = headervw.AppHeaderVw.RegisterView(app)
-	app.ViewCache["settingsvw"] = settingsvw.AppSettingsVw.RegisterView(app) 
-	app.ViewCache["lstablevw"] = labsystemvw.AppLSTableVW.RegisterView(app)
-	app.ViewCache["sidenav"] = sidenav.AppSideNav.RegisterView(app)	
-	app.ViewCache["cardsvw"] = cardsvw.AppCardsVW.RegisterView(app)
-	app.ViewCache["loginvw"] = login.AppLoginVw.RegisterView(app)
-
-	// Register the services
-	app.ViewCache["unigystatus"] = unigystatus.AppStatusSvc.RegisterService(app)
-	app.ViewCache["unigydata"] = unigydata.AppUnigyDataSvc.RegisterService(app)
-}
 
 func routes(app *config.AppConfig) http.Handler {
 	mux := chi.NewRouter()
@@ -46,11 +32,9 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Group(func(r chi.Router) {
 		// r.Use(MyMiddleware)		
 		r.Use(jwtauth.Verifier(jwtauthsvc.GetToken()))
-		r.Use(jwtauth.Authenticator(jwtauthsvc.GetToken()))
-		
-		r.Post("/logoff", handlers.Repo.Logoff)
-		r.Post("/create-account-request", handlers.Repo.CreateAccount)
-		r.Post("/create-account", handlers.Repo.CreateAccount)
+		r.Use(jwtauth.Authenticator(jwtauthsvc.GetToken()))	
+			
+		r.Post("/logoff", handlers.Repo.Logoff)		
 		r.Post("/request/status", handlers.Repo.StatusInfo)
 		r.Post("/upload", handlers.Repo.Upload)
 		r.Post("/element/event/click", handlers.Repo.HandleClickEvents)
@@ -61,6 +45,9 @@ func routes(app *config.AppConfig) http.Handler {
 	// Unprotected routes
 	mux.Get("/", handlers.Repo.Login)
 	mux.Post("/login", handlers.Repo.Login)
+	mux.Post("/create-account-request", handlers.Repo.CreateAccount)
+	mux.Post("/create-account", handlers.Repo.CreateAccount)
+
 	mux.Get("/test2", handlers.Repo.Test2)	
 
 	fileServer := http.FileServer(http.Dir("./ui/html/"))

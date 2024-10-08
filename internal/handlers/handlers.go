@@ -5,9 +5,20 @@ import (
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/handlers/upload"
 	"dshusdock/tw_prac1/internal/render"
+	"dshusdock/tw_prac1/internal/views/base"
+	"dshusdock/tw_prac1/internal/views/cardsvw"
+	"dshusdock/tw_prac1/internal/views/headervw"
+	"dshusdock/tw_prac1/internal/views/labsystemvw"
+	"dshusdock/tw_prac1/internal/views/layoutvw"
+	"dshusdock/tw_prac1/internal/views/login"
+	"dshusdock/tw_prac1/internal/views/settingsvw"
+	"dshusdock/tw_prac1/internal/views/sidenav"
+
 	// am "dshusdock/tw_prac1/internal/services/account_mgmt"
-	"dshusdock/tw_prac1/internal/services/messagebus"
 	"dshusdock/tw_prac1/internal/services/jwtauthsvc"
+	"dshusdock/tw_prac1/internal/services/messagebus"
+	"dshusdock/tw_prac1/internal/services/unigy/unigydata"
+	"dshusdock/tw_prac1/internal/services/unigy/unigystatus"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -24,6 +35,27 @@ type Repository struct {
 	MBS messagebus.MessageBusSvc
 }
 
+func initRouteHandlers() {
+	// Register the views
+	Repo.App.ViewCache["basevw"] = base.AppBaseVw.RegisterView(Repo.App)
+
+	Repo.App.ViewCache["lyoutvw"] = layoutvw.AppLayoutVw.RegisterView(Repo.App)
+	Repo.App.ViewCache["loginvw"] = login.AppLoginVw.RegisterView(Repo.App)
+
+	Repo.App.ViewCache["headervw"] = headervw.AppHeaderVw.RegisterView(Repo.App)
+	Repo.App.ViewCache["sidenav"] = sidenav.AppSideNavVw.RegisterView(Repo.App)	
+
+	Repo.App.ViewCache["settingsvw"] = settingsvw.AppSettingsVw.RegisterView(Repo.App) 
+	Repo.App.ViewCache["lstablevw"] = labsystemvw.AppLSTableVW.RegisterView(Repo.App)
+	
+	Repo.App.ViewCache["cardsvw"] = cardsvw.AppCardsVW.RegisterView(Repo.App)
+	
+
+	// Register the services
+	Repo.App.ViewCache["unigystatus"] = unigystatus.AppStatusSvc.RegisterService(Repo.App)
+	Repo.App.ViewCache["unigydata"] = unigydata.AppUnigyDataSvc.RegisterService(Repo.App)
+}
+
 // http.ResponseWriter, r *http.Request NewRepo creates a new repository
 func NewRepo(app *config.AppConfig) *Repository {
 	return &Repository{
@@ -34,6 +66,7 @@ func NewRepo(app *config.AppConfig) *Repository {
 // NewHandlers sets the repository for the handlers
 func NewHandlers(r *Repository) {
 	Repo = r
+	initRouteHandlers()
 }
 
 func GetAppTemplateParamsObj() config.AppTemplateparams{
@@ -51,22 +84,20 @@ func GetAppTemplateParamsObj() config.AppTemplateparams{
 func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Login Handler PATH-", r.URL.Path)
 	ptr := m.App.ViewCache["loginvw"]
-	ptr.ProcessRequest(w, r)	
+	ptr.HandleHttpRequest(w, r)	
 }
 
 func (m *Repository) Logoff(w http.ResponseWriter, r *http.Request) {
 	ptr := m.App.ViewCache["loginvw"]
-	ptr.ProcessRequest(w, r)	
+	ptr.HandleHttpRequest(w, r)	
 	// render.RenderTemplate_new(w, r, m.App, con.RM_HOME)
 }
 
 func (m *Repository) CreateAccount(w http.ResponseWriter, r *http.Request) {
 	ptr := m.App.ViewCache["loginvw"]
-	ptr.ProcessRequest(w, r)	
+	ptr.HandleHttpRequest(w, r)	
 	// render.RenderTemplate_new(w, r, m.App, con.RM_HOME)
 }
-
-
 
 /**
  * 	HandleClickEvents
@@ -97,7 +128,7 @@ func (m *Repository) HandleClickEvents(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ptr := m.App.ViewCache[v_id]
-	ptr.ProcessRequest(w, r)	
+	ptr.HandleHttpRequest(w, r)	
 }
 
 func (m *Repository) HandleSearchEvents(w http.ResponseWriter, r *http.Request) {
@@ -128,7 +159,7 @@ func (m *Repository) HandleSearchEvents(w http.ResponseWriter, r *http.Request) 
 
 	// route request to appropriate handler
 	ptr := m.App.ViewCache[v_id]
-	ptr.ProcessRequest(w, r)
+	ptr.HandleHttpRequest(w, r)
 	
 }
 
@@ -203,7 +234,7 @@ func (m *Repository) StatusInfo(w http.ResponseWriter, r *http.Request) {
 	
 	// route request to appropriate handler
 	ptr := m.App.ViewCache[v_id]
-	ptr.ProcessRequest(w, r)
+	ptr.HandleHttpRequest(w, r)
 }
 
 func testStatus(w http.ResponseWriter) {

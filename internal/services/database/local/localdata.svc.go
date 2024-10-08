@@ -44,7 +44,7 @@ func (m *LocalDataSvc) ProcessMBusRequest() {
 	slog.Info("Processing MBus Request")
 }
 
-func (m *LocalDataSvc) ProcessRequest(w http.ResponseWriter, d url.Values) {
+func (m *LocalDataSvc) HandleHttpRequest(w http.ResponseWriter, d url.Values) {
 	slog.Info("Processing request", "ID", m.Id)
 }
 

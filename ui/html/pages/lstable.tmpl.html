@@ -36,11 +36,11 @@
   </div>
 
   <div id="labsystbl" class="labsys-table" >
-    {{ with.ViewCache.lstablevw.Data }}
+    
     <table class="blueTable">
       <thead>
         <tr>
-          {{ range.HdrDef }}
+          {{ range.Data.HdrDef }}
           <th style="{{.Width}}" @click="onHdrClick($event)">{{.Header}}</th>
           {{end}}
         </tr>
@@ -53,7 +53,7 @@
         </div>
       </thead>
       <tbody>
-        {{ range.Tbl }}
+        {{ range.Data.Tbl }}
         <tr class="data-row" @click="onRowClick($event)">
           {{range.Data}}
           <td>{{.}}</td>
@@ -65,4 +65,4 @@
   </div>
 </div>
 
-{{end}} {{end}}
+{{end}}
