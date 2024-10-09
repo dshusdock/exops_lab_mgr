@@ -17,6 +17,7 @@ import (
 	// am "dshusdock/tw_prac1/internal/services/account_mgmt"
 	"dshusdock/tw_prac1/internal/services/jwtauthsvc"
 	"dshusdock/tw_prac1/internal/services/messagebus"
+	"dshusdock/tw_prac1/internal/services/renderview"
 	"dshusdock/tw_prac1/internal/services/unigy/unigydata"
 	"dshusdock/tw_prac1/internal/services/unigy/unigystatus"
 	"encoding/json"
@@ -69,22 +70,14 @@ func NewHandlers(r *Repository) {
 	initRouteHandlers()
 }
 
-func GetAppTemplateParamsObj() config.AppTemplateparams{
-	return config.AppTemplateparams{
-		LoggedIn: false,
-		DisplayLogin: true,
-		DisplayCreateAccount: false,
-		DisplayCreatAcctResponse: false,
-		SideNav: false,
-		MainTable: false,
-		Cards: false,
-	}
-}
-
 func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Login Handler PATH-", r.URL.Path)
-	ptr := m.App.ViewCache["loginvw"]
-	ptr.HandleHttpRequest(w, r)	
+
+	// ptr := m.App.ViewCache["loginvw"]
+	// ptr.HandleHttpRequest(w, r)	
+
+	renderview.RenderViewSvc.ProcessRequest(w, r, "loginvw")
+
 }
 
 func (m *Repository) Logoff(w http.ResponseWriter, r *http.Request) {
@@ -103,7 +96,7 @@ func (m *Repository) CreateAccount(w http.ResponseWriter, r *http.Request) {
  * 	HandleClickEvents
  */
 func (m *Repository) HandleClickEvents(w http.ResponseWriter, r *http.Request) {
-	val := m.App.SessionManager.Get(r.Context(), "LoggedIn")
+	val := m.App.SessionManager.Get(r.Context(), "LoggedIn")	
 	fmt.Println("Logged in - ", val)
 
 	if val != true {
@@ -194,12 +187,6 @@ func (m *Repository) Test2(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("This is a test2")
 	
 }
-
-// func (m *Repository) Logoff(w http.ResponseWriter, r *http.Request) {
-// 	// m.App.LoggedIn = false
-// 	render.RenderTemplate_new(w, r, m.App, con.RM_HOME)
-// }
-
 
 type Payload struct {
     Stuff string

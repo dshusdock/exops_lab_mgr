@@ -2,11 +2,11 @@ package login
 
 import (
 	"dshusdock/tw_prac1/config"
+	"dshusdock/tw_prac1/internal/constants"
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	am "dshusdock/tw_prac1/internal/services/account_mgmt"
 	"dshusdock/tw_prac1/internal/services/jwtauthsvc"
-	rv "dshusdock/tw_prac1/internal/services/renderView"
 	s "dshusdock/tw_prac1/internal/services/session"
 	"dshusdock/tw_prac1/internal/services/token"
 	"dshusdock/tw_prac1/internal/views/base"
@@ -19,23 +19,28 @@ import (
 	// "net/url"
 )
 
-
 type LoginVw struct {
 	App *config.AppConfig
 }
 
 var AppLoginVw *LoginVw
 
-func init() {	
+func init() {
 	AppLoginVw = &LoginVw{
 		App: nil,
 	}
+	// renderview.RenderViewSvc.RegisterView("basevw", AppBaseVw)
 }
 
-func (m *LoginVw) RegisterView(app *config.AppConfig) *LoginVw{
+
+func (m *LoginVw) RegisterView(app *config.AppConfig) con.ViewInterface {
 	log.Println("Registering AppLoginVw...")
 	AppLoginVw.App = app
 	return AppLoginVw
+}
+
+func (m *LoginVw) RegisterHandler() constants.ViewHandler {
+	return &LoginVw{}
 }
 
 func (m *LoginVw) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
@@ -47,21 +52,33 @@ func (m *LoginVw) HandleMBusRequest(w http.ResponseWriter, r *http.Request) {
 	CreateLoginVwData().ProcessMBusRequest(w, r)
 }
 
+func (m *LoginVw) HandleRequest(w http.ResponseWriter, r *http.Request) any {
+	fmt.Println("[loginvw] - HandleRequest")
+	obj := CreateLoginVwData().ProcessHttpRequest(w, r)
+
+	return obj
+	// c <- obj
+	// d <- obj.View
+}
+ 
+
 ///////////////////// Login View Data //////////////////////
 
 type LoginVwData struct {
 	Base base.BaseTemplateparams
 	Data any
+	View int
 }
 
 func CreateLoginVwData() *LoginVwData {
 	return &LoginVwData{
 		Base: base.GetBaseTemplateObj(),
 		Data: nil,
+		View: con.RM_HOME,
 	}
 }
 
-func (m *LoginVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request) {
+func (m *LoginVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request) *LoginVwData{
 	fmt.Println("[loginvwData] - Processing Http request")
 	var req string
 	var fd url.Values
@@ -69,8 +86,9 @@ func (m *LoginVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request)
 	if r.URL.Path == "/" {
 		fmt.Println("Displaying login page")
 		m.Base.DisplayLogin = true
-		rv.RenderViewSvc.RenderTemplate(w, r, m.Base, con.RM_LOGIN)		
-		return
+		m.View = con.RM_LOGIN
+		// renderview.RenderViewSvc.RenderTemplate(w, r, m.Base, con.RM_LOGIN)		
+		return m
 	}
 
 	if r.URL.Path == "/login" {
@@ -109,7 +127,7 @@ func (m *LoginVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request)
 		m.Base.DisplayLogin = false
 		m.Base.DisplayCreateAccount = true
 		m.Base.DisplayCreatAcctResponse = false
-		rv.RenderViewSvc.RenderTemplate(w, r, m.Base, con.RM_LOGIN)
+		// rv.RenderViewSvc.RenderTemplate(w, r, m.Base, con.RM_LOGIN)
 	case "create-account":
 		// Create a new account
 		// Need to do some validation here
@@ -123,7 +141,7 @@ func (m *LoginVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request)
 		pw, err := token.EncryptValue(fd.Get("password"))
 		if err != nil { 
 			fmt.Println(err)
-			return
+			return m
 		}
 
 		ai.Password = pw
@@ -134,8 +152,8 @@ func (m *LoginVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request)
 		if err != nil {
 			fmt.Println(err)
 			// render.RenderTemplate_new(w, r, m, con.RM_HOME)	
-			rv.RenderViewSvc.RenderTemplate(w, r, m.Base, con.RM_HOME)
-			return
+			// rv.RenderViewSvc.RenderTemplate(w, r, m.Base, con.RM_HOME)
+			return m
 		}
 				
 		// If this is successful, then we will display the response
@@ -172,22 +190,23 @@ func (m *LoginVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request)
 			// err := m.App.SessionManager.RenewToken(r.Context())
 			if err != nil {
 				http.Error(w, err.Error(), 500)
-				return
+				return m
 			}
 			
 			s.SessionSvc.SessionMgr.Put(r.Context(), "jwt", token)
 			s.SessionSvc.SessionMgr.Put(r.Context(), "LoggedIn", true)
-			rv.RenderViewSvc.RenderTemplate(w, r, m.Base, con.RM_HOME)
-			return
+			// rv.RenderViewSvc.RenderTemplate(w, r, m.Base, con.RM_HOME)
+			return m
 		}
 		m.Base.LoggedIn = false
 		m.Base.DisplayLogin = true		
-		rv.RenderViewSvc.RenderTemplate(w, r, m.Base, con.RM_LOGIN)	
+		// rv.RenderViewSvc.RenderTemplate(w, r, m.Base, con.RM_LOGIN)	
 	case "logoff":
 		m.Base.LoggedIn = false
 		m.Base.DisplayLogin = true		
-		rv.RenderViewSvc.RenderTemplate(w, r, m.Base, con.RM_LOGIN)
+		// rv.RenderViewSvc.RenderTemplate(w, r, m.Base, con.RM_LOGIN)
 	}
+	return m
 }
 
 func (m *LoginVwData) ProcessMBusRequest(w http.ResponseWriter, r *http.Request) {}

@@ -7,9 +7,9 @@ import (
 	"dshusdock/tw_prac1/internal/services/database/dbdata"
 	q "dshusdock/tw_prac1/internal/services/database/queries"
 	"dshusdock/tw_prac1/internal/services/messagebus"
+	"dshusdock/tw_prac1/internal/services/renderview"
 
 	// "dshusdock/tw_prac1/internal/services/messagebus"
-	renderview "dshusdock/tw_prac1/internal/services/renderView"
 	b "dshusdock/tw_prac1/internal/views/base"
 	"fmt"
 	"log"

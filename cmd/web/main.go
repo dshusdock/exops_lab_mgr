@@ -4,7 +4,7 @@ import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/handlers"
-	renderview "dshusdock/tw_prac1/internal/services/renderView"
+	renderview "dshusdock/tw_prac1/internal/services/renderview"
 	"dshusdock/tw_prac1/internal/services/session"
 	"log"
 	"log/slog"
@@ -25,13 +25,14 @@ func main() {
 	app.InProduction = false
 	app.SideNav = false
 	app.MainTable = false
-	app.ViewCache = make(map[string]constants.ViewInteface)
+	app.ViewCache = make(map[string]constants.ViewInterface)
 
 	repo := handlers.NewRepo(&app)
 	handlers.NewHandlers(repo)
 
 	render := renderview.NewRenderViewSvc(&app)
 	renderview.MapRenderViewSvc(render)
+	renderview.InitRouteHandlers()
 	
 	// Session Manager
 	app.SessionManager = scs.New()

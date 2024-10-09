@@ -16,11 +16,13 @@
 </head>
 
 <body>
+  {{with.Base}}
     {{if .LoggedIn}}
       {{template "layout" .}}
     {{else}}
       {{template "login" .}}
     {{end}}
+  {{end}}
     
   <script src="/html/dist/main.js"></script>
  

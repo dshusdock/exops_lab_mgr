@@ -3,7 +3,7 @@ package layoutvw
 import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/services/messagebus"
-	renderview "dshusdock/tw_prac1/internal/services/renderView"
+	"dshusdock/tw_prac1/internal/services/renderview"
 	b "dshusdock/tw_prac1/internal/views/base"
 
 	// "dshusdock/tw_prac1/internal/services/messagebus"

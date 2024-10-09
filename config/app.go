@@ -15,14 +15,13 @@ type AppConfig struct {
 	TemplateCache 			map[string]*template.Template
 	InfoLog       			*log.Logger
 	InProduction  			bool
-	ViewCache     			map[string]constants.ViewInteface
+	ViewCache     			map[string]constants.ViewInterface
 	DBA 		  			*database.LocalDBAccess
 	Bus 		  			EventBus.Bus
 	SideNav	      			bool
 	MainTable	  			bool
 	Cards		  			bool
 	SessionManager 	 		*scs.SessionManager
-	
 }
 
 

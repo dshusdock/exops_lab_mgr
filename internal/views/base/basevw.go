@@ -2,6 +2,7 @@ package base
 
 import (
 	"dshusdock/tw_prac1/config"
+	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	"fmt"
 	"log"
@@ -44,10 +45,14 @@ func init() {
 	// renderview.RenderViewSvc.RegisterView("basevw", AppBaseVw)
 }
 
-func (m *BaseVw) RegisterView(app *config.AppConfig) *BaseVw{
+func (m *BaseVw) RegisterView(app *config.AppConfig) constants.ViewInterface {
 	log.Println("Registering AppLayoutVw...")
 	AppBaseVw.App = app
 	return AppBaseVw
+}
+
+func (m *BaseVw) RegisterHandler() constants.ViewHandler {
+	return &BaseVw{}
 }
 
 func (m *BaseVw) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
@@ -59,10 +64,12 @@ func (m *BaseVw) HandleMBusRequest(w http.ResponseWriter, r *http.Request) {
 	CreateBaseVwData().ProcessMBusRequest(w, r)
 }
 
-func (m *BaseVw) HandleRequest(w http.ResponseWriter, r *http.Request, c chan BaseVwData) {
+// func (m *BaseVw) HandleRequest(w http.ResponseWriter, r *http.Request, c chan any, d chan int) {
+func (m *BaseVw) HandleRequest(w http.ResponseWriter, r *http.Request) any{	
 	fmt.Println("[lyoutvw] - HandleRequest")
-	// rslt := CreateBaseVwData().ProcessHttpRequest(w, r)
+	obj := CreateBaseVwData().ProcessHttpRequest(w, r)
 	// c <- rslt
+	return obj
 }
 
 
@@ -80,10 +87,11 @@ func CreateBaseVwData() *BaseVwData {
 	}
 }
 
-func (m *BaseVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request) {
+func (m *BaseVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request) *BaseVw{
 	fmt.Println("[lyoutvw] - Processing request")
 	render.RenderModal(w, nil, m)
 	
+	return &BaseVw{} // TEMPORARY
 }
 
 func (m *BaseVwData) ProcessMBusRequest(w http.ResponseWriter, r *http.Request) {

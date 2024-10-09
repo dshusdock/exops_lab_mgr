@@ -41,12 +41,14 @@ type SubElement struct {
 	Lbl  string
 }
 
-type ViewInteface interface {
+type ViewInterface interface {
 	// HandleHttpRequest(w http.ResponseWriter, d url.Values /*ViewInfo*/)
 	HandleHttpRequest(w http.ResponseWriter, r *http.Request)
 }
 
-
+type ViewHandler interface {
+	HandleRequest(w http.ResponseWriter, r *http.Request) any
+}
 
 type ViewInfo struct {
 	Event   int
