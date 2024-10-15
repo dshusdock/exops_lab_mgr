@@ -2,14 +2,12 @@ package labsystemvw
 
 import (
 	"dshusdock/tw_prac1/config"
+	"dshusdock/tw_prac1/internal/constants"
 	con "dshusdock/tw_prac1/internal/constants"
 	db "dshusdock/tw_prac1/internal/services/database"
 	"dshusdock/tw_prac1/internal/services/database/dbdata"
 	q "dshusdock/tw_prac1/internal/services/database/queries"
 	"dshusdock/tw_prac1/internal/services/messagebus"
-	"dshusdock/tw_prac1/internal/services/renderview"
-
-	// "dshusdock/tw_prac1/internal/services/messagebus"
 	b "dshusdock/tw_prac1/internal/views/base"
 	"fmt"
 	"log"
@@ -21,7 +19,7 @@ type LSTableVW struct {
 	// Id         string
 	// RenderFile string
 	// ViewFlags  []bool
-	// Data       TableDef
+	// LSTableVWData       TableDef
 	// Htmx       any
 }
 
@@ -40,6 +38,10 @@ func (m *LSTableVW) RegisterView(app *config.AppConfig) *LSTableVW {
 	return AppLSTableVW
 }
 
+func (m *LSTableVW) RegisterHandler() constants.ViewHandler {
+	return &LSTableVW{}
+}
+
 func (m *LSTableVW) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("[LSTableVW] - Processing request")
 	d := r.PostForm
@@ -56,12 +58,20 @@ func (m *LSTableVW) HandleMBusRequest(w http.ResponseWriter, r *http.Request) {
 	CreateLSTableVWData().ProcessMBusRequest(w, r)
 }
 
-///////////////////// LSTable View Data //////////////////////
+func (m *LSTableVW) HandleRequest(w http.ResponseWriter, r *http.Request) any {
+	fmt.Println("[LSTableVW] - HandleRequest")
+	obj := CreateLSTableVWData().ProcessHttpRequest(w, r)
+
+	return obj
+}
+ 
+
+///////////////////// LSTable View LSTableVWData //////////////////////
 
 type LSTableVWData struct {
-	Base b.BaseTemplateparams
-	Data       TableDef
-	SNData    any
+	Base 			b.BaseTemplateparams
+	LSTableVWData   TableDef
+	SNData    		any
 }
 
 type TableDef struct {
@@ -86,7 +96,7 @@ type AppLSTableVWData struct {
 func CreateLSTableVWData() *LSTableVWData {
 	return &LSTableVWData{
 		Base: b.GetBaseTemplateObj(),
-		Data: TableDef{
+		LSTableVWData: TableDef{
 			Table:       "",
 			HdrDef:      nil,
 			Tbl:         nil,
@@ -104,15 +114,21 @@ func CreateLSTableVWData() *LSTableVWData {
 	}
 }
 
-func (m *LSTableVWData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request) {	
+func (m *LSTableVWData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request) *LSTableVWData{	
 	d := r.PostForm
 	s := d.Get("label")
 	
 	switch s {
 	case "upload":
 		// render.RenderTemplate_new(w, nil, nil, con.RM_UPLOAD_MODAL)
-		renderview.RenderViewSvc.RenderTemplate(w, r, nil, con.RM_UPLOAD_MODAL)
+		// renderview.RenderViewSvc.RenderTemplate(w, nil, con.RM_UPLOAD_MODAL)
+	case "Table":
+		m.Base.MainTable = true		
+		m.Base.Cards = false
+		m.LoadTableData(s)
+		m.SNData = nil
 	}
+	return m
 }
 
 func (m *LSTableVWData) ProcessMBusRequest(w http.ResponseWriter, r *http.Request) {
@@ -129,7 +145,7 @@ func (m *LSTableVWData) ProcessMBusRequest(w http.ResponseWriter, r *http.Reques
 		m.SNData = nil
 	}
 	// render.RenderTemplate_new(w, nil, m, con.RM_TABLE)
-	renderview.RenderViewSvc.RenderTemplate(w, r, m, con.RM_TABLE)
+	// renderview.RenderViewSvc.RenderTemplate(w, r, con.RM_TABLE)
 }
 
 func (m *LSTableVWData) LoadTableData(t string) error{
@@ -138,26 +154,26 @@ func (m *LSTableVWData) LoadTableData(t string) error{
 	// m.ViewFlags[0] = true
 	ptr := q.DB_VIEW_TYPE_MAP[t]
 
-	m.Data.Start = 0
-	// m.Data.Tbl, err = db.ReadTableData(t)
-	m.Data.Tbl, err = dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetAll()
+	m.LSTableVWData.Start = 0
+	// m.LSTableVWData.Tbl, err = db.ReadTableData(t)
+	m.LSTableVWData.Tbl, err = dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetAll()
 	if err != nil {
 		fmt.Println("Error in LoadTableData: ", err)
 		return err
 	}
-	m.Data.Table = t
+	m.LSTableVWData.Table = t
 
 	var end int
-	m.Data.RowCnt = len(m.Data.Tbl)
+	m.LSTableVWData.RowCnt = len(m.LSTableVWData.Tbl)
 
-	if m.Data.RowCnt > m.Data.MaxRows {
-		end = m.Data.MaxRows
+	if m.LSTableVWData.RowCnt > m.LSTableVWData.MaxRows {
+		end = m.LSTableVWData.MaxRows
 	} else {
-		end = m.Data.RowCnt
+		end = m.LSTableVWData.RowCnt
 	}
 
-	m.Data.TblSlice = m.Data.Tbl[m.Data.Start:end]
-	m.Data.HdrDef = ptr.HdrDef
+	m.LSTableVWData.TblSlice = m.LSTableVWData.Tbl[m.LSTableVWData.Start:end]
+	m.LSTableVWData.HdrDef = ptr.HdrDef
 	return nil
 }
 
@@ -167,24 +183,24 @@ func (m *LSTableVWData) LoadTblDataByQuery(qry string) error{
 	// m.ViewFlags[0] = true
 	ptr := q.DB_VIEW_TYPE_MAP["Table"]
 
-	m.Data.Start = 0
-	m.Data.Tbl, err = db.ReadTblWithQry(qry)
+	m.LSTableVWData.Start = 0
+	m.LSTableVWData.Tbl, err = db.ReadTblWithQry(qry)
 	if err != nil {
 		fmt.Println("Error in LoadTblDataByQuery: ", err)
 		return err
 	}
-	m.Data.Table = "QUERY"
+	m.LSTableVWData.Table = "QUERY"
 
 	var end int
-	m.Data.RowCnt = len(m.Data.Tbl)
+	m.LSTableVWData.RowCnt = len(m.LSTableVWData.Tbl)
 
-	if m.Data.RowCnt > m.Data.MaxRows {
-		end = m.Data.MaxRows
+	if m.LSTableVWData.RowCnt > m.LSTableVWData.MaxRows {
+		end = m.LSTableVWData.MaxRows
 	} else {
-		end = m.Data.RowCnt
+		end = m.LSTableVWData.RowCnt
 	}
 
-	m.Data.TblSlice = m.Data.Tbl[m.Data.Start:end]
-	m.Data.HdrDef = ptr.HdrDef
+	m.LSTableVWData.TblSlice = m.LSTableVWData.Tbl[m.LSTableVWData.Start:end]
+	m.LSTableVWData.HdrDef = ptr.HdrDef
 	return nil
 }

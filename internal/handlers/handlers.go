@@ -5,12 +5,12 @@ import (
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/handlers/upload"
 	"dshusdock/tw_prac1/internal/render"
-	"dshusdock/tw_prac1/internal/views/base"
+	// "dshusdock/tw_prac1/internal/views/base"
 	"dshusdock/tw_prac1/internal/views/cardsvw"
 	"dshusdock/tw_prac1/internal/views/headervw"
 	"dshusdock/tw_prac1/internal/views/labsystemvw"
 	"dshusdock/tw_prac1/internal/views/layoutvw"
-	"dshusdock/tw_prac1/internal/views/login"
+	// "dshusdock/tw_prac1/internal/views/login"
 	"dshusdock/tw_prac1/internal/views/settingsvw"
 	"dshusdock/tw_prac1/internal/views/sidenav"
 
@@ -38,10 +38,10 @@ type Repository struct {
 
 func initRouteHandlers() {
 	// Register the views
-	Repo.App.ViewCache["basevw"] = base.AppBaseVw.RegisterView(Repo.App)
+	// Repo.App.ViewCache["basevw"] = base.AppBaseVw.RegisterView(Repo.App)
 
 	Repo.App.ViewCache["lyoutvw"] = layoutvw.AppLayoutVw.RegisterView(Repo.App)
-	Repo.App.ViewCache["loginvw"] = login.AppLoginVw.RegisterView(Repo.App)
+	// Repo.App.ViewCache["loginvw"] = login.AppLoginVw.RegisterView(Repo.App)
 
 	Repo.App.ViewCache["headervw"] = headervw.AppHeaderVw.RegisterView(Repo.App)
 	Repo.App.ViewCache["sidenav"] = sidenav.AppSideNavVw.RegisterView(Repo.App)	
@@ -81,23 +81,48 @@ func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) Logoff(w http.ResponseWriter, r *http.Request) {
-	ptr := m.App.ViewCache["loginvw"]
-	ptr.HandleHttpRequest(w, r)	
-	// render.RenderTemplate_new(w, r, m.App, con.RM_HOME)
+	renderview.RenderViewSvc.ProcessRequest(w, r, "loginvw")
 }
 
 func (m *Repository) CreateAccount(w http.ResponseWriter, r *http.Request) {
-	ptr := m.App.ViewCache["loginvw"]
-	ptr.HandleHttpRequest(w, r)	
-	// render.RenderTemplate_new(w, r, m.App, con.RM_HOME)
+	renderview.RenderViewSvc.ProcessRequest(w, r, "loginvw")
 }
 
 /**
  * 	HandleClickEvents
  */
+// func (m *Repository) HandleClickEvents(w http.ResponseWriter, r *http.Request) {
+// 	val := m.App.SessionManager.Get(r.Context(), "LoggedIn")	
+// 	fmt.Println("[Handlers] Logged In -  ", val)
+
+// 	if val != true {
+// 		// m.App.LoggedIn = false
+// 		http.Redirect(w, r, "/", http.StatusSeeOther)
+// 		return
+// 	} else {
+// 		// m.App.LoggedIn = true
+// 	}
+	
+// 	err := r.ParseForm()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	data := r.PostForm
+// 	data.Add("event", con.EVENT_CLICK)
+// 	v_id := data.Get("view_id")
+
+// 	if v_id == "" {
+// 		_ = fmt.Errorf("no handler for route")
+// 		return
+// 	}
+
+// 	ptr := m.App.ViewCache[v_id]
+// 	ptr.HandleHttpRequest(w, r)	
+// }
+
 func (m *Repository) HandleClickEvents(w http.ResponseWriter, r *http.Request) {
 	val := m.App.SessionManager.Get(r.Context(), "LoggedIn")	
-	fmt.Println("Logged in - ", val)
+	fmt.Println("[Handlers] Logged In -  ", val)
 
 	if val != true {
 		// m.App.LoggedIn = false
@@ -120,14 +145,18 @@ func (m *Repository) HandleClickEvents(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ptr := m.App.ViewCache[v_id]
-	ptr.HandleHttpRequest(w, r)	
+	renderview.RenderViewSvc.ProcessRequest(w, r, v_id)
 }
+
+
+
+
+
 
 func (m *Repository) HandleSearchEvents(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Handling Search Events")
 	val := m.App.SessionManager.Get(r.Context(), "LoggedIn")
-	fmt.Println("Logged in - ", val)
+	fmt.Println("[Handlers] Logged In -  ", val)
 
 	if val != true {
 		// m.App.LoggedIn = false
@@ -164,7 +193,7 @@ func (m *Repository) HandleSearchEvents(w http.ResponseWriter, r *http.Request) 
  */
  func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	val := m.App.SessionManager.Get(r.Context(), "LoggedIn")
-	fmt.Println("Logged in - ", val)
+	fmt.Println("[Handlers] Logged In -  ", val)
 
 	if val != true {
 		// m.App.LoggedIn = false
@@ -195,7 +224,7 @@ type Payload struct {
 func (m *Repository) StatusInfo(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("This is a StatusInfo")
 	val := m.App.SessionManager.Get(r.Context(), "LoggedIn")
-	fmt.Println("Logged in - ", val)
+	fmt.Println("[Handlers] Logged In -  ", val)
 
 	if val != true {
 		// m.App.LoggedIn = false
@@ -235,7 +264,7 @@ func testStatus(w http.ResponseWriter) {
 func (m *Repository) Upload(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("This is an Upload test")
 	val := m.App.SessionManager.Get(r.Context(), "LoggedIn")
-	fmt.Println("Logged in - ", val)
+	fmt.Println("[Handlers] Logged In -  ", val)
 
 	if val != true {
 		// m.App.LoggedIn = false

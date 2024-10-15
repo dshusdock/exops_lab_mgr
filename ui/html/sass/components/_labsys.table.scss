@@ -101,10 +101,10 @@
 }
 
 .labsys-table {
+  display: flex;
   overflow-y: auto; //-
   max-height: 70rem; //-
 
-  
   margin: 2rem 6rem 0 2rem;
   border-radius: 5px;
   opacity: 1;
@@ -285,7 +285,6 @@ table.blueTable .data-row:hover {
 // .data-row td:nth-child(4):hover {
 //   color: yellow;
 // }
-
 
 /* width */
 ::-webkit-scrollbar {

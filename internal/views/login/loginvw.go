@@ -4,15 +4,16 @@ import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/constants"
 	con "dshusdock/tw_prac1/internal/constants"
-	"dshusdock/tw_prac1/internal/render"
 	am "dshusdock/tw_prac1/internal/services/account_mgmt"
 	"dshusdock/tw_prac1/internal/services/jwtauthsvc"
 	s "dshusdock/tw_prac1/internal/services/session"
 	"dshusdock/tw_prac1/internal/services/token"
 	"dshusdock/tw_prac1/internal/views/base"
+	"encoding/base64"
 	"fmt"
 	"log"
 	"log/slog"
+	"crypto/rand"
 	"net/http"
 	"net/url"
 	"time"
@@ -57,8 +58,6 @@ func (m *LoginVw) HandleRequest(w http.ResponseWriter, r *http.Request) any {
 	obj := CreateLoginVwData().ProcessHttpRequest(w, r)
 
 	return obj
-	// c <- obj
-	// d <- obj.View
 }
  
 
@@ -127,7 +126,8 @@ func (m *LoginVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request)
 		m.Base.DisplayLogin = false
 		m.Base.DisplayCreateAccount = true
 		m.Base.DisplayCreatAcctResponse = false
-		// rv.RenderViewSvc.RenderTemplate(w, r, m.Base, con.RM_LOGIN)
+		m.View = con.RM_LOGIN
+
 	case "create-account":
 		// Create a new account
 		// Need to do some validation here
@@ -161,8 +161,7 @@ func (m *LoginVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request)
 		m.Base.DisplayLogin = false
 		m.Base.DisplayCreateAccount = false
 		m.Base.DisplayCreatAcctResponse = true
-		
-		render.RenderTemplate_new(w, nil, m.Base, con.RM_LOGIN)
+		m.View = con.RM_LOGIN
 	case "login":
 		// Check the username and password
 		if am.ValidateUser(fd.Get("username"), fd.Get("password")) {
@@ -192,19 +191,21 @@ func (m *LoginVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request)
 				http.Error(w, err.Error(), 500)
 				return m
 			}
-			
+			str, _ := GenerateRandomString(20)
+			fmt.Println("Random string:", str)
+
 			s.SessionSvc.SessionMgr.Put(r.Context(), "jwt", token)
 			s.SessionSvc.SessionMgr.Put(r.Context(), "LoggedIn", true)
-			// rv.RenderViewSvc.RenderTemplate(w, r, m.Base, con.RM_HOME)
+			s.SessionSvc.SessionMgr.Put(r.Context(), "userID", str)
+			m.View = con.RM_HOME
 			return m
 		}
 		m.Base.LoggedIn = false
 		m.Base.DisplayLogin = true		
-		// rv.RenderViewSvc.RenderTemplate(w, r, m.Base, con.RM_LOGIN)	
+		m.View = con.RM_LOGIN
 	case "logoff":
 		m.Base.LoggedIn = false
 		m.Base.DisplayLogin = true		
-		// rv.RenderViewSvc.RenderTemplate(w, r, m.Base, con.RM_LOGIN)
 	}
 	return m
 }
@@ -212,7 +213,22 @@ func (m *LoginVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request)
 func (m *LoginVwData) ProcessMBusRequest(w http.ResponseWriter, r *http.Request) {}
 
 
+func GenerateRandomString(length int) (string, error) {
+	// Create a byte slice to store random bytes
+	randomBytes := make([]byte, length)
 
+	// Read random bytes from the crypto/rand package
+	_, err := rand.Read(randomBytes)
+	if err != nil {
+		return "", err
+	}
+
+	// Encode the random bytes into a base64 string
+	randomString := base64.URLEncoding.EncodeToString(randomBytes)
+
+	// Return the random string
+	return randomString[:length], nil
+}
 
 
 

@@ -80,6 +80,7 @@ const (
 	RM_CARDS_MAX
 	RM_CARDS_UNIGY
 	RM_CARDS_SIDENAV
+	RM_NONE
 )
 
 type RenderedFileMap struct {
@@ -99,6 +100,7 @@ type RenderedFileMap struct {
 	CARDS_MAX      []string
 	CARDS_UNIGY    []string
 	CARDS_SIDENAV  []string
+	NONE           []string
 }
 
 func RENDERED_FILE_MAP() *RenderedFileMap {
@@ -175,6 +177,9 @@ func RENDERED_FILE_MAP() *RenderedFileMap {
 		},
 		ACCOUNT_CREATE: []string{
 			"./ui/html/pages/login.tmpl.html",
+		},
+		NONE: []string{
+			"",	
 		},
 	}
 }

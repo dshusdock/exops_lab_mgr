@@ -45,7 +45,8 @@ func RenderModal(w http.ResponseWriter, r *http.Request, d any) {
 // RenderTemplate renders a template
 func RenderTemplate_new(w http.ResponseWriter, r *http.Request, data any, _type int) {
 	ptr := constants.RENDERED_FILE_MAP()
-	fmt.Println("Type: ", _type)
+	fmt.Println("In RenderTemplate_new - Type: ", _type)
+
 
 	var tmplFiles []string
 	var tmplName string
@@ -96,6 +97,9 @@ func RenderTemplate_new(w http.ResponseWriter, r *http.Request, data any, _type 
 	case constants.RM_ACCOUNT_CREATE:
 		tmplFiles = ptr.ACCOUNT_CREATE
 		tmplName = "acct-create-response"
+	case constants.RM_NONE:
+		tmplFiles = ptr.NONE
+		tmplName = ""
 	default:
 		tmplFiles = ptr.HOME
 		tmplName = "base"

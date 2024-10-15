@@ -78,6 +78,7 @@ func (m *BaseVw) HandleRequest(w http.ResponseWriter, r *http.Request) any{
 type BaseVwData struct {
 	Base BaseTemplateparams
 	Data any
+	View int
 }
 
 func CreateBaseVwData() *BaseVwData {

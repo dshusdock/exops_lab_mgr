@@ -11,9 +11,8 @@
     @search="onSearchChange($el)"
   />
   <ul class="sidenav__ul">
-    
-    
-    {{range .Data.Data}}
+    {{with.Tmplt.sidenav}}
+    {{range.Data}}
     <li
       class=""
       @click="onElementClick($el)"
@@ -35,6 +34,8 @@
     <div id="{{.ID}}" class="list_container">{{template "partial1" .}}</div>
 
     {{end}}
+    {{end}}
+    
     <!--Data-->
   </ul>
 

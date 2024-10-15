@@ -21,3 +21,4 @@ func init() {
 func (ss *SessionService) RegisterSessionManager(sessionMgr *scs.SessionManager) {
 	ss.SessionMgr = sessionMgr
 }
+

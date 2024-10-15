@@ -6,8 +6,11 @@ import (
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/database/dbdata"
+	"dshusdock/tw_prac1/internal/services/session"
 	"dshusdock/tw_prac1/internal/views/base"
-	"dshusdock/tw_prac1/internal/views/labsystemvw"
+	"encoding/gob"
+
+	// "dshusdock/tw_prac1/internal/views/labsystemvw"
 	"fmt"
 	"log"
 	"net/http"
@@ -22,16 +25,16 @@ type SideNavVw struct {
 var AppSideNavVw *SideNavVw
 
 type SideNavBElemDetail struct {
-	Type    string
-	ID 		string
-	Lbl     string
-	Caret   bool
-	Class   string
-	SubLbl  []con.SubElement
-	RepoDlg []string
-	DBList  []string
-	Htmx    []con.HtmxInfo
-	EntList []string
+	Type    	string
+	ID 			string
+	Lbl     	string
+	Caret   	bool
+	Class   	string
+	SubLbl  	[]con.SubElement
+	RepoDlg 	[]string
+	DBList  	[]string
+	Htmx    	[]con.HtmxInfo
+	EntList 	[]string
 	EntListPart []string
 }
 
@@ -44,6 +47,7 @@ func init() {
 	AppSideNavVw = &SideNavVw{
 		App: nil,
 	}
+	gob.Register(SideNavVwData{})
 }
 
 func (m *SideNavVw) RegisterView(app *config.AppConfig) *SideNavVw {
@@ -52,18 +56,47 @@ func (m *SideNavVw) RegisterView(app *config.AppConfig) *SideNavVw {
 	return AppSideNavVw
 }
 
+func (m *SideNavVw) RegisterHandler() constants.ViewHandler {
+	return &SideNavVw{}
+}
+
 func (m *SideNavVw) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("[SideNav] Process Request")
 	CreateSideNavVwData().ProcessHttpRequest(w, r)
 }
 
+var GlobalObj *SideNavVwData
+
+func (m *SideNavVw) HandleRequest(w http.ResponseWriter, r *http.Request) any {
+	fmt.Println("[SideNavVw] - HandleRequest")
+	d := r.PostForm
+	id := d.Get("view_id")
+
+	var obj SideNavVwData
+
+	if session.SessionSvc.SessionMgr.Exists(r.Context(), "sidenavvw") {
+		obj = session.SessionSvc.SessionMgr.Pop(r.Context(), "sidenavvw").(SideNavVwData)
+	} else {
+		obj = *CreateSideNavVwData()	
+	}
+
+	if id == "sidenav" {
+		obj.ProcessHttpRequest(w, r)	
+	}
+	session.SessionSvc.SessionMgr.Put(r.Context(), "sidenavvw", obj)
+
+	return obj
+}
+ 
 
 ///////////////////// SideNav View Data //////////////////////
 
 type SideNavVwData struct {
-	Base base.BaseTemplateparams
+	Base 		base.BaseTemplateparams
 	SearchInput string
-	Data []SideNavBElemDetail
+	Data 		[]SideNavBElemDetail
+	View 		int
+	TestStr 	string
 }
 
 func CreateSideNavVwData() *SideNavVwData {
@@ -116,7 +149,7 @@ func CreateSideNavVwData() *SideNavVwData {
 	}
 }
 
-func (m *SideNavVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request) {
+func (m *SideNavVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request) *SideNavVwData{
 	d := r.PostForm
 	s := d.Get("event")
 
@@ -126,6 +159,8 @@ func (m *SideNavVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Reques
 	case con.EVENT_SEARCH:
 		m.processSearchEvent(w, d)	
 	}
+
+	return m
 }
 
 func (m *SideNavVwData) ProcessMBusRequest(w http.ResponseWriter, r *http.Request) {
@@ -136,20 +171,19 @@ func (m *SideNavVwData) processClickEvent(w http.ResponseWriter, d url.Values) {
 
 	fmt.Println("[SideNav] ProcessClickEvent")
 	lbl := d.Get("label")
-	id := d.Get("view_str")
+	id := d.Get("view_id")
 
 	switch d.Get("type") {
 	case "caret":
 		x := indexOf(lbl, m.Data)
 		m.toggleCaret(x)
 		m.LoadDropdownData(x)
-		
-		render.RenderTemplate_new(w, nil, m, constants.RM_SNIPPET1)
+		m.View = constants.RM_SNIPPET1		
 	case "button":
 		fmt.Printf("In the button case - %s - lbl - %s\n", id, lbl)
 				
 		// labsystemvw.AppLSTableVW.LoadTblDataByQuery(getListFromId(id, lbl))
-		labsystemvw.CreateLSTableVWData().LoadTblDataByQuery(getListFromId(id, lbl))
+		// labsystemvw.CreateLSTableVWData().LoadTblDataByQuery(getListFromId(id, lbl))
 
 		render.RenderTemplate_new(w, nil, m, constants.RM_TABLE_REFRESH)
 		
@@ -183,6 +217,9 @@ func (m *SideNavVwData) processSearchEvent(w http.ResponseWriter, d url.Values) 
 			}
 		}
 	}
+
+
+
 	fmt.Printf("Result: %v\n", rd)
 	m.Data[idx].EntListPart = rd
 

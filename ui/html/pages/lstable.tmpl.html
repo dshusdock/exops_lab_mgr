@@ -36,11 +36,11 @@
   </div>
 
   <div id="labsystbl" class="labsys-table" >
-    
+    {{with.Tmplt.lstablevw.LSTableVWData}}  
     <table class="blueTable">
       <thead>
         <tr>
-          {{ range.Data.HdrDef }}
+          {{ range.HdrDef }}
           <th style="{{.Width}}" @click="onHdrClick($event)">{{.Header}}</th>
           {{end}}
         </tr>
@@ -53,7 +53,7 @@
         </div>
       </thead>
       <tbody>
-        {{ range.Data.Tbl }}
+        {{ range.Tbl }}
         <tr class="data-row" @click="onRowClick($event)">
           {{range.Data}}
           <td>{{.}}</td>
@@ -62,6 +62,7 @@
         {{end}}
       </tbody>
     </table>
+    {{end}}
   </div>
 </div>
 
