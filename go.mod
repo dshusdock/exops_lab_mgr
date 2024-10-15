@@ -23,6 +23,7 @@ require (
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
+	github.com/alexedwards/scs/v2 v2.8.0
 	github.com/asaskevich/EventBus v0.0.0-20200907212545-49d423059eef // indirect
 	github.com/go-chi/chi v1.5.5 // indirect
 	github.com/go-chi/chi/v5 v5.0.12 // indirect
@@ -30,5 +31,7 @@ require (
 	github.com/go-chi/jwtauth/v5 v5.3.1
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
+	github.com/google/uuid v1.6.0
+	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0
 	golang.org/x/net v0.27.0 // indirect
 )
