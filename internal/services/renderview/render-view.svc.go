@@ -44,8 +44,6 @@ func InitRouteHandlers() {
 	RenderViewSvc.ViewHandlers["lstablevw"] = labsystemvw.AppLSTableVW.RegisterHandler()
 	RenderViewSvc.ViewHandlers["cardsvw"] = cardsvw.AppCardsVW.RegisterHandler()
 	RenderViewSvc.ViewHandlers["settingsvw"] = settingsvw.AppSettingsVw.RegisterHandler()
-
-	// Repo.App.ViewCache["settingsvw"] = settingsvw.AppSettingsVw.RegisterView(Repo.App) 
 }
 
 func NewRenderViewSvc(app *config.AppConfig) *RenderView {
@@ -135,10 +133,6 @@ func (rv *RenderView) RenderTemplate(w http.ResponseWriter, data any, view int) 
 	render.RenderTemplate_new(w, nil, data, view)
 }
 
-// func (rv *RenderView) RegisterView(name string, ptr constants.ViewHandler) {
-// 	rv.ViewHandlers[name] = ptr
-// }
-
 func (rv *RenderView) HandleSettingsVwEvent(w http.ResponseWriter, r *http.Request) {
 	rv.ProcessRequest(w, r, "settingsvw")
 }
@@ -161,13 +155,11 @@ func (rv *RenderView) HandleHeaderVwEvent(w http.ResponseWriter, r *http.Request
 		obj.Base.MainTable = true
 		obj.Base.Cards = false
 		obj.Base.SideNav = true
-
+		
 		rslt := rv.ViewHandlers["sidenav"].HandleRequest(w, r)
 		obj.Tmplt["sidenav"] = &rslt 
-
 		rslt2 := rv.ViewHandlers["lstablevw"].HandleRequest(w, r)
 		obj.Tmplt["lstablevw"] = &rslt2
-
 		rv.RenderTemplate(w, obj, constants.RM_TABLE)
 	case "settings": 
 		obj.Base.MainTable = false
@@ -176,7 +168,6 @@ func (rv *RenderView) HandleHeaderVwEvent(w http.ResponseWriter, r *http.Request
 
 		rslt := rv.ViewHandlers["settingsvw"].HandleRequest(w, r)
 		_view := constants.RM_SETTINGS_MODAL
-		// obj.Base = rslt.(settingsvw.SettingsVwData).Base
 		obj.Tmplt["settingsvw"] = &rslt
 		rv.RenderTemplate(w, obj, _view)
 	case "upload":
@@ -186,7 +177,6 @@ func (rv *RenderView) HandleHeaderVwEvent(w http.ResponseWriter, r *http.Request
 
 		rslt := rv.ViewHandlers["settingsvw"].HandleRequest(w, r)
 		_view := constants.RM_UPLOAD_MODAL
-		// obj.Base = rslt.(settingsvw.SettingsVwData).Base
 		obj.Tmplt["settingsvw"] = &rslt
 		rv.RenderTemplate(w, obj, _view)
 	default:
