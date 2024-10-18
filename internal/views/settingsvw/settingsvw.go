@@ -4,53 +4,34 @@ import (
 	"crypto/tls"
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/constants"
-	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/database"
 	"dshusdock/tw_prac1/internal/services/database/dbdata"
+	"dshusdock/tw_prac1/internal/services/session"
 	"dshusdock/tw_prac1/internal/services/unigy/unigydata"
-	"time"
-
-	// "dshusdock/tw_prac1/internal/services/unigy/unigystatus"
-
-	// "dshusdock/tw_prac1/internal/views/cardsvw"
-	"io"
-
-	// "dshusdock/tw_prac1/internal/services/datetime"
+	"dshusdock/tw_prac1/internal/views/base"
+	"encoding/gob"
 	"fmt"
+	"io"
 	"log"
+	"log/slog"
 	"net/http"
-
-	// "net/url"
+	"time"
 
 	"golang.org/x/net/html"
 )
 
-type AppSettingsVwData struct {
-	Lbl string
-}
-
 type SettingsVw struct {
 	App *config.AppConfig
-	Id         string
-	RenderFile string
-	ViewFlags  []bool
-	Data       any
-	Htmx       any
-	LastSynchTIme string
+
 }
 
 var AppSettingsVw *SettingsVw
 
 func init() {
 	AppSettingsVw = &SettingsVw{
-		Id:         "settingsvw",
-		RenderFile: "",
-		ViewFlags:  []bool{true},
-		Data: "",
-		Htmx: nil,
-		LastSynchTIme: time.Now().Format("2006-01-02 15:04:05"),
+		App: nil,
 	}
-
+	gob.Register(SettingsVwData{})
 }
 
 func (m *SettingsVw) RegisterView(app *config.AppConfig) *SettingsVw{
@@ -59,17 +40,56 @@ func (m *SettingsVw) RegisterView(app *config.AppConfig) *SettingsVw{
 	return AppSettingsVw
 }
 
-func (m *SettingsVw) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("[settingsvw] - Processing request")
+func (m *SettingsVw) RegisterHandler() constants.ViewHandler {
+	return &SettingsVw{}
+}
 
-	val := m.App.SessionManager.Get(r.Context(), "LoggedIn")
-	if val != true {
-		// m.App.LoggedIn = false
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
+func (m *SettingsVw) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
+	slog.Info("Processing request", "ID", "HeaderVw")
+}
+
+func (m *SettingsVw) HandleMBusRequest(w http.ResponseWriter, r *http.Request) any{ 
+
+	return nil
+}
+
+func (m *SettingsVw) HandleRequest(w http.ResponseWriter, r *http.Request) any {
+	fmt.Println("[SettingsVw] - HandleRequest")
+	var obj SettingsVwData
+
+	if session.SessionSvc.SessionMgr.Exists(r.Context(), "settingsvw") {
+		obj = session.SessionSvc.SessionMgr.Pop(r.Context(), "settingsvw").(SettingsVwData)
 	} else {
-		// m.App.LoggedIn = true
+		obj = *CreateSettingsVwData()	
 	}
+	obj.ProcessHttpRequest(w, r)	
+	session.SessionSvc.SessionMgr.Put(r.Context(), "settingsvw", obj)
+
+	return obj
+}
+
+///////////////////// Settings View Data //////////////////////
+
+type SettingsVwData struct {
+	Base base.BaseTemplateparams
+	Data any
+	Lbl string
+	View int
+	LastSynchTIme string
+}
+
+func CreateSettingsVwData() *SettingsVwData {
+	return &SettingsVwData{
+		Base: base.GetBaseTemplateObj(),
+		Data: nil,
+		Lbl: "Settings",
+		View: constants.RM_SETTINGS_MODAL,
+		LastSynchTIme: time.Now().Format("2006-01-02 15:04:05"),
+	}
+}
+
+func (m *SettingsVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request) *SettingsVwData{
+	fmt.Println("[settingsvw] - Processing request")
 
 	d := r.PostForm
 	s := d.Get("label")
@@ -77,17 +97,10 @@ func (m *SettingsVw) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
 
 	switch s {
 	case "upload":
-		render.RenderTemplate_new(w, nil, nil, constants.RM_UPLOAD_MODAL)
+		m.View = constants.RM_UPLOAD_MODAL
+		// render.RenderTemplate_new(w, nil, nil, constants.RM_UPLOAD_MODAL)
 	case "Test Button":
 		fmt.Println("Test Button Clicked ok")		
-
-		// datetime.Prac1()   
-		// datetime.Prac2()
-		// datetime.Prac3()
-
-		// htmlParser()
-		// unigydata.IdentifyValidDbEndpoints()
-		m.App.SessionManager.Put(r.Context(), "btnpressed", "truedat")
 	
 	case "Test Button2":
 		fmt.Println("Test Button2 Clicked")
@@ -101,9 +114,7 @@ func (m *SettingsVw) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
 		unigydata.PopulateDeviceTableByEnterprise("Dopey")
 	case "Test Button4":
 		fmt.Println("Test Button4 Clicked")
-		// token.TestDecrypt2()
-		x := m.App.SessionManager.Get(r.Context(), "btnpressed")
-		fmt.Println("Button Pressed: ", x)
+		
 	case "Enter Button":
 		fmt.Println("Enter Button Clicked")
 		s := d.Get("ip")
@@ -129,7 +140,10 @@ func (m *SettingsVw) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
 			unigydata.PopulateDeviceTableByEnterprise(el.Data[0])
 		}				
 	}
+	return m
 }
+
+
 
 func testHttp() {
 	tr := &http.Transport{

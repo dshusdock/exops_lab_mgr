@@ -8,7 +8,9 @@ import (
 	"dshusdock/tw_prac1/internal/services/database/dbdata"
 	q "dshusdock/tw_prac1/internal/services/database/queries"
 	"dshusdock/tw_prac1/internal/services/messagebus"
+	"dshusdock/tw_prac1/internal/services/session"
 	b "dshusdock/tw_prac1/internal/views/base"
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -16,11 +18,6 @@ import (
 
 type LSTableVW struct {
 	App        *config.AppConfig
-	// Id         string
-	// RenderFile string
-	// ViewFlags  []bool
-	// LSTableVWData       TableDef
-	// Htmx       any
 }
 
 var AppLSTableVW *LSTableVW
@@ -29,6 +26,7 @@ func init() {
 	AppLSTableVW = &LSTableVW{
 		App: nil,
 	}
+	gob.Register(LSTableVWData{})
 	messagebus.GetBus().Subscribe("Event:Click", AppLSTableVW.HandleMBusRequest)
 }
 
@@ -49,18 +47,29 @@ func (m *LSTableVW) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Label: ", s)
 
 	CreateLSTableVWData().ProcessHttpRequest(w, r)
-
 }
 
-func (m *LSTableVW) HandleMBusRequest(w http.ResponseWriter, r *http.Request) {
+func (m *LSTableVW) HandleMBusRequest(w http.ResponseWriter, r *http.Request) any{
 	fmt.Println("[LSTableVW] - Processing MBus request")
 
-	CreateLSTableVWData().ProcessMBusRequest(w, r)
+	obj := CreateLSTableVWData().ProcessMBusRequest(w, r)
+	return obj
 }
 
 func (m *LSTableVW) HandleRequest(w http.ResponseWriter, r *http.Request) any {
 	fmt.Println("[LSTableVW] - HandleRequest")
-	obj := CreateLSTableVWData().ProcessHttpRequest(w, r)
+
+
+	var obj LSTableVWData
+
+	if session.SessionSvc.SessionMgr.Exists(r.Context(), "lstablevw") {
+		obj = session.SessionSvc.SessionMgr.Pop(r.Context(), "lstablevw").(LSTableVWData)
+	} else {
+		obj = *CreateLSTableVWData()	
+	}
+
+	obj.ProcessHttpRequest(w, r)	
+	session.SessionSvc.SessionMgr.Put(r.Context(), "lstablevw", obj)
 
 	return obj
 }
@@ -71,6 +80,7 @@ func (m *LSTableVW) HandleRequest(w http.ResponseWriter, r *http.Request) any {
 type LSTableVWData struct {
 	Base 			b.BaseTemplateparams
 	LSTableVWData   TableDef
+	View 			int
 	SNData    		any
 }
 
@@ -116,26 +126,56 @@ func CreateLSTableVWData() *LSTableVWData {
 
 func (m *LSTableVWData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request) *LSTableVWData{	
 	d := r.PostForm
-	s := d.Get("label")
+	e := d.Get("event")
+
+	switch e {
+	case con.EVENT_CLICK:
+		m.ProcessClickEvent(w, r)
+	case con.EVENT_SEARCH:
+		// m.processSearchEvent(w, d)	
 	
-	switch s {
-	case "upload":
-		// render.RenderTemplate_new(w, nil, nil, con.RM_UPLOAD_MODAL)
-		// renderview.RenderViewSvc.RenderTemplate(w, nil, con.RM_UPLOAD_MODAL)
-	case "Table":
-		m.Base.MainTable = true		
-		m.Base.Cards = false
-		m.LoadTableData(s)
-		m.SNData = nil
+	default:
+		m.ProcessRequest(w, r)
 	}
 	return m
 }
 
-func (m *LSTableVWData) ProcessMBusRequest(w http.ResponseWriter, r *http.Request) {
+func (m *LSTableVWData) ProcessClickEvent(w http.ResponseWriter, r *http.Request) *LSTableVWData{
+	d := r.PostForm
+	lbl := d.Get("label")
+	str := d.Get("view_str")
+
+	if lbl == "Table" {
+		m.Base.MainTable = true		
+		m.Base.Cards = false
+		m.LoadTableData(lbl)
+		m.SNData = nil
+	} else {
+		m.LoadTblDataByQuery(getListFromId(str, lbl))
+		m.View = con.RM_TABLE_REFRESH
+	}
+
+	return m
+}
+
+func (m *LSTableVWData) ProcessRequest(w http.ResponseWriter, r *http.Request) *LSTableVWData{
+	// d := r.PostForm
+	// s := d.Get("label")
+
+	
+	return m
+}
+
+func (m *LSTableVWData) ProcessMBusRequest(w http.ResponseWriter, r *http.Request) *LSTableVWData{
 
 	fmt.Printf("[%s] - Processing Internal request\n", "LSTableVWData")
 	d := r.PostForm
 	lbl := d.Get("label")
+	id := d.Get("view_id")
+	str := d.Get("view_str")
+	fmt.Println("[LSTableVWData]label: ", lbl)
+	fmt.Println("[LSTableVWData]view_id: ", id)
+	fmt.Println("[LSTableVWData]view_str: ", str)
 	
 	switch lbl {
 	case "Table":
@@ -143,7 +183,10 @@ func (m *LSTableVWData) ProcessMBusRequest(w http.ResponseWriter, r *http.Reques
 		m.Base.Cards = false
 		m.LoadTableData(lbl)
 		m.SNData = nil
+		return m
 	}
+
+	return m
 	// render.RenderTemplate_new(w, nil, m, con.RM_TABLE)
 	// renderview.RenderViewSvc.RenderTemplate(w, r, con.RM_TABLE)
 }
@@ -204,3 +247,20 @@ func (m *LSTableVWData) LoadTblDataByQuery(qry string) error{
 	m.LSTableVWData.HdrDef = ptr.HdrDef
 	return nil
 }
+
+func getListFromId(id string, lbl string) string {
+	var str string
+	part := "Select * from LabSystem where "
+
+	switch id {
+	case "enterprise":
+		str = fmt.Sprintf(part + "Enterprise = \"%s\"", lbl)
+	case "swver":
+		str = fmt.Sprintf(part + "swVer = \"%s\"", lbl)
+	case "Unigy":
+		str = fmt.Sprintf(part + "Enterprise = \"%s\"", lbl)
+	}
+	fmt.Println("---->Query: ", str)
+	return str
+}
+

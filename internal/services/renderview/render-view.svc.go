@@ -6,10 +6,12 @@ import (
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/messagebus"
 	"dshusdock/tw_prac1/internal/views/base"
+	"dshusdock/tw_prac1/internal/views/cardsvw"
 	"dshusdock/tw_prac1/internal/views/headervw"
 	"dshusdock/tw_prac1/internal/views/labsystemvw"
 	"dshusdock/tw_prac1/internal/views/layoutvw"
 	"dshusdock/tw_prac1/internal/views/login"
+	"dshusdock/tw_prac1/internal/views/settingsvw"
 	"dshusdock/tw_prac1/internal/views/sidenav"
 	"fmt"
 	"net/http"
@@ -21,6 +23,10 @@ type RenderView struct {
 }
 
 var RenderViewSvc *RenderView
+
+func MapRenderViewSvc(r *RenderView) {
+	RenderViewSvc = r
+}
 
 type DisplayData struct {
 	Base 		base.BaseTemplateparams
@@ -36,17 +42,10 @@ func InitRouteHandlers() {
 	RenderViewSvc.ViewHandlers["headervw"] = headervw.AppHeaderVw.RegisterHandler()
 	RenderViewSvc.ViewHandlers["sidenav"] = sidenav.AppSideNavVw.RegisterHandler()
 	RenderViewSvc.ViewHandlers["lstablevw"] = labsystemvw.AppLSTableVW.RegisterHandler()
-
+	RenderViewSvc.ViewHandlers["cardsvw"] = cardsvw.AppCardsVW.RegisterHandler()
+	RenderViewSvc.ViewHandlers["settingsvw"] = settingsvw.AppSettingsVw.RegisterHandler()
 
 	// Repo.App.ViewCache["settingsvw"] = settingsvw.AppSettingsVw.RegisterView(Repo.App) 
-	// Repo.App.ViewCache["lstablevw"] = labsystemvw.AppLSTableVW.RegisterView(Repo.App)
-	
-	// Repo.App.ViewCache["cardsvw"] = cardsvw.AppCardsVW.RegisterView(Repo.App)
-	
-
-	// Register the services
-	// Repo.App.ViewCache["unigystatus"] = unigystatus.AppStatusSvc.RegisterService(Repo.App)
-	// Repo.App.ViewCache["unigydata"] = unigydata.AppUnigyDataSvc.RegisterService(Repo.App)
 }
 
 func NewRenderViewSvc(app *config.AppConfig) *RenderView {
@@ -60,21 +59,6 @@ func NewRenderViewSvc(app *config.AppConfig) *RenderView {
 	messagebus.GetBus().Subscribe("Event:Click", RenderViewSvc.HandleMBusRequest)
 	return RenderViewSvc
 	
-}
-
-func (rv *RenderView) HandleMBusRequest(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("[renderview] - HandleMBusRequest")
-    d := r.PostForm
-	id := d.Get("view_id")	
-
-	switch id {
-	case  "headervw":
-		rv.HandleHeaderVwRequest(w, r)
-	}
-}
-
-func MapRenderViewSvc(r *RenderView) {
-	RenderViewSvc = r
 }
 
 func (rv *RenderView) ProcessRequest(w http.ResponseWriter, r *http.Request, view string) {
@@ -95,20 +79,30 @@ func (rv *RenderView) ProcessRequest(w http.ResponseWriter, r *http.Request, vie
 
 	switch view {
 	case "loginvw":
-		_view = rslt.(*login.LoginVwData).View
-		obj.Base = rslt.(*login.LoginVwData).Base
+		_view = rslt.(login.LoginVwData).View
+		obj.Base = rslt.(login.LoginVwData).Base
 	case "basevw":		
-		_view = rslt.(*base.BaseVwData).View
-		obj.Base = rslt.(*base.BaseVwData).Base
+		_view = rslt.(base.BaseVwData).View
+		obj.Base = rslt.(base.BaseVwData).Base
 	case "layoutvw":
-		_view = rslt.(*layoutvw.LayoutVwData).View
-		obj.Base = rslt.(*layoutvw.LayoutVwData).Base
+		_view = rslt.(layoutvw.LayoutVwData).View
+		obj.Base = rslt.(layoutvw.LayoutVwData).Base
 	case "headervw":
-		_view = rslt.(*headervw.HeaderVwData).View
-		obj.Base = rslt.(*headervw.HeaderVwData).Base
+		_view = rslt.(headervw.HeaderVwData).View
+		obj.Base = rslt.(headervw.HeaderVwData).Base
 	case "sidenav":
 		_view = rslt.(sidenav.SideNavVwData).View
 		obj.Base = rslt.(sidenav.SideNavVwData).Base
+	case "lstablevw":
+		_view = rslt.(labsystemvw.LSTableVWData).View
+		obj.Base = rslt.(labsystemvw.LSTableVWData).Base
+	case "cardsvw":
+		_view = rslt.(cardsvw.CardsVwData).View
+		obj.Base = rslt.(cardsvw.CardsVwData).Base
+		obj.Base.Cards = true
+	case "settingsvw":
+		_view = rslt.(settingsvw.SettingsVwData).View
+		obj.Base = rslt.(settingsvw.SettingsVwData).Base
 	default:
 	}	
 
@@ -121,44 +115,91 @@ func (rv *RenderView) ProcessRequest(w http.ResponseWriter, r *http.Request, vie
 	rv.RenderTemplate(w, obj, _view)
 }
 
+func (rv *RenderView) HandleMBusRequest(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("[renderview] - HandleMBusRequest")
+    d := r.PostForm
+	id := d.Get("view_id")	
+
+	switch id {
+	case  "headervw":
+		rv.HandleHeaderVwEvent(w, r)
+		return
+	case "sidenav":		
+		rv.HandleSideNavEvent(w, r)
+	case "settingsvw":
+		rv.HandleSettingsVwEvent(w, r)
+	}
+}
+
 func (rv *RenderView) RenderTemplate(w http.ResponseWriter, data any, view int) {
 	render.RenderTemplate_new(w, nil, data, view)
 }
 
-func (rv *RenderView) RegisterView(name string, ptr constants.ViewHandler) {
-	rv.ViewHandlers[name] = ptr
+// func (rv *RenderView) RegisterView(name string, ptr constants.ViewHandler) {
+// 	rv.ViewHandlers[name] = ptr
+// }
+
+func (rv *RenderView) HandleSettingsVwEvent(w http.ResponseWriter, r *http.Request) {
+	rv.ProcessRequest(w, r, "settingsvw")
 }
 
-func (rv *RenderView) HandleHeaderVwRequest(w http.ResponseWriter, r *http.Request) {
-	_base := base.GetBaseTemplateObj()
-	_base.SideNav = true
-	_base.MainTable = true
-	_base.LoggedIn = true
-	
+func (rv *RenderView) HandleSideNavEvent(w http.ResponseWriter, r *http.Request) {
+	rv.ProcessRequest(w, r, "lstablevw")
+}
+
+func (rv *RenderView) HandleHeaderVwEvent(w http.ResponseWriter, r *http.Request) {
+	d := r.PostForm
+	lbl := d.Get("label")
+
 	obj := DisplayData{
-		Base: _base,
+		Base: base.GetBaseTemplateObj(),
 		Tmplt: make(map[string]*any),
 	}
+	
+	switch lbl{
+	case "Table":
+		obj.Base.MainTable = true
+		obj.Base.Cards = false
+		obj.Base.SideNav = true
 
-	obj.TestStr = "Test String"
+		rslt := rv.ViewHandlers["sidenav"].HandleRequest(w, r)
+		obj.Tmplt["sidenav"] = &rslt 
 
-	rslt := rv.ViewHandlers["sidenav"].HandleRequest(w, r)
-	obj.Tmplt["sidenav"] = &rslt 
-	// fmt.Printf("%+v\n", rslt)
+		rslt2 := rv.ViewHandlers["lstablevw"].HandleRequest(w, r)
+		obj.Tmplt["lstablevw"] = &rslt2
 
-	rslt2 := rv.ViewHandlers["lstablevw"].HandleRequest(w, r)
-	obj.Tmplt["lstablevw"] = &rslt2
-	// fmt.Printf("%+v\n", rslt2)
+		rv.RenderTemplate(w, obj, constants.RM_TABLE)
+	case "settings": 
+		obj.Base.MainTable = false
+		obj.Base.Cards = false
+		obj.Base.SideNav = false
 
-	rv.RenderTemplate(w, obj, constants.RM_TABLE)
-	// render.RenderTemplate_new(w, nil, obj, constants.RM_TABLE)
+		rslt := rv.ViewHandlers["settingsvw"].HandleRequest(w, r)
+		_view := constants.RM_SETTINGS_MODAL
+		// obj.Base = rslt.(settingsvw.SettingsVwData).Base
+		obj.Tmplt["settingsvw"] = &rslt
+		rv.RenderTemplate(w, obj, _view)
+	case "upload":
+		obj.Base.MainTable = false
+		obj.Base.Cards = false
+		obj.Base.SideNav = false
+
+		rslt := rv.ViewHandlers["settingsvw"].HandleRequest(w, r)
+		_view := constants.RM_UPLOAD_MODAL
+		// obj.Base = rslt.(settingsvw.SettingsVwData).Base
+		obj.Tmplt["settingsvw"] = &rslt
+		rv.RenderTemplate(w, obj, _view)
+	default:
+		obj.Base.MainTable = false
+		obj.Base.Cards = true
+		obj.Base.SideNav = false
+
+		rslt := rv.ViewHandlers["cardsvw"].HandleRequest(w, r)
+		_view := constants.RM_TABLE
+		obj.Base = rslt.(cardsvw.CardsVwData).Base
+		obj.Base.Cards = true
+		obj.Tmplt["cardsvw"] = &rslt
+		rv.RenderTemplate(w, obj, _view)
+	}
+
 }
-
-
-////////////////////////////////////////////////
-
-
-
-// func (rv *RenderView) UpdateView(view constants.ViewInteface) *RenderView{
-// 	return &RenderView{}
-// }

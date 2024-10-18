@@ -3,21 +3,13 @@ package headervw
 import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/constants"
-	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/messagebus"
+	"dshusdock/tw_prac1/internal/services/session"
 	"dshusdock/tw_prac1/internal/views/base"
-	"log/slog"
-	"strings"
-
-	// "dshusdock/tw_prac1/internal/views/cardsvw"
-	// "dshusdock/tw_prac1/internal/views/cardsvw"
-	// "dshusdock/tw_prac1/internal/views/labsystemvw"
-
-	// "dshusdock/tw_prac1/internal/views/labsystemvw"
-	// "dshusdock/tw_prac1/internal/views/tablevw"
+	"encoding/gob"
 	"fmt"
+	"log/slog"
 	"net/http"
-	"net/url"
 )
 
 type HeaderVw struct {
@@ -34,6 +26,7 @@ func init() {
 	AppHeaderVw = &HeaderVw{
 		App: nil,
 	}
+	gob.Register(HeaderVwData{})
 	messagebus.GetBus().Subscribe("Event:ViewChange", AppHeaderVw.HandleMBusRequest)
 }
 
@@ -53,11 +46,28 @@ func (m *HeaderVw) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
 	CreateHeaderVwData().ProcessHttpRequest(w, r)
 }
 
-func (m *HeaderVw) HandleMBusRequest(w http.ResponseWriter, r *http.Request) {}
+func (m *HeaderVw) HandleMBusRequest(w http.ResponseWriter, r *http.Request) any{ 
+	return nil
+}
 
 func (m *HeaderVw) HandleRequest(w http.ResponseWriter, r *http.Request) any {
 	fmt.Println("[HeaderVw] - HandleRequest")
-	obj := CreateHeaderVwData().ProcessHttpRequest(w, r)
+	
+	d := r.PostForm
+	id := d.Get("view_id")
+
+	var obj HeaderVwData
+
+	if session.SessionSvc.SessionMgr.Exists(r.Context(), "headervw") {
+		obj = session.SessionSvc.SessionMgr.Pop(r.Context(), "headervw").(HeaderVwData)
+	} else {
+		obj = *CreateHeaderVwData()	
+	}
+
+	if id == "headervw" {
+		obj.ProcessHttpRequest(w, r)	
+	}
+	session.SessionSvc.SessionMgr.Put(r.Context(), "headervw", obj)
 
 	return obj
 }
@@ -105,9 +115,13 @@ func (m *HeaderVwData) ProcessClickEvent(w http.ResponseWriter, r *http.Request)
 
 	switch lbl {
 	case "upload":
-		render.RenderTemplate_new(w, nil, nil, constants.RM_UPLOAD_MODAL)
+		messagebus.GetBus().Publish("Event:Click", w, r)
+		m.View = constants.RM_NONE
+		// render.RenderTemplate_new(w, nil, nil, constants.RM_UPLOAD_MODAL)
 	case "settings":
-		render.RenderTemplate_new(w, nil, m.Base, constants.RM_SETTINGS_MODAL)
+		messagebus.GetBus().Publish("Event:Click", w, r)
+		m.View = constants.RM_NONE // RM_SETTINGS_MODAL
+		// render.RenderTemplate_new(w, nil, m.Base, constants.RM_SETTINGS_MODAL)
 	case "Table":
 		// This is a composite view
 		messagebus.GetBus().Publish("Event:Click", w, r)
@@ -120,15 +134,9 @@ func (m *HeaderVwData) ProcessClickEvent(w http.ResponseWriter, r *http.Request)
 		
 	case "Cards":
 		// messagebus.GetBus().Publish("Event:ViewChange", w, r)
-		client := &http.Client{}
-    
-    	req, _ := http.NewRequest(http.MethodPost, "127.0.0.1/test3", strings.NewReader(url.Values{
-        	"key": {"value"},
-        	"key1":{"value1"},
-    	}.Encode()))
-
-    	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-    	client.Do(req)
+		messagebus.GetBus().Publish("Event:Click", w, r)
+		m.View = constants.RM_NONE
+		
 	}	
 }
 

@@ -4,7 +4,9 @@ import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/services/messagebus"
+	"dshusdock/tw_prac1/internal/services/session"
 	b "dshusdock/tw_prac1/internal/views/base"
+	"encoding/gob"
 
 	// "dshusdock/tw_prac1/internal/services/messagebus"
 	"fmt"
@@ -23,6 +25,7 @@ func init() {
 	AppLayoutVw = &LayoutVw{
 		App: nil,
 	}
+	gob.Register(LayoutVwData{})
 	messagebus.GetBus().Subscribe("Event:ViewChange", AppLayoutVw.HandleMBusRequest)
 }
 
@@ -43,13 +46,23 @@ func (m *LayoutVw) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
 	// render.RenderModal(w, nil, nil)
 }
 
-func (m *LayoutVw) HandleMBusRequest(w http.ResponseWriter, r *http.Request) {
+func (m *LayoutVw) HandleMBusRequest(w http.ResponseWriter, r *http.Request) any{
 	CreateLayoutVwData().ProcessMBusRequest(w, r)
+	return nil
 }
 
 func (m *LayoutVw) HandleRequest(w http.ResponseWriter, r *http.Request) any {
 	fmt.Println("[LayoutVw] - HandleRequest")
-	obj := CreateLayoutVwData().ProcessHttpRequest(w, r)
+	var obj LayoutVwData
+
+	if session.SessionSvc.SessionMgr.Exists(r.Context(), "layoutvw") {
+		obj = session.SessionSvc.SessionMgr.Pop(r.Context(), "layoutvw").(LayoutVwData)
+	} else {
+		obj = *CreateLayoutVwData()	
+	}
+
+	obj.ProcessHttpRequest(w, r)	
+	session.SessionSvc.SessionMgr.Put(r.Context(), "layoutvw", obj)
 
 	return obj
 }

@@ -6,13 +6,12 @@ import (
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
 	"dshusdock/tw_prac1/internal/services/database/dbdata"
+	"dshusdock/tw_prac1/internal/services/messagebus"
 	"dshusdock/tw_prac1/internal/services/session"
 	"dshusdock/tw_prac1/internal/views/base"
 	"encoding/gob"
-
-	// "dshusdock/tw_prac1/internal/views/labsystemvw"
 	"fmt"
-	"log"
+	"log/slog"
 	"net/http"
 	"net/url"
 	"strings"
@@ -23,6 +22,11 @@ type SideNavVw struct {
 }
 
 var AppSideNavVw *SideNavVw
+
+type DSListData struct {
+	Name     string
+	Selected bool
+}
 
 type SideNavBElemDetail struct {
 	Type    	string
@@ -38,20 +42,16 @@ type SideNavBElemDetail struct {
 	EntListPart []string
 }
 
-type DSListData struct {
-	Name     string
-	Selected bool
-}
-
 func init() {
 	AppSideNavVw = &SideNavVw{
 		App: nil,
 	}
 	gob.Register(SideNavVwData{})
+	messagebus.GetBus().Subscribe("Event:ViewChange", AppSideNavVw.HandleMBusRequest)
 }
 
 func (m *SideNavVw) RegisterView(app *config.AppConfig) *SideNavVw {
-	log.Println("Registering AppSideNav...")
+	slog.Info("Registering AppSideNav...")
 	AppSideNavVw.App = app
 	return AppSideNavVw
 }
@@ -65,7 +65,9 @@ func (m *SideNavVw) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
 	CreateSideNavVwData().ProcessHttpRequest(w, r)
 }
 
-var GlobalObj *SideNavVwData
+func (m *SideNavVw) HandleMBusRequest(w http.ResponseWriter, r *http.Request) any{
+	return nil
+}
 
 func (m *SideNavVw) HandleRequest(w http.ResponseWriter, r *http.Request) any {
 	fmt.Println("[SideNavVw] - HandleRequest")
@@ -155,7 +157,7 @@ func (m *SideNavVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Reques
 
 	switch s {
 	case con.EVENT_CLICK:
-		m.processClickEvent(w, d)
+		m.processClickEvent(w, r)
 	case con.EVENT_SEARCH:
 		m.processSearchEvent(w, d)	
 	}
@@ -163,13 +165,11 @@ func (m *SideNavVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Reques
 	return m
 }
 
-func (m *SideNavVwData) ProcessMBusRequest(w http.ResponseWriter, r *http.Request) {
+func (m *SideNavVwData) ProcessMBusRequest(w http.ResponseWriter, r *http.Request) {}
 
-}
-
-func (m *SideNavVwData) processClickEvent(w http.ResponseWriter, d url.Values) {
-
+func (m *SideNavVwData) processClickEvent(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("[SideNav] ProcessClickEvent")
+	d := r.PostForm
 	lbl := d.Get("label")
 	id := d.Get("view_id")
 
@@ -184,8 +184,9 @@ func (m *SideNavVwData) processClickEvent(w http.ResponseWriter, d url.Values) {
 				
 		// labsystemvw.AppLSTableVW.LoadTblDataByQuery(getListFromId(id, lbl))
 		// labsystemvw.CreateLSTableVWData().LoadTblDataByQuery(getListFromId(id, lbl))
-
-		render.RenderTemplate_new(w, nil, m, constants.RM_TABLE_REFRESH)
+		messagebus.GetBus().Publish("Event:Click", w, r)
+		m.View = constants.RM_NONE
+		// render.RenderTemplate_new(w, nil, m, constants.RM_TABLE_REFRESH)
 		
 	case "select":
 		fmt.Println("In the select case")
@@ -226,21 +227,6 @@ func (m *SideNavVwData) processSearchEvent(w http.ResponseWriter, d url.Values) 
 	render.RenderTemplate_new(w, nil, m, constants.RM_SNIPPET1)
 }
 
-func getListFromId(id string, lbl string) string {
-	var str string
-	part := "Select * from LabSystem where "
-
-	switch id {
-	case "enterprise":
-		str = fmt.Sprintf(part + "Enterprise = \"%s\"", lbl)
-	case "swver":
-		str = fmt.Sprintf(part + "swVer = \"%s\"", lbl)
-	case "Unigy":
-		str = fmt.Sprintf(part + "Enterprise = \"%s\"", lbl)
-	}
-
-	return str
-}
 
 func (m *SideNavVwData) toggleCaret(x int) {
 

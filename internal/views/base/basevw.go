@@ -4,6 +4,7 @@ import (
 	"dshusdock/tw_prac1/config"
 	"dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/render"
+	"dshusdock/tw_prac1/internal/services/session"
 	"fmt"
 	"log"
 	"net/http"
@@ -60,15 +61,25 @@ func (m *BaseVw) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
 	CreateBaseVwData().ProcessHttpRequest(w, r)
 }
 
-func (m *BaseVw) HandleMBusRequest(w http.ResponseWriter, r *http.Request) {
+func (m *BaseVw) HandleMBusRequest(w http.ResponseWriter, r *http.Request) any{
 	CreateBaseVwData().ProcessMBusRequest(w, r)
+	return nil
 }
 
 // func (m *BaseVw) HandleRequest(w http.ResponseWriter, r *http.Request, c chan any, d chan int) {
 func (m *BaseVw) HandleRequest(w http.ResponseWriter, r *http.Request) any{	
 	fmt.Println("[lyoutvw] - HandleRequest")
-	obj := CreateBaseVwData().ProcessHttpRequest(w, r)
-	// c <- rslt
+	var obj BaseVwData
+
+	if session.SessionSvc.SessionMgr.Exists(r.Context(), "basevw") {
+		obj = session.SessionSvc.SessionMgr.Pop(r.Context(), "basevw").(BaseVwData)
+	} else {
+		obj = *CreateBaseVwData()	
+	}
+	obj.ProcessHttpRequest(w, r)	
+	
+	session.SessionSvc.SessionMgr.Put(r.Context(), "basevw", obj)
+
 	return obj
 }
 

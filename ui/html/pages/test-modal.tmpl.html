@@ -1,7 +1,7 @@
 {{define "test-modal"}}
 
 <!-- The Modal -->
-<div id="myModal" class="fileupload-modal"  x-data="modalData">
+<div id="myUploadModal" class="fileupload-modal"  x-data="modalData">
 
     <!-- Modal content -->
     <div class="fileupload-modal__content" @click.outside="onOutsideClick(event)">
@@ -20,7 +20,6 @@
         <progress id='progress' value='0' max='100' class="progress"></progress>
       </form>
     </div>
-  
 </div>
 
 <script>

@@ -7,24 +7,25 @@
   margin: 0rem 0 2rem 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  // overflow: auto;
 
   &__right-nav {
     position: sticky;
     top: 20px;
-   
+
     margin-top: 2rem;
     width: 27rem;
     background: $color-secondary-dark;
-    height: 60rem;
-    
+    height: auto;
+    max-height: 80rem;
+
     border-radius: 0.7rem;
     box-shadow: 0 1rem 2rem rgba(black, 0.2);
     font-size: 1.7rem;
     font-family: sans-serif;
     // transition: display 1s ease-in;
     overflow-y: auto;
-
+    overflow-x: hidden;
   }
 
   &__right-nav-select {
@@ -39,8 +40,6 @@
     background-color: $color-secondary-dark;
     margin: 2rem 0 0 2rem;
   }
-
-  
 
   &__right-nav__cntrl {
     display: flex;
@@ -100,7 +99,7 @@
     }
 
     & button:focus {
-      background-color: #40A9BF;
+      background-color: #40a9bf;
     }
   }
 }
@@ -181,145 +180,141 @@
   }
 }
 
-
-
-
 ///////////////////////////////////
-/// 
+///
 
 .cr-wrapper *,
 .cr-wrapper *::before,
 .cr-wrapper *::after {
-	box-sizing: content-box !important;
+  box-sizing: content-box !important;
 }
 
 .cr-wrapper input {
-	position: absolute;
-	z-index: -1;
-	opacity: 0;
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
 }
 
 .cr-wrapper span {
-	font-size: 16px;
+  font-size: 16px;
   color: white;
-  margin: .5rem 0 0 0;
+  margin: 0.5rem 0 0 0;
 }
 
 .cr-wrapper {
-	display: table;
-	position: relative;
-	padding-left: 30px;
-	cursor: pointer;
-	margin-bottom: 15px;
+  display: table;
+  position: relative;
+  padding-left: 30px;
+  cursor: pointer;
+  margin-bottom: 15px;
 }
 
 .cr-wrapper input[type="checkbox"] ~ .cr-input {
-	position: absolute;
-	top: 50%;
-	left: 0;
-	height: 20px;
-	width: 20px;
-	background: #94A3B8;
-	transition: background 250ms;
-	border: 1px solid #F1F5F9;
-	border-radius: 3px;
-	transform: translate(0, -50%);
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background: #94a3b8;
+  transition: background 250ms;
+  border: 1px solid #f1f5f9;
+  border-radius: 3px;
+  transform: translate(0, -50%);
 }
 
 .cr-wrapper input[type="radio"] ~ .cr-input {
-	position: absolute;
-	top: 50%;
-	left: 0;
-	height: 20px;
-	width: 20px;
-	background: #94A3B8;
-	transition: background 250ms;
-	border: 1px solid #F1F5F9;
-	border-radius: 19px;
-	transform: translate(0, -50%);
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background: #94a3b8;
+  transition: background 250ms;
+  border: 1px solid #f1f5f9;
+  border-radius: 19px;
+  transform: translate(0, -50%);
 }
 
 .cr-wrapper input[type="checkbox"] ~ .cr-input::after {
-	content: "";
-	position: absolute;
-	display: none;
-	left: 4px;
-	top: 4px;
-	width: 12px;
-	height: 12px;
-	transition: background 250ms;
-	background-color: #FFFFFF;
-	clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  content: "";
+  position: absolute;
+  display: none;
+  left: 4px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  transition: background 250ms;
+  background-color: #ffffff;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
 }
 
 .cr-wrapper input[type="radio"] ~ .cr-input::after {
-	content: "";
-	position: absolute;
-	display: none;
-	left: 4px;
-	top: 4px;
-	width: 12px;
-	height: 12px;
-	border-radius: 20px;
-	background: #FFFFFF;
-	transition: background 250ms;
+  content: "";
+  position: absolute;
+  display: none;
+  left: 4px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 20px;
+  background: #ffffff;
+  transition: background 250ms;
 }
 
 .cr-wrapper input:checked ~ .cr-input::after {
-	display: block;
+  display: block;
 }
 
 .cr-wrapper:hover input[type="checkbox"]:not([disabled]) ~ .cr-input,
 .cr-wrapper input[type="checkbox"]:focus ~ .cr-input {
-	background: #E2E8F0;
-	border-color: #64748B;
+  background: #e2e8f0;
+  border-color: #64748b;
 }
 
 .cr-wrapper:hover input[type="radio"]:not([disabled]) ~ .cr-input,
 .cr-wrapper input[type="radio"]:focus ~ .cr-input {
-	background: #E2E8F0;
-	border-color: #64748B;
+  background: #e2e8f0;
+  border-color: #64748b;
 }
 
 .cr-wrapper input[type="checkbox"]:checked ~ .cr-input {
-	background: #40A9BF;
-	border-color: #2F7D8E;
+  background: #40a9bf;
+  border-color: #2f7d8e;
 }
 
 .cr-wrapper input[type="radio"]:checked ~ .cr-input {
-	background: #40A9BF;
-	border-color: #2F7D8E;
+  background: #40a9bf;
+  border-color: #2f7d8e;
 }
 
 .cr-wrapper input[type="checkbox"]:disabled ~ .cr-input,
 .cr-wrapper input[type="radio"]:disabled ~ .cr-input {
-	opacity: 0.5;
-	cursor: not-allowed;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .cr-wrapper input[type="checkbox"]:disabled ~ span,
 .cr-wrapper input[type="radio"]:disabled ~ span {
-	opacity: 0.5;
-	cursor: not-allowed;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .cr-wrapper input[type="checkbox"]:disabled ~ .cr-input::after {
-	background: #FFFFFF;
+  background: #ffffff;
 }
 
 .cr-wrapper input[type="radio"]:disabled ~ .cr-input::after {
-	background: #FFFFFF;
+  background: #ffffff;
 }
 
 .cr-wrapper:hover input[type="checkbox"]:not([disabled]):checked ~ .cr-input,
 .cr-wrapper input[type="checkbox"]:checked:focus ~ .cr-input {
-	background: #2F7D8E;
-	border-color: #225D69;
+  background: #2f7d8e;
+  border-color: #225d69;
 }
 
 .cr-wrapper:hover input[type="radio"]:not([disabled]):checked ~ .cr-input,
 .cr-wrapper input[type="radio"]:checked:focus ~ .cr-input {
-	background: #2F7D8E;
-	border-color: #225D69;
+  background: #2f7d8e;
+  border-color: #225d69;
 }
-

@@ -1,12 +1,14 @@
 {{define "activity"}}
-<div class="activity-sidenav">
-   {{template "sidenav" .}}  
+{{if .Base.SideNav}}
+<div class="activity-sidenav">  
+      {{template "sidenav" .}} 
 </div>
+{{end}}
 <div class="activity-main">
    {{if .Base.MainTable}}     
       {{template "lstable" .}}
    {{end}}
-   {{if .Cards}}
+   {{if .Base.Cards}}
       {{template "cardsvw" .}}
    {{end}}
 </div> 

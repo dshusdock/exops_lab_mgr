@@ -15,13 +15,17 @@ export default () => ({
       document.getElementById("fileChoice").innerText = fileName;
     },
     onCloseClick(event) {
-      console.log("close clicked");
-      let modal = document.getElementById("myModal");
+      console.log("modal close clicked");
+      let modal = document.getElementById("myUploadModal");
+      let x = document.getElementsByClassName("fileupload-modal")[0]
+      x.style.display = "none";
+      x.innerText = "TEST";
+      modal.innerText = "TEST";
       modal.style.display = "none";
     },
     onOutsideClick(event) {
       console.log("outside clicked");
-      let modal = document.getElementById("myModal");
+      let modal = document.getElementById("myUploadModal");
       if (event.target == modal) {
         modal.style.display = "none";
       }

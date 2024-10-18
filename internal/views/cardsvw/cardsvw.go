@@ -2,12 +2,15 @@ package cardsvw
 
 import (
 	"dshusdock/tw_prac1/config"
+	"dshusdock/tw_prac1/internal/constants"
 	con "dshusdock/tw_prac1/internal/constants"
-	"dshusdock/tw_prac1/internal/render"
 	d "dshusdock/tw_prac1/internal/services/database"
 	"dshusdock/tw_prac1/internal/services/database/dbdata"
 	q "dshusdock/tw_prac1/internal/services/database/queries"
 	"dshusdock/tw_prac1/internal/services/messagebus"
+	"dshusdock/tw_prac1/internal/services/session"
+	"dshusdock/tw_prac1/internal/views/base"
+	"encoding/gob"
 	"fmt"
 	"log"
 	"log/slog"
@@ -47,8 +50,65 @@ const (
 	SWVERSION
 )
 
+/////////////////////////////////////////////////////////////
+
+type CardsVw struct {
+	App  *config.AppConfig
+}
+
+var AppCardsVW *CardsVW
+
 type CardsVW struct {
-	App        		*config.AppConfig
+	App  *config.AppConfig
+}
+
+func init() {
+	AppCardsVW = &CardsVW{
+		App:	&config.AppConfig{},
+	}
+	gob.Register(CardsVwData{})
+	messagebus.GetBus().Subscribe("Event:ViewChange", AppCardsVW.HandleMBusRequest)
+}
+
+func (m *CardsVW) RegisterView(app *config.AppConfig) *CardsVW {
+	log.Println("Registering AppCardsVW...")
+	AppCardsVW.App = app
+	return AppCardsVW
+}
+
+func (m *CardsVW) RegisterHandler() constants.ViewHandler {
+	return &CardsVW{}
+}
+
+func (m *CardsVW) HandleMBusRequest(w http.ResponseWriter, r *http.Request) any{
+	return nil
+}
+
+func (m *CardsVW) HandleRequest(w http.ResponseWriter, r *http.Request) any {
+	d := r.PostForm
+	id := d.Get("view_id")
+
+	var obj CardsVwData
+
+	if session.SessionSvc.SessionMgr.Exists(r.Context(), "cardsvw") {
+		obj = session.SessionSvc.SessionMgr.Pop(r.Context(), "cardsvw").(CardsVwData)
+	} else {
+		obj = *CreateCardsVwData()	
+	}
+
+	if id == "cardsvw" || id == "headervw" {
+		obj.ProcessHttpRequest(w, r)	
+	}
+	session.SessionSvc.SessionMgr.Put(r.Context(), "cardsvw", obj)
+
+	return obj
+}
+
+///////////////////// Cards View Data //////////////////////
+
+type CardsVwData struct {
+	Base base.BaseTemplateparams
+	View int
 	Id         		string
 	RenderFile 		string
 	ViewFlags  		[]bool
@@ -61,87 +121,87 @@ type CardsVW struct {
 	SelectedFilter	string
 }
 
-var AppCardsVW *CardsVW
- 
-func init() {
-
-	AppCardsVW = &CardsVW{
-		App:        	&config.AppConfig{},
+func CreateCardsVwData() *CardsVwData {
+	return &CardsVwData{
 		Id:         	"cardsvw",
 		RenderFile: 	"",
 		ViewFlags:  	[]bool{true},
 		Cards:      	[]CardDef{},
-		Turret:		 	[]TurretDef{},
+		Turret:			[]TurretDef{},
 		Htmx:       	nil,
 		SidePanelDef: 	[]SidePanelBtn{},
 		EnterpriseVw:   true,
 		SelectedDevice: "",
 		SelectedFilter: "",
 	}
-
-	messagebus.GetBus().Subscribe("Event:ViewChange", AppCardsVW.ProcessMBusRequest)
 }
 
-func (m *CardsVW) RegisterView(app *config.AppConfig) *CardsVW {
-	log.Println("Registering AppCardsVW...")
-	AppCardsVW.App = app
-	return AppCardsVW
-}
-
-func (m *CardsVW) ProcessMBusRequest(w http.ResponseWriter, d url.Values) {
+func (m *CardsVwData) ProcessMBusRequest(w http.ResponseWriter, d url.Values) *CardsVwData{
 	slog.Info("ProcessMBusRequest", "ID", m.Id)
 	s := d.Get("label")
 	slog.Info("Target - ", "Label", s)
 	
-	m.App.MainTable = false
-	m.App.Cards = true
+	m.Base.MainTable = false
+	m.Base.Cards = true
 	m.EnterpriseVw = true
 
-	AppCardsVW.LoadCardData()
-	AppCardsVW.UpdateSidePanel(ENTERPRISE)
-	render.RenderTemplate_new(w, nil, m.App, con.RM_CARDS)
+	m.LoadCardData()
+	m.UpdateSidePanel(ENTERPRISE)
+	m.View = con.RM_CARDS
+	return m
+	// render.RenderTemplate_new(w, nil, m, con.RM_CARDS)
 }
 
-func (m *CardsVW) HandleHttpRequest(w http.ResponseWriter, r *http.Request) {
+func (m *CardsVwData) ProcessHttpRequest(w http.ResponseWriter, r *http.Request) *CardsVwData{
 	fmt.Println("[AppCardsVW] - Processing request")
-	var fileIdx int
 	d := r.PostForm
 	lbl := d.Get("label")
 	_type := d.Get("type")
+	viewId := d.Get("view_id")
 	selector := d.Get("view_str")
 	fmt.Println("selector: ", selector)
 
-	if selector == "device-selector" {
+	if selector == "device-selector" || viewId == "headervw" {
 		// m.EnterpriseVw = true
+
 		switch _type {
-		case "button":			
-			ret := m.handleSelectedDevice(lbl)
-			render.RenderTemplate_new(w, nil, m.App, ret)
+		case "button":
+			if lbl != "Max" && lbl != "Unigy" && lbl != "Touch" {
+				lbl = "Unigy"
+			} 			
+			m.UpdateSidePanel(ENTERPRISE)
+			m.View = m.handleSelectedDevice(lbl)
+			
+			// render.RenderTemplate_new(w, nil, m, ret)
 		}
 	} else { // Filter selector
 		switch _type {
 		case "button":			
 			ret := m.handleSelectedFilter(lbl)
-			render.RenderTemplate_new(w, nil, m.App, ret) 
+			m.View = ret
 		case "radio":
 			fmt.Println("Radio button selected")
 
-			fileIdx = con.RM_CARDS_SIDENAV
+			m.View = con.RM_CARDS_SIDENAV
 			if lbl == "EnterpriseVw" {
 				m.EnterpriseVw = true
-				AppCardsVW.UpdateSidePanel(ENTERPRISE)
+				m.UpdateSidePanel(ENTERPRISE)
 				
 			} else {
 				m.EnterpriseVw = false	
-				AppCardsVW.UpdateSidePanel(SWVERSION)		
-				
+				m.UpdateSidePanel(SWVERSION)						
 			}
-			render.RenderTemplate_new(w, nil, m.App, fileIdx)
 		}
 	}
+	return m
 }
 
-func (m *CardsVW) handleSelectedDevice(lbl string) int {
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+
+func (m *CardsVwData) handleSelectedDevice(lbl string) int {
 	var fileIdx = con.RM_CARDS_UNIGY
 	switch lbl {
 	case "Max":
@@ -150,7 +210,7 @@ func (m *CardsVW) handleSelectedDevice(lbl string) int {
 		fileIdx = con.RM_CARDS_MAX
 	case "Unigy":
 		m.SelectedDevice = "Unigy"
-		AppCardsVW.LoadCardData()
+		m.LoadCardData()
 		fileIdx = con.RM_CARDS_UNIGY
 	case "Touch":
 		m.SelectedDevice = "Touch"
@@ -160,7 +220,7 @@ func (m *CardsVW) handleSelectedDevice(lbl string) int {
 	return fileIdx
 }
 
-func (m *CardsVW) handleSelectedFilter(lbl string) int {
+func (m *CardsVwData) handleSelectedFilter(lbl string) int {
 	slog.Info("In handleSelectedFilter..." + lbl)
 	var fileIdx = con.RM_CARDS_UNIGY
 
@@ -216,7 +276,7 @@ func (m *CardsVW) handleSelectedFilter(lbl string) int {
 	return fileIdx
 }
 
-func (m *CardsVW) resetDisplayFlag() {
+func (m *CardsVwData) resetDisplayFlag() {
 	for i := range m.Cards {
 		m.Cards[i].Display = true
 	}
@@ -226,7 +286,7 @@ func (m *CardsVW) resetDisplayFlag() {
 	}
 }
 
-func (m *CardsVW) LoadCardData() error{
+func (m *CardsVwData) LoadCardData() error{
 	slog.Info("In LoadCardData...")
 	
 	m.Cards = []CardDef{}
@@ -257,12 +317,12 @@ func (m *CardsVW) LoadCardData() error{
 		}
 
 		m.Cards[x].SwVer, _ = dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetView(dbdata.VIEW_8, m.Cards[x].Enterprise)
-		LoadZoneData(&m.Cards[x])	
+		m.LoadZoneData(&m.Cards[x])	
 	}
 	return nil
 }
 
-func LoadZoneData(ptr *CardDef) error{
+func (m *CardsVwData) LoadZoneData(ptr *CardDef) error{
 	rslt, _ := dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetView(dbdata.VIEW_6, ptr.Enterprise)
 
 	for _, result := range rslt {
@@ -292,7 +352,7 @@ func LoadZoneData(ptr *CardDef) error{
 	return nil
 }
 
-func (m *CardsVW) LoadTurretData(t string) error{ 
+func (m *CardsVwData) LoadTurretData(t string) error{ 
 	slog.Info("In LoadTurretData...")
 	m.Turret = []TurretDef{}
 	
@@ -313,7 +373,7 @@ func (m *CardsVW) LoadTurretData(t string) error{
 	return nil
 }
 
-func (m *CardsVW) UpdateSidePanel(viewType int) {
+func (m *CardsVwData) UpdateSidePanel(viewType int) {
 	m.SidePanelDef = []SidePanelBtn{}
 	if viewType == ENTERPRISE {
 		rsltb, _ := dbdata.GetDBAccess(dbdata.LAB_SYSTEM).GetFieldList("enterprise_unigy")
@@ -328,6 +388,28 @@ func (m *CardsVW) UpdateSidePanel(viewType int) {
 			p := SidePanelBtn{}
 			p.Label = result.Data[0]
 			m.SidePanelDef = append(m.SidePanelDef, p)
+		}
+	}
+}
+
+func (m *CardsVwData) FilterView(lbl string) {
+	fmt.Println("FilterView: ", lbl)
+
+	if m.SelectedDevice == "Unigy" {
+		for i:=0; i<len(m.Cards); i++ {
+			if m.Cards[i].Enterprise == lbl {				
+				m.Cards[i].Display = true
+			} else {
+				m.Cards[i].Display = false
+			}
+		}
+	} else {
+		for i:=0; i<len(m.Turret); i++ {
+			if m.Turret[i].Enterprise == lbl {				
+				m.Turret[i].Display = true
+			} else {
+				m.Turret[i].Display = false
+			}
 		}
 	}
 }
@@ -356,27 +438,5 @@ func checkServerType(ent string) (string, error){
 		return "vm", nil
 	} else {
 		return "hw", nil
-	}
-}
-
-func (m *CardsVW) FilterView(lbl string) {
-	fmt.Println("FilterView: ", lbl)
-
-	if m.SelectedDevice == "Unigy" {
-		for i:=0; i<len(m.Cards); i++ {
-			if m.Cards[i].Enterprise == lbl {				
-				m.Cards[i].Display = true
-			} else {
-				m.Cards[i].Display = false
-			}
-		}
-	} else {
-		for i:=0; i<len(m.Turret); i++ {
-			if m.Turret[i].Enterprise == lbl {				
-				m.Turret[i].Display = true
-			} else {
-				m.Turret[i].Display = false
-			}
-		}
 	}
 }

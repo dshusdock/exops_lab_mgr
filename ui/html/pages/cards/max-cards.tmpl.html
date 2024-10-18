@@ -1,6 +1,6 @@
 {{define "max_cardsvw" }}
 <div class="max_cards">
-  {{ with.ViewCache.cardsvw }}
+  {{ with.Tmplt.cardsvw }}
   {{ range .Turret}}
     {{ if .Display}}
       {{ template "turret-card-comp" .}}

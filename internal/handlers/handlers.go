@@ -5,11 +5,12 @@ import (
 	con "dshusdock/tw_prac1/internal/constants"
 	"dshusdock/tw_prac1/internal/handlers/upload"
 	"dshusdock/tw_prac1/internal/render"
+
 	// "dshusdock/tw_prac1/internal/views/base"
-	"dshusdock/tw_prac1/internal/views/cardsvw"
 	"dshusdock/tw_prac1/internal/views/headervw"
 	"dshusdock/tw_prac1/internal/views/labsystemvw"
 	"dshusdock/tw_prac1/internal/views/layoutvw"
+
 	// "dshusdock/tw_prac1/internal/views/login"
 	"dshusdock/tw_prac1/internal/views/settingsvw"
 	"dshusdock/tw_prac1/internal/views/sidenav"
@@ -49,7 +50,7 @@ func initRouteHandlers() {
 	Repo.App.ViewCache["settingsvw"] = settingsvw.AppSettingsVw.RegisterView(Repo.App) 
 	Repo.App.ViewCache["lstablevw"] = labsystemvw.AppLSTableVW.RegisterView(Repo.App)
 	
-	Repo.App.ViewCache["cardsvw"] = cardsvw.AppCardsVW.RegisterView(Repo.App)
+	// Repo.App.ViewCache["cardsvw"] = cardsvw.AppCardsVW.RegisterView(Repo.App)
 	
 
 	// Register the services
@@ -81,6 +82,8 @@ func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) Logoff(w http.ResponseWriter, r *http.Request) {
+	// session.SessionSvc.DeleteUserSessions(w, r, "userID")
+
 	renderview.RenderViewSvc.ProcessRequest(w, r, "loginvw")
 }
 

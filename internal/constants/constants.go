@@ -48,6 +48,7 @@ type ViewInterface interface {
 
 type ViewHandler interface {
 	HandleRequest(w http.ResponseWriter, r *http.Request) any
+	HandleMBusRequest(w http.ResponseWriter, r *http.Request) any
 }
 
 type ViewInfo struct {
