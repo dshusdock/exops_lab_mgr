@@ -62,7 +62,7 @@ func (m *LoginVw) HandleMBusRequest(w http.ResponseWriter, r *http.Request) any{
 func (m *LoginVw) HandleRequest(w http.ResponseWriter, r *http.Request) any {
 	fmt.Println("[loginvw] - HandleRequest")
 
-	var obj LoginVwData
+	var obj LoginVwData 
 
 	if session.SessionSvc.SessionMgr.Exists(r.Context(), "loginvw") {
 		obj = session.SessionSvc.SessionMgr.Pop(r.Context(), "loginvw").(LoginVwData)

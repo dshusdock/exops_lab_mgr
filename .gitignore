@@ -3,3 +3,4 @@ package-lock.json
 tmp/main
 tmp/build-errors.log
 ui/html/css/styles.css
+tmp/build-errors.log
